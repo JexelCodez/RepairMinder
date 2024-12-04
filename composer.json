@@ -3,15 +3,15 @@
     "name": "laravel/laravel",
     "type": "project",
     "description": "The skeleton application for the Laravel framework.",
-    "keywords": ["laravel", "framework"],
+    "keywords": [
+        "laravel",
+        "framework"
+    ],
     "license": "MIT",
     "require": {
         "php": "^8.2",
-<<<<<<< HEAD
         "filament/filament": "^3.2",
         "joaopaulolndev/filament-edit-profile": "^1.0",
-=======
->>>>>>> 5782c6619d95732890caffc52412e0e864d96933
         "laravel/framework": "^11.31",
         "laravel/tinker": "^2.9"
     },
@@ -39,12 +39,8 @@
     "scripts": {
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
-<<<<<<< HEAD
             "@php artisan package:discover --ansi",
             "@php artisan filament:upgrade"
-=======
-            "@php artisan package:discover --ansi"
->>>>>>> 5782c6619d95732890caffc52412e0e864d96933
         ],
         "post-update-cmd": [
             "@php artisan vendor:publish --tag=laravel-assets --ansi --force"
