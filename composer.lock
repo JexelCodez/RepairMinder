@@ -4,6 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
+<<<<<<< HEAD
     "content-hash": "78daa6d78e6b5ce0ccf13d65e446f0a9",
     "packages": [
         {
@@ -223,6 +224,11 @@
             "time": "2024-10-17T17:38:00+00:00"
         },
         {
+=======
+    "content-hash": "626b9e7ddd47fb7eff9aaa53cce0c9ad",
+    "packages": [
+        {
+>>>>>>> 5782c6619d95732890caffc52412e0e864d96933
             "name": "brick/math",
             "version": "0.12.1",
             "source": {
@@ -352,6 +358,7 @@
             "time": "2024-02-09T16:56:22+00:00"
         },
         {
+<<<<<<< HEAD
             "name": "danharrin/date-format-converter",
             "version": "v0.3.1",
             "source": {
@@ -457,6 +464,8 @@
             "time": "2024-05-06T09:10:03+00:00"
         },
         {
+=======
+>>>>>>> 5782c6619d95732890caffc52412e0e864d96933
             "name": "dflydev/dot-access-data",
             "version": "v3.0.3",
             "source": {
@@ -532,6 +541,7 @@
             "time": "2024-07-08T12:26:09+00:00"
         },
         {
+<<<<<<< HEAD
             "name": "doctrine/dbal",
             "version": "4.2.1",
             "source": {
@@ -687,6 +697,8 @@
             "time": "2024-01-30T19:34:25+00:00"
         },
         {
+=======
+>>>>>>> 5782c6619d95732890caffc52412e0e864d96933
             "name": "doctrine/inflector",
             "version": "2.0.10",
             "source": {
@@ -987,6 +999,7 @@
             "time": "2023-10-06T06:47:41+00:00"
         },
         {
+<<<<<<< HEAD
             "name": "filament/actions",
             "version": "v3.2.127",
             "source": {
@@ -1419,6 +1432,8 @@
             "time": "2024-11-27T16:52:29+00:00"
         },
         {
+=======
+>>>>>>> 5782c6619d95732890caffc52412e0e864d96933
             "name": "fruitcake/php-cors",
             "version": "v1.3.0",
             "source": {
@@ -1963,6 +1978,7 @@
             "time": "2023-12-03T19:50:20+00:00"
         },
         {
+<<<<<<< HEAD
             "name": "jaybizzle/crawler-detect",
             "version": "v1.3.0",
             "source": {
@@ -2237,6 +2253,8 @@
             "time": "2024-11-26T13:22:08+00:00"
         },
         {
+=======
+>>>>>>> 5782c6619d95732890caffc52412e0e864d96933
             "name": "laravel/framework",
             "version": "v11.34.2",
             "source": {
@@ -2824,6 +2842,7 @@
             "time": "2022-12-11T20:36:23+00:00"
         },
         {
+<<<<<<< HEAD
             "name": "league/csv",
             "version": "9.18.0",
             "source": {
@@ -2911,6 +2930,8 @@
             "time": "2024-10-18T08:14:48+00:00"
         },
         {
+=======
+>>>>>>> 5782c6619d95732890caffc52412e0e864d96933
             "name": "league/flysystem",
             "version": "3.29.1",
             "source": {
@@ -3099,6 +3120,7 @@
             "time": "2024-09-21T08:32:55+00:00"
         },
         {
+<<<<<<< HEAD
             "name": "league/uri",
             "version": "7.4.1",
             "source": {
@@ -3478,6 +3500,8 @@
             "time": "2023-11-07T21:57:25+00:00"
         },
         {
+=======
+>>>>>>> 5782c6619d95732890caffc52412e0e864d96933
             "name": "monolog/monolog",
             "version": "3.8.0",
             "source": {
@@ -3980,6 +4004,7 @@
             "time": "2024-11-21T10:39:51+00:00"
         },
         {
+<<<<<<< HEAD
             "name": "openspout/openspout",
             "version": "v4.28.0",
             "source": {
@@ -4073,6 +4098,8 @@
             "time": "2024-11-29T09:45:53+00:00"
         },
         {
+=======
+>>>>>>> 5782c6619d95732890caffc52412e0e864d96933
             "name": "phpoption/phpoption",
             "version": "1.9.3",
             "source": {
@@ -4148,6 +4175,7 @@
             "time": "2024-07-20T21:41:07+00:00"
         },
         {
+<<<<<<< HEAD
             "name": "psr/cache",
             "version": "3.0.0",
             "source": {
@@ -4197,6 +4225,8 @@
             "time": "2021-02-03T23:26:27+00:00"
         },
         {
+=======
+>>>>>>> 5782c6619d95732890caffc52412e0e864d96933
             "name": "psr/clock",
             "version": "1.0.0",
             "source": {
@@ -4913,6 +4943,7 @@
             "time": "2024-04-27T21:32:50+00:00"
         },
         {
+<<<<<<< HEAD
             "name": "ryangjchandler/blade-capture-directive",
             "version": "v1.0.0",
             "source": {
@@ -5169,6 +5200,8 @@
             "time": "2024-11-18T15:02:02+00:00"
         },
         {
+=======
+>>>>>>> 5782c6619d95732890caffc52412e0e864d96933
             "name": "symfony/clock",
             "version": "v7.1.6",
             "source": {
@@ -5763,6 +5796,7 @@
             "time": "2024-10-01T08:31:23+00:00"
         },
         {
+<<<<<<< HEAD
             "name": "symfony/html-sanitizer",
             "version": "v7.2.0",
             "source": {
@@ -5832,6 +5866,8 @@
             "time": "2024-09-25T14:21:43+00:00"
         },
         {
+=======
+>>>>>>> 5782c6619d95732890caffc52412e0e864d96933
             "name": "symfony/http-foundation",
             "version": "v7.1.9",
             "source": {
@@ -9961,5 +9997,9 @@
         "php": "^8.2"
     },
     "platform-dev": [],
+<<<<<<< HEAD
     "plugin-api-version": "2.3.0"
+=======
+    "plugin-api-version": "2.6.0"
+>>>>>>> 5782c6619d95732890caffc52412e0e864d96933
 }
