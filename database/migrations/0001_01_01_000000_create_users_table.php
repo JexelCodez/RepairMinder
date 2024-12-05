@@ -47,8 +47,4 @@ return new class extends Migration
         Schema::dropIfExists('password_reset_tokens');
         Schema::dropIfExists('sessions');
     }
-<<<<<<< HEAD
 };
-=======
-};
->>>>>>> 5782c6619d95732890caffc52412e0e864d96933
