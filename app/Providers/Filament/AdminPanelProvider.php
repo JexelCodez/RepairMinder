@@ -51,6 +51,7 @@ class AdminPanelProvider extends PanelProvider
                     ->setIcon('heroicon-o-user')
                     ->setTitle('My Profile')
                     ->setNavigationLabel('My Profile')
+                    ->setNavigationGroup('Profile')
             ])
             ->middleware([
                 EncryptCookies::class,
