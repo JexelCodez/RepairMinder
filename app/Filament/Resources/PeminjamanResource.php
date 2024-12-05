@@ -25,6 +25,22 @@ class PeminjamanResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
+    /**
+     * Override getSlug untuk memastikan URL yang benar.
+     */
+    public static function getSlug(): string
+    {
+        return 'peminjaman';
+    }
+
+    /**
+     * Override getPluralLabelForNavigation untuk label navigasi yang benar.
+     */
+    public static function getPluralLabel(): string
+    {
+        return 'Peminjaman';
+    }
+
     public static function form(Form $form): Form
     {
         return $form
@@ -127,7 +143,7 @@ class PeminjamanResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListPeminjamen::route('/'),
+            'index' => Pages\ListPeminjaman::route('/'),
             'create' => Pages\CreatePeminjaman::route('/create'),
             'view' => Pages\ViewPeminjaman::route('/{record}'),
             'edit' => Pages\EditPeminjaman::route('/{record}/edit'),
