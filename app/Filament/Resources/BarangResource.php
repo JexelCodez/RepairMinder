@@ -83,7 +83,8 @@ class BarangResource extends Resource
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('token_qr')
-                    ->searchable(),
+                    ->searchable()
+                    ->view('qr-barang.qr-code'),
                 Tables\Columns\TextColumn::make('status'),
                 Tables\Columns\TextColumn::make('lokasi.nama_lokasi')
                     ->numeric()
