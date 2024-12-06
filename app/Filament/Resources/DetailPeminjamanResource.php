@@ -19,27 +19,16 @@ class DetailPeminjamanResource extends Resource
 
     protected static ?string $modelLabel = 'Detail Peminjaman';
 
+    protected static ?string $pluralModelLabel = 'Detail Peminjaman';
+
+    protected static ?string $slug = 'detail-peminjaman';
+
     protected static ?string $navigationLabel = 'Detail Peminjaman';
 
     protected static ?string $navigationGroup = 'Events';
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
-    /**
-     * Override getSlug untuk memastikan URL yang benar.
-     */
-    public static function getSlug(): string
-    {
-        return 'detail-peminjaman';
-    }
-
-    /**
-     * Override getPluralLabelForNavigation untuk label navigasi yang benar.
-     */
-    public static function getPluralLabel(): string
-    {
-        return 'Detail Peminjaman';
-    }
 
     public static function form(Form $form): Form
     {
