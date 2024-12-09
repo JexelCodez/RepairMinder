@@ -26,7 +26,7 @@ class Barang extends Model
     ];
 
     /**
-     * Hubungan dengan Model Kategori
+     * Hubungan dengan Model Kategori dengan Eager Loading
      */
     public function kategori()
     {
@@ -34,7 +34,7 @@ class Barang extends Model
     }
 
     /**
-     * Hubungan dengan Model Lokasi
+     * Hubungan dengan Model Lokasi dengan Eager Loading
      */
     public function lokasi()
     {
