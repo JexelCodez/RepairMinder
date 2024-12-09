@@ -30,7 +30,7 @@ class Barang extends Model
      */
     public function kategori()
     {
-        return $this->belongsTo(Kategori::class, 'id_kategori');
+        return $this->belongsTo(Kategori::class, 'id_kategori')->with('kategori');
     }
 
     /**
@@ -38,6 +38,6 @@ class Barang extends Model
      */
     public function lokasi()
     {
-        return $this->belongsTo(Lokasi::class, 'id_lokasi');
+        return $this->belongsTo(Lokasi::class, 'id_lokasi')->with('lokasi');
     }
 }
