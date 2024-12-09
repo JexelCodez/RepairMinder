@@ -26,18 +26,18 @@ class Barang extends Model
     ];
 
     /**
-     * Hubungan dengan Model Kategori
+     * Hubungan dengan Model Kategori dengan Eager Loading
      */
     public function kategori()
     {
-        return $this->belongsTo(Kategori::class, 'id_kategori');
+        return $this->belongsTo(Kategori::class, 'id_kategori')->with('kategori');
     }
 
     /**
-     * Hubungan dengan Model Lokasi
+     * Hubungan dengan Model Lokasi dengan Eager Loading
      */
     public function lokasi()
     {
-        return $this->belongsTo(Lokasi::class, 'id_lokasi');
+        return $this->belongsTo(Lokasi::class, 'id_lokasi')->with('lokasi');
     }
 }
