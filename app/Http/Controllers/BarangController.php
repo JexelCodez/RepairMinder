@@ -23,7 +23,7 @@ class BarangController extends Controller
         $pdf = PDF::loadView('qr-barang.qr-pdf', compact('barang'));
 
         // Mengatur nama file PDF
-        $fileName = 'qr-barang-' . $barang->id . '.pdf';
+        $fileName = 'qr-barang-' . $barang->nama. '-' . now() . '.pdf';
 
         // Mengembalikan response download PDF
         return $pdf->download($fileName);

@@ -5,10 +5,15 @@
     <style>
         body {
             font-family: Arial, sans-serif;
+            margin: 20px;
         }
         .label {
-            width: 100%;
-            padding: 10px;
+            width: 33.33%;
+            padding: 2px;
+            border: 0.8px solid #000;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+            vertical-align: top;
         }
         .label-table {
             width: 100%;
@@ -16,21 +21,30 @@
         }
         .label-table td {
             vertical-align: middle;
-            padding: 10px;
+            padding: 0;
+            margin: 0;
         }
         .qr {
-            width: 150px; /* Atur lebar QR Code sesuai kebutuhan */
+            width: 100px;
+            padding-right: 0;
+            margin-right: 0;
+        }
+        .qr img {
+            display: block;
+            margin-right: 0.1px !important;
         }
         .info {
-            /* Sesuaikan lebar kolom informasi jika diperlukan */
+            text-align: left;
+            margin: 0;
         }
         .info p {
+            font-size: 12px;
             margin: 2px 0;
-            font-size: 14px;
+            padding: 0;
         }
         .info strong {
             display: inline-block;
-            width: 120px; /* Atur lebar label */
+            width: 120px;
         }
     </style>
 </head>
@@ -42,7 +56,7 @@
                 <td class="qr">
                     <img src="data:image/png;base64, {!! base64_encode(QrCode::format('png')->size(75)->generate($barang->token_qr)) !!}" alt="QR Code Barang">
                 </td>
-                
+
                 <!-- Kolom Informasi -->
                 <td class="info">
                     <p> {{ $barang->nama }}</p>
