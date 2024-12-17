@@ -11,16 +11,49 @@
 @endsection
 
 @section('content')
-    <style>
+    {{-- <style>
         #reader__dashboard_section_csr{
             display: none !important;
+        }
+    </style> --}}
+    <style>
+        #reader {
+            width: 100%;
+            max-width: 400px;
+            height: auto;
+            margin: auto;
+            position: relative;
+            overflow: hidden;
+        }
+    
+        #reader video {
+            transform: scaleX(-1);
+            width: 100%;
+            height: auto;
+            object-fit: cover;
+        }
+    
+        @media (max-width: 768px) {
+            #reader {
+                max-width: 300px;
+            }
+        }
+    
+        @media (max-width: 480px) {
+            #reader {
+                max-width: 250px;
+            }
         }
     </style>
 
     <div class="container flex justify-center px-4 py-8">
         <div class="w-full max-w-lg mx-auto p-4 bg-white rounded-lg shadow-lg">
             <div class="flex justify-center items-center col-12 md:col-6 lg:col-4 m-auto mb-4">
-                <div id="reader" class="w-full h-64 border col-12 md:col-6 lg:col-4 m-auto border-gray-300 rounded-lg"></div>
+                <div id="reader"></div>
+                <!-- Start/Stop Button -->
+                {{-- <div class="mt-3 text-center">
+                    <button id="toggle-scan-btn" class="btn btn-primary">Start Scan</button>
+                </div> --}}
             </div>
 
             <div class="text-center mt-4">
@@ -28,11 +61,6 @@
                 <span id="result" class="block mt-2 text-xl text-blue-600 font-medium"></span>
                 <p id="error" class="text-red-600 mt-2"></p>
             </div>
-
-            <!-- Stop Button -->
-            {{-- <button id="stop-scanner" class="stop-scanner-btn mt-4 bg-red-600 text-white px-6 py-2 rounded-lg">
-                Stop Scanner
-            </button> --}}
         </div>
     </div>
 @endsection
@@ -43,28 +71,62 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.8/html5-qrcode.min.js" integrity="sha512-r6rDA7W6ZeQhvl8S7yRVQUKVHdexq+GAlNkNNqVC7YyIV+NwqCTJe2hDWCiffTyRNOeGEzRRJ9ifvRm/HCzGYg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
     <script>
-        const resultElement = document.getElementById('result');
-        const errorElement = document.getElementById('error');
+        let html5QrcodeScanner = new Html5Qrcode("reader");
+        let isScanning = false;
 
-        // Function to handle scan success
+        function calculateQrboxSize() {
+            const readerWidth = document.getElementById('reader').offsetWidth;
+            return Math.min(350, readerWidth * 0.8);
+        }
+
         function onScanSuccess(decodedText) {
             resultElement.innerText = decodedText;
             console.log(`Scanned result: ${decodedText}`);
         }
 
-        // Function to handle scan failure
         function onScanFailure(error) {
             errorElement.innerText = `Scan error: ${error}`;
             console.warn(`Scan error: ${error}`);
         }
 
-        // Initialize the QR code scanner
-        const html5QrcodeScanner = new Html5QrcodeScanner(
-            "reader", { fps: 10, qrbox: 250 }, false
-        );
+        // BUAT START/STOP BUTTON
+        
+        // document.getElementById('toggle-scan-btn').addEventListener('click', function() {
+        //     if (isScanning) {
+        //         html5QrcodeScanner.stop().then(() => {
+        //             document.getElementById('toggle-scan-btn').textContent = 'Start Scan';
+        //             isScanning = false;
+        //         }).catch(err => {
+        //             console.error("Error stopping QR code scanner: ", err);
+        //         });
+        //     } else {
+        //         html5QrcodeScanner.start(
+        //             { facingMode: "environment" },
+        //             {
+        //                 fps: 30,
+        //                 qrbox: calculateQrboxSize()
+        //             },
+        //             onScanSuccess,
+        //             onScanFailure
+        //         ).then(() => {
+        //             document.getElementById('toggle-scan-btn').textContent = 'Stop Scan';
+        //             isScanning = true;
+        //         }).catch(err => {
+        //             console.error("Error starting QR code scanner: ", err);
+        //         });
+        //     }
+        // });
 
-        // Start scanning
-        html5QrcodeScanner.render(onScanSuccess, onScanFailure);
-
+        html5QrcodeScanner.start(
+            { facingMode: "environment" },
+            {
+                fps: 30,
+                qrbox: calculateQrboxSize()
+            },
+            onScanSuccess,
+            onScanFailure
+        ).catch(err => {
+                console.error("Error starting QR code scanner: ", err);
+        });
     </script>
 @endsection
