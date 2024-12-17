@@ -80,12 +80,15 @@
         }
 
         function onScanSuccess(decodedText) {
-            resultElement.innerText = decodedText;
-            console.log(`Scanned result: ${decodedText}`);
+            // tampilin di result
+            document.getElementById('result').innerText = decodedText;
+
+            // qrcode jadi url:
+            // window.location.href = decodedText;
         }
 
         function onScanFailure(error) {
-            errorElement.innerText = `Scan error: ${error}`;
+            // Log error untuk debugging
             console.warn(`Scan error: ${error}`);
         }
 
