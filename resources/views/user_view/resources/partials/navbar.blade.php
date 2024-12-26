@@ -1,17 +1,17 @@
 <nav class="navbar navbar-expand-lg">
     <div class="container">
         <a class="navbar-brand me-lg-5 me-0" href="index.html">
-            <img src="images/pod-talk-logo.png" class="logo-image img-fluid" alt="templatemo pod talk">
+            <img src="images/sijates.png" class="logo-image img-fluid" alt="templatemo pod talk">
         </a>
 
         <form action="#" method="get" class="custom-form search-form flex-fill me-3" role="search">
             <div class="input-group input-group-lg">
-                <input name="search" type="search" class="form-control" id="search" placeholder="Search Podcast"
-                    aria-label="Search">
+                <!-- <input name="search" type="search" class="form-control" id="search" placeholder="Search"
+                    aria-label="Search"> -->
 
-                <button type="submit" class="form-control" id="submit">
+                <!-- <button type="submit" class="form-control" id="submit">
                     <i class="bi-search"></i>
-                </button>
+                </button> -->
             </div>
         </form>
 
@@ -22,15 +22,15 @@
 
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-lg-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="index.html">Home</a>
-                </li>
+                <!-- <li class="nav-item">
+                    <a class="nav-link" href="#">Home</a>
+                </li> -->
 
                 <li class="nav-item">
-                    <a class="nav-link" href="about.html">About</a>
+                    <a class="nav-link" href="about.html">Tentang Kami</a>
                 </li>
 
-                <li class="nav-item dropdown">
+                <!-- <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarLightDropdownMenuLink" role="button"
                         data-bs-toggle="dropdown" aria-expanded="false">Pages</a>
 
@@ -39,15 +39,15 @@
 
                         <li><a class="dropdown-item active" href="detail-page.html">Detail Page</a></li>
                     </ul>
-                </li>
+                </li> -->
 
-                <li class="nav-item">
-                    <a class="nav-link" href="contact.html">Contact</a>
-                </li>
+                <!-- <li class="nav-item">
+                    <a class="nav-link" href="contact.html">Kontak</a>
+                </li> -->
             </ul>
 
             <div class="ms-4">
-                <a href="#section_2" class="btn custom-btn custom-border-btn smoothscroll">Get started</a>
+                <a href="#section_2" class="btn custom-btn custom-border-btn smoothscroll">Ayo Memulai</a>
             </div>
         </div>
     </div>

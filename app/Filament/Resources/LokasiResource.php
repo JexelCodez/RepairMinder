@@ -19,15 +19,11 @@ use Filament\Forms\Components\Section;
 class LokasiResource extends Resource
 {
     protected static ?string $model = Lokasi::class;
-
     protected static ?string $modelLabel = 'Lokasi';
-
+    protected static ?string $pluralModelLabel = 'Lokasi';
     protected static ?string $navigationIcon = 'heroicon-o-map';
-
     protected static ?string $navigationLabel = 'Lokasi';
-
     protected static ?string $navigationGroup = 'Master Data Barang';
-
 
     public static function table(Table $table): Table
     {

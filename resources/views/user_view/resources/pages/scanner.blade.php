@@ -45,7 +45,7 @@
         </div>
 
         <div class="text-center mt-4">
-            <p class="text-lg font-semibold">Scanned Result:</p>
+            <p class="text-lg font-semibold">Hasil Scan:</p>
             <span id="result" class="block mt-2 text-xl text-blue-600 font-medium"></span>
             <p id="error" class="text-red-600 mt-2"></p>
         </div>

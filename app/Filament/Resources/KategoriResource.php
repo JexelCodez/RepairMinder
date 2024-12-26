@@ -18,15 +18,11 @@ use Filament\Forms\Components\Section;
 class KategoriResource extends Resource
 {
     protected static ?string $model = Kategori::class;
-
     protected static ?string $modelLabel = 'Kategori';
-
+    protected static ?string $pluralModelLabel = 'Kategori';
     protected static ?string $navigationIcon = 'heroicon-o-archive-box';
-
     protected static ?string $navigationLabel = 'Kategori';
-
     protected static ?string $navigationGroup = 'Master Data Barang';
-
 
     public static function table(Table $table): Table
     {

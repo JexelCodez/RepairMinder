@@ -18,6 +18,7 @@ use Filament\Forms\Components\Repeater;
 use Illuminate\Support\Str;
 use Filament\Forms\Components\Hidden;
 use Filament\Tables\Actions\BulkAction;
+
 // INFOLIST
 use Filament\Infolists\Infolist;
 use Filament\Infolists\Components\TextEntry;
@@ -31,13 +32,11 @@ use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 class BarangResource extends Resource
 {
     protected static ?string $model = Barang::class;
-
     protected static ?string $modelLabel = 'Barang';
-
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
-
+    protected static ?string $pluralModelLabel = 'Barang';
     protected static ?string $navigationLabel = 'Barang';
-
+    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    
     public static function form(Form $form): Form
     {
         return $form

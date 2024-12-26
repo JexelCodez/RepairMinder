@@ -4,7 +4,7 @@
 
             <div class="col-lg-12 col-12 text-center">
 
-                <h2 class="mb-0">@yield('title_page', 'Menu')</h2>
+                <h2 class="mb-0">@yield('title_page', 'REMI')</h2>
             </div>
 
         </div>
