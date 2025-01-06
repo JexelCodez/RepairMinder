@@ -27,7 +27,7 @@
         }
     
         #reader video {
-            transform: scaleX(-1);
+            /* transform: scaleX(-1); */
             width: 100%;
             height: auto;
             object-fit: cover;
@@ -51,9 +51,9 @@
             <div class="flex justify-center items-center col-12 md:col-6 lg:col-4 m-auto mb-4">
                 <div id="reader"></div>
                 <!-- Start/Stop Button -->
-                {{-- <div class="mt-3 text-center">
+                <div class="mt-3 text-center">
                     <button id="toggle-scan-btn" class="btn btn-primary">Start Scan</button>
-                </div> --}}
+                </div>
             </div>
 
             <div class="text-center mt-4">
@@ -80,11 +80,39 @@
         }
 
         function onScanSuccess(decodedText) {
-            // tampilin di result
-            document.getElementById('result').innerText = decodedText;
+            // Tampilkan hasil di elemen "result"
+            document.getElementById('result').innerText = "Processing QR Code...";
 
-            // qrcode jadi url:
-            // window.location.href = decodedText;
+            // Kirim token_qr ke server untuk mendapatkan data barang
+            fetch('/scan', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                },
+                body: JSON.stringify({ token_qr: decodedText })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Tampilkan data barang
+                    const barang = data.data;
+                    document.getElementById('result').innerHTML = `
+                        <strong>Nama:</strong> ${barang.nama}<br>
+                        <strong>Kategori ID:</strong> ${barang.id_kategori}<br>
+                        <strong>Stok:</strong> ${barang.stok_barang}<br>
+                        <strong>Status:</strong> ${barang.status}<br>
+                        <strong>Lokasi ID:</strong> ${barang.id_lokasi}
+                    `;
+                } else {
+                    // Jika data tidak ditemukan
+                    document.getElementById('result').innerText = data.message;
+                }
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                document.getElementById('result').innerText = "An error occurred while processing the QR code.";
+            });
         }
 
         function onScanFailure(error) {
@@ -94,42 +122,43 @@
 
         // BUAT START/STOP BUTTON
         
-        // document.getElementById('toggle-scan-btn').addEventListener('click', function() {
-        //     if (isScanning) {
-        //         html5QrcodeScanner.stop().then(() => {
-        //             document.getElementById('toggle-scan-btn').textContent = 'Start Scan';
-        //             isScanning = false;
-        //         }).catch(err => {
-        //             console.error("Error stopping QR code scanner: ", err);
-        //         });
-        //     } else {
-        //         html5QrcodeScanner.start(
-        //             { facingMode: "environment" },
-        //             {
-        //                 fps: 30,
-        //                 qrbox: calculateQrboxSize()
-        //             },
-        //             onScanSuccess,
-        //             onScanFailure
-        //         ).then(() => {
-        //             document.getElementById('toggle-scan-btn').textContent = 'Stop Scan';
-        //             isScanning = true;
-        //         }).catch(err => {
-        //             console.error("Error starting QR code scanner: ", err);
-        //         });
-        //     }
+        document.getElementById('toggle-scan-btn').addEventListener('click', function() {
+            if (isScanning) {
+                html5QrcodeScanner.stop().then(() => {
+                    document.getElementById('toggle-scan-btn').textContent = 'Start Scan';
+                    isScanning = false;
+                }).catch(err => {
+                    console.error("Error stopping QR code scanner: ", err);
+                });
+            } else {
+                html5QrcodeScanner.start(
+                    { facingMode: "environment" },
+                    {
+                        fps: 60,
+                        qrbox: calculateQrboxSize()
+                    },
+                    onScanSuccess,
+                    onScanFailure
+                ).then(() => {
+                    document.getElementById('toggle-scan-btn').textContent = 'Stop Scan';
+                    isScanning = true;
+                }).catch(err => {
+                    console.error("Error starting QR code scanner: ", err);
+                });
+            }
+        });
+
+        // html5QrcodeScanner.start(
+        //     { facingMode: "environment" },
+        //     {
+        //         fps: 30,
+        //         qrbox: calculateQrboxSize()
+        //     },
+        //     onScanSuccess,
+        //     onScanFailure
+        // ).catch(err => {
+        //         console.error("Error starting QR code scanner: ", err);
         // });
 
-        html5QrcodeScanner.start(
-            { facingMode: "environment" },
-            {
-                fps: 30,
-                qrbox: calculateQrboxSize()
-            },
-            onScanSuccess,
-            onScanFailure
-        ).catch(err => {
-                console.error("Error starting QR code scanner: ", err);
-        });
     </script>
 @endsection
