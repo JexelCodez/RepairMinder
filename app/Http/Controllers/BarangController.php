@@ -62,4 +62,28 @@ class BarangController extends Controller
         // Mengembalikan response download PDF
         return $pdf->download($fileName);
     }
+
+
+    public function scan(Request $request)
+    {
+        // Validasi token_qr
+        $request->validate([
+            'token_qr' => 'required|string',
+        ]);
+
+        // Cari data berdasarkan token_qr
+        $barang = Barang::where('token_qr', $request->token_qr)->first();
+
+        if ($barang) {
+            return response()->json([
+                'success' => true,
+                'data' => $barang,
+            ]);
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => 'Barang tidak ditemukan.',
+            ]);
+        }
+    }
 }
