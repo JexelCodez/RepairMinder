@@ -23,4 +23,12 @@ class Siswa extends Model
         'tanggal_lahir',
         'jenis_kelamin',
     ];
+
+    protected $hidden = [
+        'password', 'remember_token',
+    ];
+
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+    ];
 }

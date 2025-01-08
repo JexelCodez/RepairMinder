@@ -11,13 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('siswas', function (Blueprint $table) {
-            $table->id(); 
+        Schema::create('teknisis', function (Blueprint $table) {
+            $table->id();
             $table->unsignedBigInteger('id_user');
-            $table->string('kelas')->nullable(); 
-            $table->string('alamat')->nullable(); 
-            $table->date('tanggal_lahir')->nullable(); 
-            $table->enum('jenis_kelamin', ['laki-laki', 'perempuan'])->nullable();
             $table->foreign('id_user')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
         });
@@ -28,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('siswas');
+        Schema::dropIfExists('teknisis');
     }
 };
