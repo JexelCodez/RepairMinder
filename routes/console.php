@@ -2,7 +2,9 @@
 
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Support\Facades\Artisan;
+use App\Jobs\SyncBarangJob;
 
-Artisan::command('inspire', function () {
-    $this->comment(Inspiring::quote());
-})->purpose('Display an inspiring quote')->hourly();
+// Command untuk men-schedule job sync barang
+Artisan::command('sync:barang', function () {
+    SyncBarangJob::dispatch();
+})->purpose('Sinkronisasi barang dari API A ke aplikasi B');

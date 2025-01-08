@@ -26,6 +26,9 @@ use Filament\Infolists\Components\RepeatableEntry;
 use Filament\Infolists\Components\Fieldset;
 use Filament\Infolists\Components\ViewEntry;
 use Filament\Infolists\Components\Grid;
+use Filament\Tables\Columns\ImageColumn;
+use Filament\Infolists\Components\ImageEntry;
+ 
 
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 
@@ -37,68 +40,21 @@ class BarangResource extends Resource
     protected static ?string $navigationLabel = 'Barang';
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
     
-    public static function form(Form $form): Form
-    {
-        return $form
-            ->schema([
-                Section::make('Informasi Barang')
-                    ->schema([
-                        Forms\Components\TextInput::make('nama')
-                            ->required(),
-                        Forms\Components\TextInput::make('stok_barang')
-                            ->numeric()
-                            ->default(null),
-                        Forms\Components\Select::make('id_kategori')
-                            ->required()
-                            ->relationship('kategori', 'nama_kategori'),
-                        Forms\Components\Select::make('id_lokasi')
-                            ->required()
-                            ->relationship('lokasi', 'nama_lokasi'),
-                        Hidden::make('token_qr') // Ubah TextInput menjadi Hidden
-                            ->default(function () {
-                                return Str::random(10); // Atur panjang string sesuai kebutuhan
-                            }),
-                        Repeater::make('mac_address')
-                            ->schema([
-                                Forms\Components\TextInput::make('mac_addresses')
-                                    ->nullable()
-                                    ->hint('Masukkan jika Barang memiliki MAC address'),
-                            ])->columnSpanFull()->addActionLabel('Tambah Mac Address Lainnya')             
-                    ])->columnSpan(2)->columns(2),
-                Section::make('Story Status')
-                    ->schema([
-                        Forms\Components\Radio::make('status')
-                        ->options([
-                            'Bagus' => 'Bagus',
-                            'Dalam Perbaikan' => 'Dalam Perbaikan',
-                            'Rusak' => 'Rusak',
-                        ])
-                        ->inline()
-                        ->default('Bagus')
-                        ->required(),
-                    ])->columnSpan(1),    
-            ])->columns(3);
-    }
 
     public static function table(Table $table): Table
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('nama')
+                Tables\Columns\TextColumn::make('nama_barang')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('kategori.nama_kategori')
-                    ->numeric()
+                Tables\Columns\TextColumn::make('merek')
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('kode_barang')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('stok_barang')
-                    ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('token_qr')
-                    ->searchable()
-                    ->view('qr-barang.qr-code'),
-                Tables\Columns\TextColumn::make('status'),
-                Tables\Columns\TextColumn::make('lokasi.nama_lokasi')
-                    ->numeric()
-                    ->sortable(),
+                ImageColumn::make('qrcode_image'),
+                Tables\Columns\TextColumn::make('nama_jenis_barang'),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -113,31 +69,6 @@ class BarangResource extends Resource
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
-                Tables\Actions\EditAction::make(),
-                // Action baru untuk mendownload QR Code
-                Action::make('print_qr')
-                    ->label('Print QR Code')
-                    ->icon('heroicon-o-printer') // Ikon opsional
-                    ->url(fn ($record) => route('barang.download-qr', $record->id))
-                    ->color('success'), // Warna tombol opsional
-            ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                    // Bulk Action untuk mendownload QR Codes secara massal dalam satu PDF
-                    BulkAction::make('download_bulk_qr')
-                        ->label('Print QR Codes')
-                        ->icon('heroicon-o-printer')
-                        ->action(function (EloquentCollection $records) {
-                            // Mengambil semua ID dari records yang dipilih
-                            $ids = $records->pluck('id')->implode(',');
-
-                            // Redirect ke route download bulk QR Codes dengan parameter IDs
-                            return redirect()->route('barang.download-bulk-qrs', ['ids' => $ids]);
-                        })
-                        ->requiresConfirmation()
-                        ->color('primary'),
-                ]),
             ]);
     }
 
@@ -147,32 +78,26 @@ class BarangResource extends Resource
         ->schema([
             Fieldset::make('Informasi Barang')
                 ->schema([
-                    TextEntry::make('nama'),
+                    TextEntry::make('nama_barang'),
+                    TextEntry::make('merek'),
                     TextEntry::make('stok_barang'),
-                    TextEntry::make('kategori.nama_kategori'),
-                    TextEntry::make('lokasi.nama_lokasi'),
-                    RepeatableEntry::make('mac_address')
-                        ->schema([
-                            TextEntry::make('mac_addresses'),
-                        ])->columnSpanFull()           
+                    TextEntry::make('kode_barang'),           
+                    TextEntry::make('nama_jenis_barang'),           
                 ])->columnSpan(2)->columns(2),
             Grid::make()
                 ->schema([
-                    Fieldset::make('Status Barang')
+                    Fieldset::make('QR Code')
                         ->schema([
-                            TextEntry::make('status')
-                                ->badge()
-                                ->color(fn (string $state): string => match ($state) {
-                                    'Dalam Perbaikan' => 'warning',
-                                    'Bagus' => 'success',
-                                    'Rusak' => 'danger',
-                                }),   
-                        ]),
-                    Fieldset::make('QR Code Barang')
+                            ImageEntry::make('qrcode_image')
+                                ->size('xl'),
+                        ])->columns(1),
+                    Fieldset::make('Status')
                         ->schema([
-                            ViewEntry::make('token_qr')
-                                ->view('qr-barang.infolist_qr-code'),  
-                        ]),
+                            TextEntry::make('created_at')
+                            ->dateTime(),
+                            TextEntry::make('updated_at')
+                            ->dateTime(),           
+                        ])->columns(1),
                 ])->columnSpan(1),
         ])->columns(3);
     }
@@ -188,9 +113,9 @@ class BarangResource extends Resource
     {
         return [
             'index' => Pages\ListBarangs::route('/'),
-            'create' => Pages\CreateBarang::route('/create'),
+            // 'create' => Pages\CreateBarang::route('/create'),
             // 'view' => Pages\ViewBarang::route('/{record}'),
-            'edit' => Pages\EditBarang::route('/{record}/edit'),
+            // 'edit' => Pages\EditBarang::route('/{record}/edit'),
         ];
     }
 }
