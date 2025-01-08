@@ -42,6 +42,7 @@
 
 @section('content')
     <div class="container flex justify-center px-4 py-8">
+        @auth
         <div class="w-full max-w-lg mx-auto p-4 bg-white rounded-lg shadow-lg">
             <div class="flex justify-center items-center col-12 md:col-6 lg:col-4 m-auto mb-4">
                 <div id="reader"></div>
@@ -57,6 +58,14 @@
                 <p id="error" class="text-red-600 mt-2"></p>
             </div>
         </div>
+        @else
+        <div class="w-full max-w-lg mx-auto p-4 bg-white rounded-lg shadow-lg">
+            <div class="flex justify-center items-center col-12 md:col-6 lg:col-4 m-auto mb-4">
+                <h5 class="text-center">Login Dulu Gak sih 👉 <a href="{{route('login')}}">Login</a></h5>
+            </div>
+        </div>
+        @endauth
+
     </div>
 @endsection
 @push('custom-js')

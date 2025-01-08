@@ -24,6 +24,9 @@ Route::post('/scan', [BarangController::class, 'scan'])->name('scan');
 Route::get('/', function () {
     return view('user_view.resources.pages.scanner');
 });
+Route::get('/home/guru', function () {
+    return view('guru_view.home');
+})->name('home.guru')->middleware(['auth', 'guru']);
 
 Route::middleware(['auth'])->group(function () {
     // Protected routes here

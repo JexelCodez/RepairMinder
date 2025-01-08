@@ -46,9 +46,18 @@
                 </li> -->
             </ul>
 
+            @auth
             <div class="ms-4">
-                <a href="#section_2" class="btn custom-btn custom-border-btn smoothscroll">Ayo Memulai</a>
+                <a href="{{route('logout')}}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="btn custom-btn custom-border-btn smoothscroll">Log Out</a>
             </div>
+            <form id="logout-form" action="{{ route('logout') }}" method="POST">
+                @csrf
+            </form>
+            @else
+            <div class="ms-4">
+                <a href="{{route('login')}}" class="btn custom-btn custom-border-btn smoothscroll">Log In</a>
+            </div>
+            @endauth
         </div>
     </div>
 </nav>

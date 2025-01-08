@@ -16,17 +16,21 @@ class LoginController extends Controller
 
     public function login(Request $request)
     {
-        $credentials = $request->validate([
-            'email' => 'required|email',
-            'password' => 'required|string',
-        ]);
+        $credentials = $request->only('email', 'password');
 
         if (Auth::attempt($credentials)) {
-            return redirect()->route('dashboard');  // Redirect setelah berhasil login
+            $user = Auth::user();
+            if ($user->role === 'siswa') {
+                return redirect('/');
+            }
+            if ($user->role === 'guru') {
+                return redirect()->route('home.guru');
+            }
+            if ($user->role === 'teknisi') {
+                return redirect('home');
+            }
         }
 
-        // return back()->withErrors(['email' => 'The provided credentials are incorrect.']);
-        // If login fails, return with error
-        dd('Error: The provided credentials are incorrect.');
+        return redirect()->back()->withErrors(['email' => 'Invalid credentials'])->withInput();
     }
 }

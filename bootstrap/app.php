@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Middleware\GuruMiddleware;
+use App\Http\Middleware\SiswaMiddleware;
+use App\Http\Middleware\TeknisiMiddleware;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -11,7 +14,11 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        //
+        $middleware -> alias ([
+            'guru' => GuruMiddleware :: class,
+            'siswa' => SiswaMiddleware :: class,
+            'teknisi' => TeknisiMiddleware :: class,
+       ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //
