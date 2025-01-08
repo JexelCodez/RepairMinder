@@ -5,44 +5,50 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Http;
+use Sushi\Sushi;
+use Illuminate\Support\Facades\Log;
+
 class Barang extends Model
 {
-    use HasFactory;
-
-    protected $table = 'barangs';
-
-    protected $fillable = [
-        'nama',
-        'id_kategori',
-        'stok_barang',
-        'mac_address',
-        'token_qr',
-        'status',
-        'id_lokasi',
-    ];
-
-    protected $casts = [
-        'mac_address' => 'array',
-    ];
+    use HasFactory, Sushi;
 
     /**
-     * Eager load hubungan kategori dan lokasi secara default
+     * Model Rows
+     *
+     * @return array
      */
-    protected $with = ['kategori', 'lokasi'];
-
-    /**
-     * Hubungan dengan Model Kategori dengan Eager Loading
-     */
-    public function kategori()
+    public function getRows()
     {
-        return $this->belongsTo(Kategori::class, 'id_kategori');
+        //API
+        $response = Http::get('https://zaikotrack-main.test/api/barang');
+
+        if ($response->successful()) {
+            $products = $response->json();
+        } else {
+            Log::error('Failed to retrieve data from API: ' . $response->status());
+            return []; // Return empty array or default data
+        }
+
+        //filtering some attributes
+        $products = Arr::map($products['data'], function ($item) {
+            $filtered = Arr::only($item, [
+                'id_barang',
+                'nama_barang',
+                'merek',
+                'stok_barang',
+                'kode_barang',
+                'qrcode_image',
+                'created_at',
+                'updated_at'
+            ]);
+            $filtered['nama_jenis_barang'] = $item['jenis_barang']['nama_jenis_barang'] ?? null;
+            $filtered['stok_barang'] = $item['stok_barang'] ?? 'N/A'; // Set to 'N/A' if null
+            return $filtered;
+        });
+
+        return $products;
     }
 
-    /**
-     * Hubungan dengan Model Lokasi dengan Eager Loading
-     */
-    public function lokasi()
-    {
-        return $this->belongsTo(Lokasi::class, 'id_lokasi');
-    }
 }
