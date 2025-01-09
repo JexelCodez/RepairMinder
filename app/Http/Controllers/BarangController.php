@@ -4,8 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Barang;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
-use PDF; // Pastikan dompdf sudah terinstal
+use PDF; 
 
 class BarangController extends Controller
 {
@@ -66,24 +67,34 @@ class BarangController extends Controller
 
     public function scan(Request $request)
     {
-        // Validasi token_qr
         $request->validate([
-            'token_qr' => 'required|string',
+            'kode_barang' => 'required|string',
         ]);
-
-        // Cari data berdasarkan token_qr
-        $barang = Barang::where('token_qr', $request->token_qr)->first();
-
-        if ($barang) {
-            return response()->json([
-                'success' => true,
-                'data' => $barang,
-            ]);
+    
+        $response = Http::get('https://zaikotrack-main.test/api/barang');
+    
+        if ($response->successful()) {
+            $products = $response->json();
+    
+            $barang = collect($products['data'])->firstWhere('kode_barang', $request->kode_barang);
+    
+            if ($barang) {
+                return response()->json([
+                    'success' => true,
+                    'data' => $barang,
+                ]);
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Barang tidak ditemukan.',
+                ]);
+            }
         } else {
             return response()->json([
                 'success' => false,
-                'message' => 'Barang tidak ditemukan.',
+                'message' => 'Gagal mengambil data dari API.',
             ]);
         }
     }
+    
 }

@@ -82,40 +82,43 @@
         }
 
         function onScanSuccess(decodedText) {
-            // Tampilkan hasil di elemen "result"
-            document.getElementById('result').innerText = "Processing QR Code...";
+        // Tampilkan hasil di elemen "result"
+        document.getElementById('result').innerText = "Processing QR Code...";
 
-            // Kirim token_qr ke server untuk mendapatkan data barang
-            fetch('/scan', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-                },
-                body: JSON.stringify({ token_qr: decodedText })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    // Tampilkan data barang
-                    const barang = data.data;
-                    document.getElementById('result').innerHTML = `
-                        <strong>Nama:</strong> ${barang.nama}<br>
-                        <strong>Kategori ID:</strong> ${barang.id_kategori}<br>
-                        <strong>Stok:</strong> ${barang.stok_barang}<br>
-                        <strong>Status:</strong> ${barang.status}<br>
-                        <strong>Lokasi ID:</strong> ${barang.id_lokasi}
-                    `;
-                } else {
-                    // Jika data tidak ditemukan
-                    document.getElementById('result').innerText = data.message;
-                }
-            })
-            .catch(error => {
-                console.error("Error:", error);
-                document.getElementById('result').innerText = "An error occurred while processing the QR code.";
-            });
-        }
+        // Kirim kode_barang ke server untuk mendapatkan data barang
+        fetch('/scan', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+            },
+            body: JSON.stringify({ kode_barang: decodedText }) // Ubah token_qr menjadi kode_barang
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Tampilkan data barang
+                const barang = data.data;
+                document.getElementById('result').innerHTML = `
+                    <strong>Nama Barang:</strong> ${barang.nama_barang}<br>
+                    <strong>Merk:</strong> ${barang.merek}<br>
+                    <strong>Stok:</strong> ${barang.stok_barang}<br>
+                    <strong>Kode Barang:</strong> ${barang.kode_barang}<br>
+                    <strong>Jenis Barang:</strong> ${barang.nama_jenis_barang}<br>
+                    <strong>Terakhir Diperbarui:</strong> ${barang.updated_at}
+                `;
+            } else {
+                // Jika data tidak ditemukan
+                document.getElementById('result').innerText = data.message;
+            }
+        })
+        .catch(error => {
+            console.error("Error:", error);
+            document.getElementById('result').innerText = "An error occurred while processing the QR code.";
+        });
+    }
+
+
 
         function onScanFailure(error) {
             // Log error untuk debugging
