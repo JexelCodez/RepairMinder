@@ -66,35 +66,28 @@ class BarangController extends Controller
 
 
     public function scan(Request $request)
-    {
-        $request->validate([
-            'kode_barang' => 'required|string',
+{
+    $request->validate([
+        'kode_barang' => 'required|string',
+    ]);
+
+    $barangModel = new Barang();
+    
+    $products = $barangModel->getRows();
+
+    $barang = collect($products)->firstWhere('kode_barang', $request->kode_barang);
+
+    if ($barang) {
+        return response()->json([
+            'success' => true,
+            'data' => $barang,
         ]);
-    
-        $response = Http::get('https://zaikotrack-main.test/api/barang');
-    
-        if ($response->successful()) {
-            $products = $response->json();
-    
-            $barang = collect($products['data'])->firstWhere('kode_barang', $request->kode_barang);
-    
-            if ($barang) {
-                return response()->json([
-                    'success' => true,
-                    'data' => $barang,
-                ]);
-            } else {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Barang tidak ditemukan.',
-                ]);
-            }
-        } else {
-            return response()->json([
-                'success' => false,
-                'message' => 'Gagal mengambil data dari API.',
-            ]);
-        }
+    } else {
+        return response()->json([
+            'success' => false,
+            'message' => 'Barang tidak ditemukan.',
+        ]);
     }
+}
     
 }
