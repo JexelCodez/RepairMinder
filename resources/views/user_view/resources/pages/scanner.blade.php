@@ -1,5 +1,5 @@
 @extends('user_view.resources.layouts.app')
-@section('title', 'Scanner Page')
+@section('title', 'Scanner')
 
 @push('custom-css')
     

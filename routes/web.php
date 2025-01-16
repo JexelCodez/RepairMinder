@@ -23,7 +23,16 @@ Route::post('/scan', [BarangController::class, 'scan'])->name('scan');
 
 Route::get('/', function () {
     return view('user_view.resources.pages.scanner');
-});
+})->name('home');
+
+Route::get('/tentang_kami', function () {
+    return view('user_view.resources.pages.tentang_kami');
+})->name('tentang_kami');
+
+Route::get('/kontak', function () {
+    return view('user_view.resources.pages.kontak');
+})->name('kontak');
+
 Route::get('/home/guru', function () {
     return view('guru_view.home');
 })->name('home.guru')->middleware(['auth', 'guru']);
