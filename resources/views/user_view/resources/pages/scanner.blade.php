@@ -37,6 +37,11 @@
                 max-width: 250px;
             }
         }
+        .hidden {
+    display: none;
+}
+
+        
     </style>
 @endpush
 
@@ -52,11 +57,35 @@
                 </div>
             </div>
 
-            <div class="text-center mt-4">
-                <p class="text-lg font-semibold">Scanned Result:</p>
-                <span id="result" class="block mt-2 text-xl text-blue-600 font-medium"></span>
-                <p id="error" class="text-red-600 mt-2"></p>
+            <!-- Modal untuk hasil scan -->
+            <div id="result" class="fixed inset-0 z-50 flex items-center justify-center hidden bg-gray-900 bg-opacity-50">
+                <div class="bg-white rounded-lg shadow-lg w-full max-w-2xl">
+                    <div class="p-4 border-b">
+                        <h3 class="text-xl font-bold">Hasil Scan</h3>
+                    </div>
+                    <div class="p-4">
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <p><strong>Nama Barang:</strong> <span id="nama-barang"></span></p>
+                                <p><strong>Merk:</strong> <span id="merk"></span></p>
+                                <p><strong>Stok:</strong> <span id="stok-barang"></span></p>
+                                <p><strong>Kode Barang:</strong> <span id="kode-barang"></span></p>
+                                <p><strong>Jenis Barang:</strong> <span id="jenis-barang"></span></p>
+                            </div>
+                            <div>
+                                <p><strong>Terakhir Diperbarui:</strong> <span id="updated-at"></span></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex justify-end p-4 border-t">
+                        <button id="close-btn" class="btn btn-primary">Tutup</button>
+                        <button id="close-btn" class="btn btn-danger">Lapor</button>
+                    </div>
+                </div>
             </div>
+
+            <p id="error" class="text-red-600 mt-2 hidden"></p>
+            
         </div>
         @else
         <div class="w-full max-w-lg mx-auto p-4 bg-white rounded-lg shadow-lg">
@@ -82,43 +111,45 @@
         }
 
         function onScanSuccess(decodedText) {
-    // Tampilkan hasil di elemen "result"
-    document.getElementById('result').innerText = "Processing QR Code...";
+            html5QrcodeScanner.stop().then(() => {
+                isScanning = false;
+                document.getElementById('toggle-scan-btn').textContent = 'Start Scan';
+            }).catch(err => {
+                console.error("Error stopping QR code scanner: ", err);
+            });
 
-    // Kirim kode_barang ke server untuk mendapatkan data barang
-    fetch('/scan', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-        },
-        body: JSON.stringify({ kode_barang: decodedText }) // Kirim kode_barang yang dipindai
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            // Tampilkan data barang jika berhasil ditemukan
-            const barang = data.data;
-            document.getElementById('result').innerHTML = `
-                <strong>Nama Barang:</strong> ${barang.nama_barang}<br>
-                <strong>Merk:</strong> ${barang.merek}<br>
-                <strong>Stok:</strong> ${barang.stok_barang}<br>
-                <strong>Kode Barang:</strong> ${barang.kode_barang}<br>
-                <strong>Jenis Barang:</strong> ${barang.nama_jenis_barang}<br>
-                <strong>Terakhir Diperbarui:</strong> ${barang.updated_at}
-            `;
-        } else {
-            // Jika data tidak ditemukan, tampilkan pesan
-            document.getElementById('result').innerText = data.message;
+            fetch('/scan', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                },
+                body: JSON.stringify({ kode_barang: decodedText })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const barang = data.data;
+                    document.getElementById('nama-barang').textContent = barang.nama_barang;
+                    document.getElementById('merk').textContent = barang.merek;
+                    document.getElementById('stok-barang').textContent = barang.stok_barang;
+                    document.getElementById('kode-barang').textContent = barang.kode_barang;
+                    document.getElementById('jenis-barang').textContent = barang.nama_jenis_barang;
+                    document.getElementById('updated-at').textContent = barang.updated_at;
+
+                    document.getElementById('result').classList.remove('hidden');
+                } else {
+                    console.error("Error fetching barang data: ", data.message);
+                }
+            })
+            .catch(error => {
+                console.error("Error:", error);
+            });
         }
-    })
-    .catch(error => {
-        console.error("Error:", error);
-        document.getElementById('result').innerText = "An error occurred while processing the QR code.";
-    });
-}
 
-
+        document.getElementById('close-btn').addEventListener('click', () => {
+            document.getElementById('result').classList.add('hidden');
+        });
 
 
         function onScanFailure(error) {
@@ -168,4 +199,3 @@
 
     </script>
 @endpush
-

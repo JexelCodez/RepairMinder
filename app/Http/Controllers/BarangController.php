@@ -66,28 +66,28 @@ class BarangController extends Controller
 
 
     public function scan(Request $request)
-{
-    $request->validate([
-        'kode_barang' => 'required|string',
-    ]);
-
-    $barangModel = new Barang();
-    
-    $products = $barangModel->getRows();
-
-    $barang = collect($products)->firstWhere('kode_barang', $request->kode_barang);
-
-    if ($barang) {
-        return response()->json([
-            'success' => true,
-            'data' => $barang,
+    {
+        $request->validate([
+            'kode_barang' => 'required|string',
         ]);
-    } else {
-        return response()->json([
-            'success' => false,
-            'message' => 'Barang tidak ditemukan.',
-        ]);
+
+        $barangModel = new Barang();
+        
+        $products = $barangModel->getRows();
+
+        $barang = collect($products)->firstWhere('kode_barang', $request->kode_barang);
+
+        if ($barang) {
+            return response()->json([
+                'success' => true,
+                'data' => $barang,
+            ]);
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => 'Barang tidak ditemukan.',
+            ]);
+        }
     }
-}
     
 }
