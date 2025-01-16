@@ -27,7 +27,7 @@ class LoginController extends Controller
                 return redirect()->route('home.guru');
             }
             if ($user->role === 'teknisi') {
-                return redirect('home');
+                return redirect('/admin');
             }
         }
 
