@@ -79,7 +79,7 @@
                     </div>
                     <div class="flex justify-end p-4 border-t">
                         <button id="close-btn" class="btn btn-primary">Tutup</button>
-                        <button id="close-btn" class="btn btn-danger">Lapor</button>
+                        <button id="close-btn" class="btn btn-danger laporpak">Lapor</button>
                     </div>
                 </div>
             </div>
@@ -184,6 +184,17 @@
                 });
             }
         });
+
+        document.querySelector('.laporpak').addEventListener('click', function() {
+    const namaBarang = document.getElementById('nama-barang').textContent;
+    const merkBarang = document.getElementById('merk').textContent;
+    const kodeBarang = document.getElementById('kode-barang').textContent;
+
+    // Redirect ke halaman laporan dengan data
+    const url = `/lapor?nama_barang=${encodeURIComponent(namaBarang)}&merk_barang=${encodeURIComponent(merkBarang)}&kode_barang=${encodeURIComponent(kodeBarang)}`;
+    window.location.href = url;
+});
+
 
         // html5QrcodeScanner.start(
         //     { facingMode: "environment" },
