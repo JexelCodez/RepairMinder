@@ -1,7 +1,7 @@
 <nav class="navbar navbar-expand-lg">
     <div class="container">
         <a class="navbar-brand me-lg-5 me-0" href="{{ route('home') }}">
-            <img src="images/sijates.png" class="logo-image img-fluid" alt="templatemo pod talk">
+            <img src="icons/remi-icon.png" class="logo-image img-fluid" alt="templatemo pod talk">
         </a>
 
         <form action="#" method="get" class="custom-form search-form flex-fill me-3" role="search">
@@ -30,7 +30,7 @@
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('tentang_kami') }}">Tentang Kami</a>
+                    <a class="nav-link" href="{{ route('tentang') }}">Tentang REMI</a>
                 </li>
 
                 <!-- <li class="nav-item dropdown">

@@ -1,5 +1,5 @@
 @extends('user_view.resources.layouts.app')
-@section('title', 'Tentang Kami')
+@section('title', 'Tentang REMI')
 
 
 @section('content')

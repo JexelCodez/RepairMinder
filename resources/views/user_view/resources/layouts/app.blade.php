@@ -5,13 +5,14 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-
     <meta name="description" content="">
     <meta name="author" content="">
+    <link rel="icon" href="{{ asset('icons/remi-icon.png') }}" type="image/x-icon">
 
     <title>@yield('title')</title>
 
     <!-- CSS FILES -->
+    
     @include('user_view.resources.assets.css')
 
     @stack('custom-css')
@@ -50,6 +51,11 @@ https://templatemo.com/tm-584-pod-talk
     <!-- JAVASCRIPT ENDFILES -->
 
     <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script> -->
+
+    <!-- SweetAlert -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    @include('sweetalert::alert')
 
 </body>
 

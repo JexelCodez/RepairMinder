@@ -28,7 +28,7 @@
                 </p> -->
             </div>
 
-            <div class="col-lg-3 col-md-6 col-12">
+            <!-- <div class="col-lg-3 col-md-6 col-12">
                 <h6 class="site-footer-title mb-3">Download Mobile</h6>
 
                 <div class="site-footer-thumb mb-4 pb-2">
@@ -58,7 +58,7 @@
                         <a href="#" class="social-icon-link bi-whatsapp"></a>
                     </li>
                 </ul>
-            </div>
+            </div> -->
 
         </div>
     </div>
