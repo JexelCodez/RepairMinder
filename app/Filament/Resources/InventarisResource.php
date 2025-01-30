@@ -79,10 +79,18 @@ class InventarisResource extends Resource
                 BadgeColumn::make('kondisi_barang')
                     ->label('Kondisi')
                     ->sortable()
+                    ->formatStateUsing(function ($state) {
+                        return match ($state) {
+                            'lengkap'        => 'Lengkap',
+                            'tidak_lengkap'  => 'Tidak Lengkap',
+                            'rusak'          => 'Rusak',
+                            default          => $state,
+                        };
+                    })
                     ->colors([
                         'success' => 'lengkap',
                         'warning' => 'tidak_lengkap',
-                        'danger' => 'rusak',
+                        'danger'  => 'rusak',
                     ]),
 
                 TextColumn::make('ket_barang')
