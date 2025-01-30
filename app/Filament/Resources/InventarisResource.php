@@ -136,9 +136,9 @@ class InventarisResource extends Resource
                         $success = $record->updateKondisiBarang($data['kondisi_barang']);
                     
                         if ($success) {
-                            session()->flash('success', 'Status barang berhasil diperbarui!');
+                            session()->flash('success', 'Kondisi barang berhasil diperbarui!');
                         } else {
-                            session()->flash('error', 'Gagal memperbarui status barang di API.');
+                            session()->flash('error', 'Gagal memperbarui Kondisi barang di API.');
                         }
                     }),
             ])
