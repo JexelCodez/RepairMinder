@@ -112,26 +112,38 @@ class InventarisResource extends Resource
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
-                Tables\Actions\EditAction::make()->action(function ($record, array $data) {
-                    // Update kondisi barang di database
-                    $record->update(['kondisi_barang' => $data['kondisi_barang']]);
-    
-                    // Panggil method updateKondisiBarang untuk update API
-                    $success = $record->updateKondisiBarang($data['kondisi_barang']);
-    
-                    if ($success) {
-                        return redirect()->route('filament.resources.inventarises.index')
-                            ->with('success', 'Status barang berhasil diperbarui!');
-                    } else {
-                        return redirect()->route('filament.resources.inventarises.index')
-                            ->with('error', 'Gagal memperbarui status barang di API.');
-                    }
-                }),                             
+                // Menggunakan modal untuk Edit
+                EditAction::make()
+                    ->modalHeading('Edit Kondisi Barang')
+                    ->modalWidth('lg')
+                    ->form(fn ($record) => [
+                        Forms\Components\Select::make('kondisi_barang')
+                            ->label('Kondisi Barang')
+                            ->options([
+                                'lengkap' => 'Lengkap',
+                                'tidak_lengkap' => 'Tidak Lengkap',
+                                'rusak' => 'Rusak',
+                            ])
+                            ->default($record->kondisi_barang)
+                            ->required()
+                            ->reactive(),
+                    ])
+                    ->action(function ($record, array $data) {
+                        // Update kondisi barang di database
+                        $record->update(['kondisi_barang' => $data['kondisi_barang']]);
+                    
+                        // Panggil method updateKondisiBarang untuk update API
+                        $success = $record->updateKondisiBarang($data['kondisi_barang']);
+                    
+                        if ($success) {
+                            session()->flash('success', 'Status barang berhasil diperbarui!');
+                        } else {
+                            session()->flash('error', 'Gagal memperbarui status barang di API.');
+                        }
+                    }),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
+                Tables\Actions\BulkActionGroup::make([Tables\Actions\DeleteBulkAction::make()]),
             ]);
     }
 
@@ -147,7 +159,7 @@ class InventarisResource extends Resource
         return [
             'index' => Pages\ListInventaris::route('/'),
             'create' => Pages\CreateInventaris::route('/create'),
-            'edit' => Pages\EditInventaris::route('/{record}/edit'),
+            // 'edit' => Pages\EditInventaris::route('/{record}/edit'),
         ];
     }
 }
