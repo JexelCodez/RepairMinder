@@ -50,9 +50,12 @@ class Inventaris extends Model
             return [
                 'id_inventaris'   => $item['id_inventaris'],
                 'id_barang'       => $item['barang']['id_barang'] ?? null,
+                'nama_jenis_barang'       => $item['barang']['jenis_barang']['nama_jenis_barang'] ?? 'Tidak Ada',
                 'nama_barang'     => $item['barang']['nama_barang'] ?? 'Tidak Ada',
                 'merek'           => $item['barang']['merek'] ?? 'Tidak Ada',
-                'qrcode_image'           => $item['barang']['qrcode_image'] ?? 'Tidak Ada',
+                'kode_barang'           => $item['barang']['kode_barang'] ?? 'Tidak Ada',
+                'qrcode_image'    => $item['barang']['qrcode_image'] ?? 'Tidak Ada',
+                'stok_barang'     => $item['barang']['stok_barang'] ?? 'N/A',
                 'id_ruangan'      => $item['ruangan']['id_ruangan'] ?? null,
                 'nama_ruangan'    => $item['ruangan']['nama_ruangan'] ?? 'Tidak Ada',
                 'jumlah_barang'   => $item['jumlah_barang'] ?? 'N/A',
