@@ -4,47 +4,81 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Login</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <title>RepairMinder - Login</title>
+    <link rel="icon" href="{{ asset('icons/remi-icon.png') }}" type="image/x-icon">
+    <link rel="stylesheet" href="{{ asset('css/login-page.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
 </head>
-<body class="d-flex align-items-center justify-content-center vh-100 bg-light">
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-6 col-lg-4">
-                <div>
-                    <div class="card shadow">
-                        <div class="card-body">
-                            <h3 class="text-center mb-4">Login</h3>
-                            <form method="POST" action="{{ route('login') }}">
-                                @csrf
-                                <div class="mb-3">
-                                    <label class="form-label">Email</label>
-                                    <input name="email" type="email" class="form-control {{ $errors->has('email') ? 'is-invalid' : '' }}" value="{{old('email')}}" placeholder="Enter Email" required>
-                                    @error('email')
-                                    <span class="text-danger">{{$message}}</span>
-                                    @enderror
-                                </div>
-                                <div class="mb-3">
-                                    <label class="form-label">Password</label>
-                                    <input name="password" type="password" class="form-control {{ $errors->has('password') ? 'is-invalid' : '' }}"  placeholder="Enter password" required>
-                                    @error('password')
-                                    <span class="text-danger">{{$message}}</span>
-                                    @enderror
-                                </div>
-                                <button type="submit" class="btn btn-primary w-100">Login</button>
-                            </form>
-                            <div class="mt-3 text-center">
-                                <p>Dont have an account? <a href="{{route('register')}}" class="text-decoration-none">Register</a></p>
+<body>
+    <div class="container d-flex justify-content-center align-items-center min-vh-100">
+        <div class="row justify-content-center w-100">
+            <div class="col-md-8 col-lg-6 col-xl-4">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <img src="{{ asset('icons/remi-icon.png') }}" alt="Remi Logo" class="small-icon">
+                        <h3 class="text-center mb-4 fw-bold font-monospace">REPAIRMINDER</h3>
+                        <form method="POST" action="{{ route('login') }}">
+                            @csrf
+                            <!-- Email Field -->
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Email</label>
+                                <input name="email" id="email" type="email" class="form-control {{ $errors->has('email') ? 'is-invalid' : '' }}" value="{{ old('email') }}" placeholder="Masukkan email" required>
+                                @error('email')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
                             </div>
+                            <!-- Password Field -->
+                            <div class="mb-3">
+                                <label for="password" class="form-label">Password</label>
+                                <div class="input-group">
+                                    <input name="password" id="password" type="password" 
+                                        class="form-control {{ $errors->has('password') ? 'is-invalid' : '' }}" 
+                                        placeholder="Masukkan password" required>
+                                    <button id="togglePassword" class="input-group-text"></button>
+                                </div>
+                                @error('password')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                            </div>
+                            <!-- Submit Button -->
+                            <button type="submit" class="btn btn-primary w-100 mb-3">Login</button>
+                            <!-- Forgot Password Link -->
+                            <div class="mt-2 text-end">
+                                <a href="{{ route('password.request') }}" class="text-decoration-none small text-muted">Lupa Password?</a>
+                            </div>
+                        </form>
+                        <!-- Register Link -->
+                        <div class="mt-3 text-center">
+                            <p>Belum memiliki akun? <a href="{{ route('register') }}" class="text-decoration-none">Register</a></p>
                         </div>
                     </div>
                 </div>
-                
             </div>
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const togglePassword = document.querySelector('#togglePassword');
+        const passwordInput = document.querySelector('#password');
+
+        togglePassword.addEventListener('click', function () {
+            // Toggle the input type
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+
+            // Toggle the "show" class for the CSS pseudo-element
+            this.classList.toggle('show');
+        });
+    </script>
+
+    <!-- Bootstrap JS and Popper (needed for Bootstrap components) -->
+    <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
+
+    <!-- SweetAlert -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    @include('sweetalert::alert')
+
 </body>
 </html>

@@ -8,6 +8,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Facades\Validator;
 
 class RegisterController extends Controller
@@ -35,6 +36,8 @@ class RegisterController extends Controller
             'password' => $request->password,
             'role' => 'siswa'
         ]);
+
+        Alert::success('Berhasil', 'Silahkan lanjut login!');
 
         return redirect()->route('login'); 
     }

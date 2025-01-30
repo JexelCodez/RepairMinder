@@ -1,0 +1,195 @@
+/*---------------------------------------
+  LOGIN PAGE BACKGROUND 
+-----------------------------------------*/
+body {
+    background-image: url('../images/templatemo-wave-footer.jpg'), linear-gradient(#FFFFFF, #348CD2);
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;  /* Ensures the image covers the screen */
+    height: 100vh;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/*---------------------------------------
+  CONTAINER AND FORM STYLING
+-----------------------------------------*/
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+.card {
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1); /* Soft shadow */
+}
+
+.card-body {
+    padding: 40px;
+    background-color: rgb(236, 230, 230);
+}
+
+.small-icon {
+    width: 50px;  /* Set the desired width */
+    height: 50px; /* Ensure the height is the same to keep it square */
+    object-fit: contain; /* Ensures the image maintains its aspect ratio */
+    display: block;
+    margin-left: auto;
+    margin-right: auto; /* Centers the image horizontally */
+    border-radius: 50%;
+}
+
+/* Heading Style */
+h3 {
+    font-size: 28px;
+    color: #348CD2; /* Match primary theme color */
+    margin-bottom: 25px;
+}
+
+/* Form Inputs and Buttons */
+.form-control {
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    padding: 15px;
+    margin-bottom: 15px;
+}
+
+.btn-primary {
+    background-color: #348CD2;
+    border-color: #348CD2;
+    padding: 10px;
+    border-radius: 8px;
+}
+
+.btn-primary:hover {
+    background-color: #2879b9; /* Darker blue on hover */
+    border-color: #2879b9;
+}
+
+/* Password Toggle Button */
+/* Password Toggle Button */
+#togglePassword {
+    display: flex;
+    align-items: center; /* Centers the icon vertically */
+    justify-content: center; /* Centers the icon horizontally */
+    width: 40px; /* Match the input group's height */
+    height: 40px; /* Match the input group's height */
+    cursor: pointer; /* Add pointer for interactivity */
+    background: transparent; /* Transparent background */
+    border: none; /* Remove any border */
+    padding: 0; /* Remove default padding */
+}
+
+#togglePassword::before {
+    content: '\f06e'; /* Unicode for "eye" icon */
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    font-size: 1rem; /* Adjust the icon size */
+    color: #6c757d; /* Matches Bootstrap's default text-secondary color */
+}
+
+#togglePassword.show::before {
+    content: '\f070'; /* Unicode for "eye-slash" icon */
+}
+
+/* Adjustments for Responsiveness */
+@media screen and (max-width: 576px) {
+    #togglePassword {
+        width: 35px;
+        height: 35px;
+    }
+
+    #togglePassword::before {
+        font-size: 0.9rem;
+    }
+}
+
+/* Footer and Links Styling */
+.text-muted {
+    font-size: 14px;
+}
+
+.text-decoration-none {
+    text-decoration: none;
+}
+
+a {
+    color: #348CD2;
+}
+
+a:hover {
+    color: #2879b9;
+}
+
+/* Notification Alerts (Optional) */
+.alert {
+    border-radius: 8px;
+    font-size: 16px;
+}
+
+.alert button {
+    border-radius: 50%;
+    padding: 5px 10px;
+}
+
+.alert-dismissible {
+    transition: opacity 0.3s ease-in-out;
+}
+
+/* Media Queries for Responsiveness */
+@media screen and (max-width: 991px) {
+    .card-body {
+        padding: 30px;
+        background-color: rgb(236, 230, 230);
+    }
+
+    h3 {
+        font-size: 24px;
+    }
+
+    .form-control {
+        font-size: 14px;
+    }
+
+    .btn-primary {
+        padding: 12px;
+    }
+}
+
+/* Additional Media Query for Mobile */
+@media screen and (max-width: 576px) {
+    body {
+        background-size: cover;  /* Ensure the image still covers the screen */
+        background-position: center center;  /* Keeps the image centered */
+    }
+
+    .card {
+        margin-top: 20px;
+        margin-bottom: 20px;
+        border-radius: 10px;
+    }
+
+    .card-body {
+        padding: 20px;
+        background-color: rgb(236, 230, 230);
+    }
+
+    h3 {
+        font-size: 20px;
+    }
+
+    .form-control {
+        font-size: 14px;
+        padding: 12px;
+    }
+
+    .btn-primary {
+        padding: 12px;
+        font-size: 16px;
+    }
+}

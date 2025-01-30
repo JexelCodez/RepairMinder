@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Validation\ValidationException;
 
 class LoginController extends Controller
@@ -21,13 +22,14 @@ class LoginController extends Controller
         if (Auth::attempt($credentials)) {
             $user = Auth::user();
             if ($user->role === 'siswa') {
+                Alert::success('Mantap', 'Anda berhasil login!');
                 return redirect('/');
             }
             if ($user->role === 'guru') {
                 return redirect()->route('home.guru');
             }
             if ($user->role === 'teknisi') {
-                return redirect('home');
+                return redirect('/admin');
             }
         }
 

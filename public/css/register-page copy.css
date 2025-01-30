@@ -1,0 +1,119 @@
+/*---------------------------------------
+  REGISTER PAGE BACKGROUND
+-----------------------------------------*/
+body {
+    background-image: url('../images/templatemo-wave-footer.jpg'), linear-gradient(#FFFFFF, #348CD2);
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+    height: 100vh;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Wrapper for centering form */
+.form-wrapper {
+    max-width: 400px;
+    width: 100%;
+    padding: 20px;
+}
+
+/* Card styling */
+.card {
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
+    background-color: rgb(236, 230, 230);
+}
+
+/* Card body spacing */
+.card-body {
+    padding: 30px;
+}
+
+/* Form groups */
+.form-group {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 8px;
+    color: #333;
+}
+
+.form-control {
+    width: 100%;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+
+/* Password toggle button */
+.password-group {
+    position: relative;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+.toggle-password:focus {
+    outline: none;
+}
+
+/* Button styles */
+.btn-primary {
+    background-color: #348CD2;
+    border: none;
+    color: white;
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 16px;
+    width: 100%;
+    cursor: pointer;
+}
+
+.btn-primary:hover {
+    background-color: #2879b9;
+}
+
+/* Links */
+.text-link {
+    color: #348CD2;
+    text-decoration: none;
+}
+
+.text-link:hover {
+    color: #2879b9;
+    text-decoration: underline;
+}
+
+/* Responsive adjustments */
+@media screen and (max-width: 576px) {
+    .card-body {
+        padding: 20px;
+    }
+
+    .form-control {
+        font-size: 14px;
+        padding: 8px;
+    }
+
+    .btn-primary {
+        font-size: 14px;
+        padding: 8px;
+    }
+}

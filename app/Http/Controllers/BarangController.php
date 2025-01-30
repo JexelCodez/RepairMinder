@@ -26,36 +26,22 @@ class BarangController extends Controller
             'kode_barang' => 'required|string|max:255',
         ]);
 
-        $kodeBarang = $request->input('kode_barang');
+        $barangModel = new Barang();
+        
+        $products = $barangModel->getRows();
 
-        try {
-            // Attempt to retrieve barang data from cache
-            $barangData = Cache::remember('barang_data', now()->addMinutes(10), function () {
-                $barangModel = new Barang();
-                return $barangModel->getRows();
-            });
+        $barang = collect($products)->firstWhere('kode_barang', $request->kode_barang);
 
-            // Find the barang with the matching 'kode_barang'
-            $barang = collect($barangData)->firstWhere('kode_barang', $kodeBarang);
-
-            if ($barang) {
-                return response()->json([
-                    'success' => true,
-                    'data' => $barang,
-                ]);
-            } else {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Barang tidak ditemukan.',
-                ], 404);
-            }
-        } catch (\Exception $e) {
-            Log::error('Scan Error: ' . $e->getMessage());
-
+        if ($barang) {
+            return response()->json([
+                'success' => true,
+                'data' => $barang,
+            ]);
+        } else {
             return response()->json([
                 'success' => false,
-                'message' => 'Terjadi kesalahan saat memproses permintaan.',
-            ], 500);
+                'message' => 'Barang tidak ditemukan.',
+            ]);
         }
     }
     
