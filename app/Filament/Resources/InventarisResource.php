@@ -113,27 +113,18 @@ class InventarisResource extends Resource
             ->actions([
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make()->action(function ($record, array $data) {
-                    // Update field di database
+                    // Update kondisi barang di database
                     $record->update(['kondisi_barang' => $data['kondisi_barang']]);
-                
-                    // Kirim ke API
-                    $response = Http::put("https://zaikotrack-main.test/api/inventaris/{$record->id_inventaris}/kondisi", [
-                        'kondisi_barang' => $data['kondisi_barang'],
-                    ]);
-                
-                    Log::info("Update API response", [
-                        'status' => $response->status(),
-                        'body' => $response->json(),
-                    ]);
-                
-                    if ($response->successful()) {
-                        // Force reload the table data after successful update
+    
+                    // Panggil method updateKondisiBarang untuk update API
+                    $success = $record->updateKondisiBarang($data['kondisi_barang']);
+    
+                    if ($success) {
                         return redirect()->route('filament.resources.inventarises.index')
-                            ->with('success', 'Status barang berhasil diperbarui!')
-                            ->with('reload', true); // Using a custom flag to reload data
+                            ->with('success', 'Status barang berhasil diperbarui!');
                     } else {
                         return redirect()->route('filament.resources.inventarises.index')
-                            ->with('error', 'Gagal memperbarui status barang. ' . $response->body());
+                            ->with('error', 'Gagal memperbarui status barang di API.');
                     }
                 }),                             
             ])
