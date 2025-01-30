@@ -21,6 +21,15 @@ use Filament\Tables\Actions\Action;
 use Filament\Tables\Actions\EditAction;
 use Illuminate\Support\Facades\Log;
 
+// INFOLIST
+use Filament\Infolists\Infolist;
+use Filament\Infolists\Components\TextEntry;
+use Filament\Infolists\Components\RepeatableEntry;
+use Filament\Infolists\Components\Fieldset;
+use Filament\Infolists\Components\ViewEntry;
+use Filament\Infolists\Components\Grid;
+use Filament\Infolists\Components\ImageEntry;
+
 class InventarisResource extends Resource
 {
     protected static ?string $model = Inventaris::class;
@@ -64,8 +73,8 @@ class InventarisResource extends Resource
                     ->sortable()
                     ->searchable(),
 
-                ImageColumn::make('qrcode_image')
-                    ->label('QR Code'),
+                // ImageColumn::make('qrcode_image')
+                //     ->label('QR Code'),
 
                 TextColumn::make('nama_ruangan')
                     ->label('Nama Ruangan')
@@ -151,8 +160,57 @@ class InventarisResource extends Resource
                     }),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([Tables\Actions\DeleteBulkAction::make()]),
+                // Tables\Actions\BulkActionGroup::make([Tables\Actions\DeleteBulkAction::make()]),
             ]);
+    }
+
+    public static function infolist(Infolist $infolist): Infolist
+    {
+        return $infolist
+        ->schema([
+            Fieldset::make('Informasi Barang')
+                ->schema([
+                    TextEntry::make('nama_barang'),
+                    TextEntry::make('merek'),
+                    TextEntry::make('stok_barang'),
+                    TextEntry::make('kode_barang'),           
+                    TextEntry::make('nama_jenis_barang'),           
+                    TextEntry::make('nama_ruangan')
+                        ->label('Lokasi'),
+                    TextEntry::make('kondisi_barang')
+                        ->badge()
+                        ->formatStateUsing(function ($state) {
+                            return match ($state) {
+                                'lengkap'        => 'Lengkap',
+                                'tidak_lengkap'  => 'Tidak Lengkap',
+                                'rusak'          => 'Rusak',
+                                default          => $state,
+                            };
+                        })
+                        ->colors([
+                            'success' => 'lengkap',
+                            'warning' => 'tidak_lengkap',
+                            'danger'  => 'rusak',
+                        ]),
+                        TextEntry::make('ket_barang')
+                            ->label('Keterangan'),           
+                ])->columnSpan(2)->columns(2),
+            Grid::make()
+                ->schema([
+                    Fieldset::make('QR Code')
+                        ->schema([
+                            ImageEntry::make('qrcode_image')
+                                ->size('xl'),
+                        ])->columns(1),
+                    Fieldset::make('Status')
+                        ->schema([
+                            TextEntry::make('created_at')
+                            ->dateTime(),
+                            TextEntry::make('updated_at')
+                            ->dateTime(),           
+                        ])->columns(1),
+                ])->columnSpan(1),
+        ])->columns(3);
     }
 
     public static function getRelations(): array
@@ -166,7 +224,7 @@ class InventarisResource extends Resource
     {
         return [
             'index' => Pages\ListInventaris::route('/'),
-            'create' => Pages\CreateInventaris::route('/create'),
+            // 'create' => Pages\CreateInventaris::route('/create'),
             // 'edit' => Pages\EditInventaris::route('/{record}/edit'),
         ];
     }
