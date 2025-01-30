@@ -66,4 +66,19 @@ class Inventaris extends Model
 
         return $inventaris;
     }
+
+    // Method untuk update kondisi barang ke API
+    public function updateKondisiBarang($kondisi_barang)
+    {
+        // Kirim permintaan PUT ke API
+        $response = Http::put("https://zaikotrack-main.test/api/inventaris/{$this->id_inventaris}/kondisi", [
+            'kondisi_barang' => $kondisi_barang,
+        ]);
+
+        if ($response->successful()) {
+            return true;
+        }
+
+        return false;
+    }
 }

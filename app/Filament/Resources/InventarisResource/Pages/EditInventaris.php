@@ -16,13 +16,11 @@ class EditInventaris extends EditRecord
     // Override handleRecordUpdate untuk menangani update melalui API
     protected function handleRecordUpdate(Model $record, array $data): Model
     {
-        // Kirim permintaan PUT ke API untuk memperbarui kondisi barang
-        $response = Http::put("https://zaikotrack-main.test/api/inventaris/{$record->id_inventaris}/kondisi", [
-            'kondisi_barang' => $data['kondisi_barang'],
-        ]);
+        // Panggil method updateKondisiBarang yang ada di model
+        $success = $record->updateKondisiBarang($data['kondisi_barang']);
 
         // Mengecek apakah API berhasil merespon
-        if ($response->successful()) {
+        if ($success) {
             // Jika sukses, perbarui record di database lokal
             $record->update([
                 'kondisi_barang' => $data['kondisi_barang'],
@@ -32,9 +30,10 @@ class EditInventaris extends EditRecord
             return $record;
         } else {
             // Jika API gagal, lempar exception atau beri pesan error
-            throw new \Exception("Gagal memperbarui kondisi barang di API. Response: " . $response->body());
+            throw new \Exception("Gagal memperbarui kondisi barang di API.");
         }
     }
+
 
     protected function getHeaderActions(): array
     {
