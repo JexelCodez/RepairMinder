@@ -9,6 +9,23 @@
     <link rel="stylesheet" href="{{ asset('css/login-page.css') }}">
     <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+
+    <style>
+        .input-icon {
+            position: absolute;
+            top: 50%;
+            right: 10px;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #6c757d;
+            font-size: 1.2rem;
+        }
+    
+        .position-relative .form-control {
+            padding-right: 2.5rem; /* Memberi ruang untuk ikon */
+        }
+    </style>
+    
 </head>
 <body>
     <div class="container d-flex justify-content-center align-items-center min-vh-100">
@@ -31,16 +48,19 @@
                             <!-- Password Field -->
                             <div class="mb-3">
                                 <label for="password" class="form-label">Password</label>
-                                <div class="input-group">
-                                    <input name="password" id="password" type="password" 
-                                        class="form-control {{ $errors->has('password') ? 'is-invalid' : '' }}" 
-                                        placeholder="Masukkan password" required>
-                                    <button id="togglePassword" class="input-group-text"></button>
+                                <div class="position-relative">
+                                    <input name="password" type="password" 
+                                           class="form-control {{ $errors->has('password') ? 'is-invalid' : '' }}" 
+                                           id="floatingPassword" 
+                                           placeholder="Password" 
+                                           required>
+                                    <i class="fa fa-eye-slash input-icon" id="togglePasswordIcon" onclick="togglePassword()"></i>
                                 </div>
                                 @error('password')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
                             </div>
+                            
                             <!-- Submit Button -->
                             <button type="submit" class="btn btn-primary w-100 mb-3">Login</button>
                             <!-- Forgot Password Link -->
@@ -58,7 +78,7 @@
         </div>
     </div>
 
-    <script>
+    {{-- <script>
         const togglePassword = document.querySelector('#togglePassword');
         const passwordInput = document.querySelector('#password');
 
@@ -70,6 +90,23 @@
             // Toggle the "show" class for the CSS pseudo-element
             this.classList.toggle('show');
         });
+    </script> --}}
+
+    <script>
+        function togglePassword() {
+            var passwordField = document.getElementById("floatingPassword");
+            var toggleIcon = document.getElementById("togglePasswordIcon");
+
+            if (passwordField.type === "password") {
+                passwordField.type = "text";
+                toggleIcon.classList.remove("fa-eye-slash");
+                toggleIcon.classList.add("fa-eye");
+            } else {
+                passwordField.type = "password";
+                toggleIcon.classList.remove("fa-eye");
+                toggleIcon.classList.add("fa-eye-slash");
+            }
+        }
     </script>
 
     <!-- Bootstrap JS and Popper (needed for Bootstrap components) -->
