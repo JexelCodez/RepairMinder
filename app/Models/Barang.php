@@ -22,7 +22,7 @@ class Barang extends Model
     public function getRows()
     {
         //API
-        $response = Http::get('https://zaikotrack-main.test/api/barang');
+        $response = Http::get('https://zaikotrack.test/api/barang');
 
         if ($response->successful()) {
             $products = $response->json();

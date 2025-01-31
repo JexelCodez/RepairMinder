@@ -8,6 +8,12 @@ use Illuminate\Support\Facades\Auth;
 
 class LaporController extends Controller
 {
+
+    public function index()
+    {
+        
+    }
+
     public function create(Request $request)
     {
         return view('user_view.resources.pages.lapor.lapor-create', [
