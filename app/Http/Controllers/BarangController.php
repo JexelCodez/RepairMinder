@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Barang;
+use App\Models\Inventaris;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
@@ -21,16 +22,17 @@ class BarangController extends Controller
      */
     public function scan(Request $request)
     {
-        // Validate the incoming request
+        // Validasi input
         $request->validate([
             'kode_barang' => 'required|string|max:255',
         ]);
 
-        $barangModel = new Barang();
-        
-        $products = $barangModel->getRows();
+        // Ambil data inventaris dari API melalui model
+        $inventarisModel = new Inventaris();
+        $inventaris = $inventarisModel->getRows(); // Pastikan method getRows() mengambil data dari API
 
-        $barang = collect($products)->firstWhere('kode_barang', $request->kode_barang);
+        // Cari barang berdasarkan kode_barang
+        $barang = collect($inventaris)->firstWhere('kode_barang', $request->kode_barang);
 
         if ($barang) {
             return response()->json([
@@ -44,5 +46,6 @@ class BarangController extends Controller
             ]);
         }
     }
+
     
 }

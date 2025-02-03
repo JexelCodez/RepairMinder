@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
@@ -62,7 +63,7 @@ class Inventaris extends Model
                 'kondisi_barang'  => $item['kondisi_barang'] ?? 'N/A',
                 'ket_barang'      => $item['ket_barang'] ?? '-',
                 'created_at'      => $item['created_at'],
-                'updated_at'      => $item['updated_at'],
+                'updated_at'      => Carbon::parse($item['updated_at'])->format('d-M-Y H:i'),
             ];
         });
         

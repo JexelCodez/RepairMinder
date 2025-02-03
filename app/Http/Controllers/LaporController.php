@@ -20,6 +20,7 @@ class LaporController extends Controller
             'nama_barang' => $request->get('nama_barang'),
             'merk_barang' => $request->get('merk_barang'),
             'kode_barang' => $request->get('kode_barang'),
+            'lokasi_barang' => $request->get('lokasi_barang'),
         ]);
         
     }
