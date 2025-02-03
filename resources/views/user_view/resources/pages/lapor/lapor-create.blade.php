@@ -37,20 +37,20 @@
                                    class="form-control" readonly>
                         </div>
 
+                        <!-- Lokasi Laporan -->
+                        <div class="mb-3">
+                            <label for="lokasi_barang" class="form-label">Lokasi Barang</label>
+                            <input type="text" id="lokasi_barang" name="lokasi_barang" 
+                                value="{{ old('lokasi_barang', $lokasi_barang ?? '') }}" 
+                                class="form-control" readonly>
+                        </div>
+
                         <!-- Deskripsi Laporan -->
                         <div class="mb-3">
                             <label for="deskripsi_laporan" class="form-label">Deskripsi Laporan</label>
                             <textarea id="deskripsi_laporan" name="deskripsi_laporan" 
                                       class="form-control" rows="4" 
                                       placeholder="Jelaskan masalah yang ingin dilaporkan..." required>{{ old('deskripsi_laporan') }}</textarea>
-                        </div>
-
-                        <!-- Lokasi Laporan -->
-                        <div class="mb-3">
-                            <label for="lokasi_barang" class="form-label">Lokasi Laporan</label>
-                            <input type="text" id="lokasi_barang" name="lokasi_barang" 
-                                   value="{{ old('lokasi_barang') }}" 
-                                   class="form-control" placeholder="Masukkan lokasi barang..." required>
                         </div>
 
                         <div class="mb-3">

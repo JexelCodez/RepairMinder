@@ -71,6 +71,8 @@
                                 <p><strong>Stok:</strong> <span id="stok-barang"></span></p>
                                 <p><strong>Kode Barang:</strong> <span id="kode-barang"></span></p>
                                 <p><strong>Jenis Barang:</strong> <span id="jenis-barang"></span></p>
+                                <p><strong>Nama Ruangan:</strong> <span id="lokasi-barang"></span></p>
+                                <p><strong>KOndisi:</strong> <span id="status"></span></p>
                             </div>
                             <div>
                                 <p><strong>Terakhir Diperbarui:</strong> <span id="updated-at"></span></p>
@@ -136,6 +138,8 @@
                     document.getElementById('kode-barang').textContent = barang.kode_barang;
                     document.getElementById('jenis-barang').textContent = barang.nama_jenis_barang;
                     document.getElementById('updated-at').textContent = barang.updated_at;
+                    document.getElementById('lokasi-barang').textContent = barang.nama_ruangan;
+                    document.getElementById('status').textContent = barang.kondisi_barang;
 
                     document.getElementById('result').classList.remove('hidden');
                 } else {
@@ -186,14 +190,15 @@
         });
 
         document.querySelector('.laporpak').addEventListener('click', function() {
-    const namaBarang = document.getElementById('nama-barang').textContent;
-    const merkBarang = document.getElementById('merk').textContent;
-    const kodeBarang = document.getElementById('kode-barang').textContent;
+            const namaBarang = document.getElementById('nama-barang').textContent;
+            const merkBarang = document.getElementById('merk').textContent;
+            const kodeBarang = document.getElementById('kode-barang').textContent;
+            const lokasiBarang = document.getElementById('lokasi-barang').textContent;
 
-    // Redirect ke halaman laporan dengan data
-    const url = `/lapor?nama_barang=${encodeURIComponent(namaBarang)}&merk_barang=${encodeURIComponent(merkBarang)}&kode_barang=${encodeURIComponent(kodeBarang)}`;
-    window.location.href = url;
-});
+            // Redirect ke halaman laporan dengan data
+            const url = `/lapor?nama_barang=${encodeURIComponent(namaBarang)}&merk_barang=${encodeURIComponent(merkBarang)}&kode_barang=${encodeURIComponent(kodeBarang)}&lokasi_barang=${encodeURIComponent(lokasiBarang)}`;
+            window.location.href = url;
+        });
 
 
         // html5QrcodeScanner.start(
