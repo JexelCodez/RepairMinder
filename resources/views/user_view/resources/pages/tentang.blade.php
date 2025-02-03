@@ -14,31 +14,28 @@
                     <div class="col-lg-8 col-12 mx-auto">
                         <div class="pb-5 mb-5">
                             <div class="section-title-wrap mb-4">
-                                <h4 class="section-title">Our story</h4>
+                                <h4 class="section-title">Apa itu REMI?</h4>
                             </div>
 
-                            <p>Pod Talk HTML CSS Template is made by Bootstrap v5.2.2 framework. You are allowed to
-                                modify and use this template for your business websites.</p>
+                            <p>Sekolah memiliki perangkat yang dipinjam (seperti switch, router, dan access point) yang membutuhkan pemeliharaan dan perbaikan rutin agar tetap dalam kondisi terbaik sepanjang tahun. Pelacakan manual tidak efisien dan rentan terhadap kesalahan.</p>
 
-                            <p>You are not allowed to redistribute the downloadable template ZIP file on any other
-                                website without a permission. Please contact TemplateMo website for further information.
-                                Thank you.</p>
+                            <p>Mengembangkan aplikasi yang memusatkan catatan pemeliharaan, jadwal, dan kondisi perangkat, menyediakan cara cepat dan andal untuk melacak dan mengelola kondisi perangkat.</p>
 
-                            <img src="images/medium-shot-young-people-recording-podcast.jpg"
-                                class="about-image mt-5 img-fluid" alt="">
+                            <img src="images/medium-shot-young-people-recording-podcat.jpg"
+                                class="about-image mt-5 img-fluid" alt="gambar anak sija betulin alat">
                         </div>
                     </div>
 
                     <div class="col-lg-12 col-12">
                         <div class="section-title-wrap mb-5">
-                            <h4 class="section-title">Meet podcaters</h4>
+                            <h4 class="section-title">Tim Teknisi Kami</h4>
                         </div>
                     </div>
 
                     <div class="col-lg-3 col-md-6 col-12 mb-4 mb-lg-0">
                         <div class="team-thumb bg-white shadow-lg">
-                            <img src="images/profile/cute-smiling-woman-outdoor-portrait.jpg"
-                                class="about-image img-fluid" alt="">
+                            <img src="images/profile/cute-smiling-woan-outdoor-portrait.jpg"
+                                class="about-image img-fluid" alt="teknisi 1">
 
                             <div class="team-info">
                                 <h4 class="mb-2">
@@ -71,8 +68,8 @@
 
                     <div class="col-lg-3 col-md-6 col-12 mb-4 mb-lg-0">
                         <div class="team-thumb bg-white shadow-lg">
-                            <img src="images/profile/handsome-asian-man-listening-music-through-headphones.jpg"
-                                class="about-image img-fluid" alt="">
+                            <img src="images/profile/handsome-asian-man-lisening-music-through-headphones.jpg"
+                                class="about-image img-fluid" alt="teknisi 2">
 
                             <div class="team-info">
                                 <h4 class="mb-2">
@@ -105,8 +102,8 @@
 
                     <div class="col-lg-3 col-md-6 col-12 mb-4 mb-lg-0 mb-md-0">
                         <div class="team-thumb bg-white shadow-lg">
-                            <img src="images/profile/smart-attractive-asian-glasses-male-standing-smile-with-freshness-joyful-casual-blue-shirt-portrait-white-background.jpg"
-                                class="about-image img-fluid" alt="">
+                            <img src="images/profile/smart-attractive-asian-glasses-male-stading-smile-with-freshness-joyful-casual-blue-shirt-portrait-white-background.jpg"
+                                class="about-image img-fluid" alt="teknisi 3">
 
                             <div class="team-info">
                                 <h4 class="mb-2">
@@ -133,8 +130,8 @@
 
                     <div class="col-lg-3 col-md-6 col-12">
                         <div class="team-thumb bg-white shadow-lg">
-                            <img src="images/profile/smiling-business-woman-with-folded-hands-against-white-wall-toothy-smile-crossed-arms.jpg"
-                                class="about-image img-fluid" alt="">
+                            <img src="images/profile/smiling-business-woman-with-flded-hands-against-white-wall-toothy-smile-crossed-arms.jpg"
+                                class="about-image img-fluid" alt="teknisi 4">
 
                             <div class="team-info">
                                 <h4 class="mb-2">

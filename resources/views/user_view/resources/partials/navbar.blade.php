@@ -49,8 +49,20 @@
                 </li>
 
                 @auth
-                <li class="nav-item">
-                    <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="nav-link">Log Out</a>
+                <!-- Dropdown for logged-in user with Bootstrap styling -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle btn btn-primary text-white px-3 py-2 rounded-pill" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        {{ Auth::user()->name }}
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                        <li>
+                            <a class="dropdown-item" href="{{ route('logout') }}"
+                               onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                Log Out
+                            </a>
+                        </li>
+                    </ul>
+                    <!-- Hidden Logout Form -->
                     <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                         @csrf
                     </form>

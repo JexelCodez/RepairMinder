@@ -6,8 +6,10 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>RepairMinder - Login</title>
     <link rel="icon" href="{{ asset('icons/remi-icon.png') }}" type="image/x-icon">
+    <!-- Custom CSS -->
     <link rel="stylesheet" href="{{ asset('css/login-page.css') }}">
     <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
+    <!-- Font Awesome (optional, for icons) -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
 
     <style>

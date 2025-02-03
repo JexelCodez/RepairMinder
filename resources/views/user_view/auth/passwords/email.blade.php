@@ -23,15 +23,15 @@
                             @csrf
                             <div class="mb-3">
                                 <label class="form-label">Email</label>
-                                <input name="email" type="email" class="form-control {{ $errors->has('email') ? 'is-invalid' : '' }}" value="{{ old('email') }}" placeholder="Enter your email" required>
+                                <input name="email" type="email" class="form-control {{ $errors->has('email') ? 'is-invalid' : '' }}" value="{{ old('email') }}" placeholder="Masukkan email Anda" required>
                                 @error('email')
                                 <span class="text-danger">{{ $message }}</span>
                                 @enderror
                             </div>
-                            <button type="submit" class="btn btn-primary w-100">Send Reset Link</button>
+                            <button type="submit" class="btn btn-primary w-100">Kirim Reset Link</button>
                         </form>
                         <div class="mt-3 text-center">
-                            <a href="{{ route('login') }}" class="text-decoration-none">Back to Login</a>
+                            <a href="{{ route('login') }}" class="text-decoration-none">Kembali ke Login</a>
                         </div>
                     </div>
                 </div>
