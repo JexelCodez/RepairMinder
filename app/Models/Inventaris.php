@@ -37,7 +37,7 @@ class Inventaris extends Model
     public function getRows()
     {
         // Panggil API untuk mendapatkan data inventaris
-        $response = Http::get('https://zaikotrack.test/api/inventaris');
+        $response = Http::get('https://zaikotrack-main.test/api/inventaris');
 
         if ($response->successful()) {
             $inventaris = $response->json();
@@ -75,7 +75,7 @@ class Inventaris extends Model
     public function updateKondisiBarang($kondisi_barang)
     {
         // Kirim permintaan PUT ke API
-        $response = Http::put("https://zaikotrack.test/api/inventaris/{$this->id_inventaris}/kondisi", [
+        $response = Http::put("https://zaikotrack-main.test/api/inventaris/{$this->id_inventaris}/kondisi", [
             'kondisi_barang' => $kondisi_barang,
         ]);
 
@@ -85,4 +85,10 @@ class Inventaris extends Model
 
         return false;
     }
+
+    public function updateKondisiBarangToLengkap()
+    {
+        return $this->updateKondisiBarang('lengkap');
+    }
+
 }

@@ -72,7 +72,7 @@
                                 <p><strong>Kode Barang:</strong> <span id="kode-barang"></span></p>
                                 <p><strong>Jenis Barang:</strong> <span id="jenis-barang"></span></p>
                                 <p><strong>Nama Ruangan:</strong> <span id="lokasi-barang"></span></p>
-                                <p><strong>KOndisi:</strong> <span id="status"></span></p>
+                                <p><strong>Kondisi:</strong> <span id="status"></span></p>
                             </div>
                             <div>
                                 <p><strong>Terakhir Diperbarui:</strong> <span id="updated-at"></span></p>
