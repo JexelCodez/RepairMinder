@@ -31,7 +31,10 @@ class LaporanResource extends Resource
 {
     protected static ?string $model = Laporan::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $modelLabel = 'Laporan';
+    protected static ?string $pluralModelLabel = 'Laporan';
+
+    protected static ?string $navigationIcon = 'heroicon-o-document-text';
 
     public static function table(Table $table): Table
     {
@@ -51,20 +54,23 @@ class LaporanResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('status'),
                 BadgeColumn::make('status')
-                        ->badge()
-                        ->formatStateUsing(function ($state) {
-                            return match ($state) {
-                                'done'        => 'Done',
-                                'processed'  => 'Processed',
-                                'pending'          => 'Pending',
-                                default          => $state,
-                            };
-                        })
-                        ->colors([
-                            'success' => 'done',
-                            'warning' => 'processed',
-                            'danger'  => 'pending',
-                        ]),
+                    ->badge()
+                    ->formatStateUsing(fn ($state) => match ($state) {
+                        'done' => 'Done',
+                        'processed' => 'Processed',
+                        'pending' => 'Pending',
+                        default => $state,
+                    })
+                    ->icons([
+                        'heroicon-o-check-circle' => 'done',   // Ikon untuk Done
+                        'heroicon-o-arrow-path' => 'processed', // Ikon untuk Processed
+                        'heroicon-o-clock' => 'pending',       // Ikon untuk Pending
+                    ])
+                    ->colors([
+                        'success' => 'done',
+                        'warning' => 'processed',
+                        'danger' => 'pending',
+                    ]),
                 Tables\Columns\TextColumn::make('tanggal_laporan')
                     ->date()
                     ->sortable(),
@@ -141,6 +147,11 @@ class LaporanResource extends Resource
                                                 default          => $state,
                                             };
                                         })
+                                        ->icons([
+                                            'heroicon-o-check-circle' => 'done',   // Ikon untuk Done
+                                            'heroicon-o-arrow-path' => 'processed', // Ikon untuk Processed
+                                            'heroicon-o-clock' => 'pending',       // Ikon untuk Pending
+                                        ])
                                         ->colors([
                                             'success' => 'done',
                                             'warning' => 'processed',
