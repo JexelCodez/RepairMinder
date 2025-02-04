@@ -75,7 +75,7 @@ class Inventaris extends Model
     public function updateKondisiBarang($kondisi_barang)
     {
         // Kirim permintaan PUT ke API
-        $response = Http::put("https://zaikotrack-main.test/api/inventaris/{$this->id_inventaris}/kondisi", [
+        $response = Http::put("https://zaikotrack.test/api/inventaris/{$this->id_inventaris}/kondisi", [
             'kondisi_barang' => $kondisi_barang,
         ]);
 

@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Inventaris;
 use App\Models\Laporan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
 
 class LaporController extends Controller
 {
@@ -26,28 +28,47 @@ class LaporController extends Controller
     }
 
     public function store(Request $request)
-{
-    $userId = Auth::user()->id;
-    $validatedData = $request->validate([
-        'nama_barang' => 'required|string|max:255',
-        'merk_barang' => 'required|string|max:255',
-        'kode_barang' => 'required|string|max:255',
-        'deskripsi_laporan' => 'required|string',
-        'lokasi_barang' => 'required|string|max:255',
-        'bukti_laporan' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
-    ]);
-
-    if ($request->hasFile('bukti_laporan')) {
-        $filePath = $request->file('bukti_laporan')->store('bukti_laporan', 'public');
-        $validatedData['bukti_laporan'] = $filePath;
+    {
+        $userId = Auth::user()->id;
+        
+        // Validasi data laporan
+        $validatedData = $request->validate([
+            'nama_barang' => 'required|string|max:255',
+            'merk_barang' => 'required|string|max:255',
+            'kode_barang' => 'required|string|max:255',
+            'deskripsi_laporan' => 'required|string',
+            'lokasi_barang' => 'required|string|max:255',
+            'bukti_laporan' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+        ]);
+    
+        // Jika ada file bukti laporan, simpan file tersebut
+        if ($request->hasFile('bukti_laporan')) {
+            $filePath = $request->file('bukti_laporan')->store('bukti_laporan', 'public');
+            $validatedData['bukti_laporan'] = $filePath;
+        }
+    
+        // Tambahkan data user dan tanggal laporan
+        $validatedData['id_user'] = $userId;
+        $validatedData['tanggal_laporan'] = now();
+    
+        // Simpan laporan baru
+        $laporan = Laporan::create($validatedData);
+    
+        // Cari inventaris berdasarkan kode_barang
+        $inventaris = Inventaris::where('kode_barang', $validatedData['kode_barang'])->first();
+    
+        // Jika inventaris ditemukan, update kondisi barang menjadi "rusak"
+        if ($inventaris) {
+            $inventaris->updateKondisiBarang('rusak');
+        }
+    
+        return redirect()->route('home')->with('success', 'Laporan berhasil dikirim dan status inventaris diperbarui.');
     }
+    
+    
 
-    $validatedData['id_user'] = $userId;
-    $validatedData['tanggal_laporan'] = now();
-
-    Laporan::create($validatedData);
-
-    return redirect()->route('home')->with('success', 'Laporan berhasil dikirim.');
-}
+    
+    
+    
 
 }
