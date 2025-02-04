@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Inventaris;
 use App\Models\Laporan;
+use App\Models\User;
+use Filament\Notifications\Notification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
@@ -60,6 +62,15 @@ class LaporController extends Controller
         // Jika inventaris ditemukan, update kondisi barang menjadi "rusak"
         if ($inventaris) {
             $inventaris->updateKondisiBarang('rusak');
+        }
+
+            // 🚀 Notifikasi ke semua user dengan role "teknisi"
+        $teknisiUsers = User::where('role', 'teknisi')->get();
+        foreach ($teknisiUsers as $user) {
+            Notification::make()
+                ->title('Laporan Baru')
+                ->body("Laporan untuk barang {$laporan->nama_barang} telah dibuat.")
+                ->sendToDatabase($user);
         }
     
         return redirect()->route('home')->with('success', 'Laporan berhasil dikirim dan status inventaris diperbarui.');
