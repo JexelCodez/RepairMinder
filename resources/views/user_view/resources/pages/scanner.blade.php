@@ -56,6 +56,15 @@
                 opacity: 1;
             }
         }
+
+        .header-scan {
+            background-image: url("../images/templatemo-wave-header.jpg"),
+                linear-gradient(#348cd2, #ffffff);
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
         
     </style>
 @endpush
@@ -75,7 +84,7 @@
             <!-- Modal untuk hasil scan -->
             <div id="result" class="fixed inset-0 z-50 flex items-center justify-center hidden bg-gray-900 bg-opacity-50">
                 <div class="bg-white rounded-lg shadow-lg w-full max-w-2xl">
-                    <div class="p-4 border-b">
+                    <div class="p-4 border-b header-scan">
                         <h3 class="text-xl font-bold">Hasil Scan</h3>
                     </div>
                     <div class="p-4">
