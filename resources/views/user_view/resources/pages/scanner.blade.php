@@ -53,7 +53,7 @@
                 <div id="reader"></div>
                 <!-- Start/Stop Button -->
                 <div class="mt-3 text-center">
-                    <button id="toggle-scan-btn" class="btn btn-primary">Start Scan</button>
+                    <button id="toggle-scan-btn" class="btn custom-btn smoothscroll mt-3">Start Scan</button>
                 </div>
             </div>
 
@@ -80,8 +80,8 @@
                         </div>
                     </div>
                     <div class="flex justify-end p-4 border-t">
-                        <button id="close-btn" class="btn btn-primary">Tutup</button>
-                        <button id="close-btn" class="btn btn-danger laporpak">Lapor</button>
+                        <button id="close-btn" class="btn custom-btn smoothscroll mt-3">Tutup</button>
+                        <button id="close-btn" class="btn danger-btn smoothscroll mt-3 laporpak">Lapor</button>
                     </div>
                 </div>
             </div>
