@@ -27,8 +27,13 @@ use Filament\Infolists\Components\ImageEntry;
 use Filament\Infolists\Components\Tabs;
 use Filament\Infolists\Components\Section;
 
-class LaporanResource extends Resource
+//Plugin
+use Awcodes\Overlook\Contracts\CustomizeOverlookWidget;
+use Awcodes\Overlook\Concerns\HandlesOverlookWidgetCustomization;
+
+class LaporanResource extends Resource implements CustomizeOverlookWidget
 {
+    use HandlesOverlookWidgetCustomization;
     protected static ?string $model = Laporan::class;
 
     protected static ?string $modelLabel = 'Laporan';
@@ -190,5 +195,14 @@ class LaporanResource extends Resource
         return [
             'index' => Pages\ListLaporans::route('/'),
         ];
+    }
+
+    public static function getOverlookWidgetQuery(Builder $query): Builder
+    {
+        return $query->where('status','=','pending');
+    }
+    public static function getOverlookWidgetTitle(): string
+    {
+        return 'Laporan Pending';
     }
 }

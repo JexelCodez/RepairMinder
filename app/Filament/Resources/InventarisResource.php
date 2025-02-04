@@ -30,8 +30,13 @@ use Filament\Infolists\Components\ViewEntry;
 use Filament\Infolists\Components\Grid;
 use Filament\Infolists\Components\ImageEntry;
 
-class InventarisResource extends Resource
+//Plugin
+use Awcodes\Overlook\Contracts\CustomizeOverlookWidget;
+use Awcodes\Overlook\Concerns\HandlesOverlookWidgetCustomization;
+
+class InventarisResource extends Resource implements CustomizeOverlookWidget
 {
+    use HandlesOverlookWidgetCustomization;
     protected static ?string $model = Inventaris::class;
     protected static ?string $modelLabel = 'Inventaris';
     protected static ?string $pluralModelLabel = 'Inventaris';
@@ -227,5 +232,14 @@ class InventarisResource extends Resource
             // 'create' => Pages\CreateInventaris::route('/create'),
             // 'edit' => Pages\EditInventaris::route('/{record}/edit'),
         ];
+    }
+
+    public static function getOverlookWidgetQuery(Builder $query): Builder
+    {
+        return $query->where('kondisi_barang','=','rusak');
+    }
+    public static function getOverlookWidgetTitle(): string
+    {
+        return 'Barang Rusak';
     }
 }

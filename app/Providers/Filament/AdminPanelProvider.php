@@ -17,8 +17,10 @@ use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\AuthenticateSession;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
-
+// PLUGIN
 use Joaopaulolndev\FilamentEditProfile\FilamentEditProfilePlugin;
+use Awcodes\Overlook\OverlookPlugin;
+use Awcodes\Overlook\Widgets\OverlookWidget;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -41,17 +43,32 @@ class AdminPanelProvider extends PanelProvider
             ->pages([
                 Pages\Dashboard::class,
             ])
+            ->viteTheme('resources/css/filament/admin/theme.css')
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
             ->widgets([
                 Widgets\AccountWidget::class,
                 // Widgets\FilamentInfoWidget::class,
+                OverlookWidget::class,
             ])
             ->plugins([
                 FilamentEditProfilePlugin::make()
                     ->setIcon('heroicon-o-user')
                     ->setTitle('My Profile')
                     ->setNavigationLabel('My Profile')
-                    ->setNavigationGroup('Profile')
+                    ->setNavigationGroup('Profile'),
+                OverlookPlugin::make()
+                    ->includes([
+                        \App\Filament\Resources\LaporanResource::class,
+                        \App\Filament\Resources\InventarisResource::class,
+                    ])
+                    ->icons([
+                        'heroicon-o-document-text' => \App\Filament\Resources\LaporanResource::class,
+                        'heroicon-o-archive-box' => \App\Filament\Resources\InventarisResource::class,
+                    ])
+                    ->sort(2)
+                    ->columns([
+                        'lg' => 4,
+                    ]),    
             ])
             ->middleware([
                 EncryptCookies::class,
