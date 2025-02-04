@@ -37,10 +37,25 @@
                 max-width: 250px;
             }
         }
-        .hidden {
-    display: none;
-}
 
+        .hidden {
+            display: none;
+        }
+
+        /* Tambahkan animasi dan border pada modal */
+        #result .bg-white.rounded-lg {
+            border: 2px solid #ddd;
+            animation: fadeIn 0.3s ease-in-out forwards;
+            transform: translateY(-10px);
+            opacity: 0;
+        }
+
+        @keyframes fadeIn {
+            100% {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
         
     </style>
 @endpush
