@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Tables\Actions\Action;
 use Filament\Tables\Columns\BadgeColumn;
+use Filament\Notifications\Notification;
 
 // INFOLIST
 use Filament\Infolists\Infolist;
@@ -90,30 +91,39 @@ class LaporanResource extends Resource implements CustomizeOverlookWidget
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
+            
                 Action::make('Process')
                     ->visible(fn (Laporan $record) => $record->status === 'pending')
                     ->action(function (Laporan $record) {
                         $record->update(['status' => 'processed']);
+            
+                        Notification::make()
+                            ->title('Barang Diproses')
+                            ->body('Status barang telah diubah menjadi "Processed".')
+                            ->success()
+                            ->send();
                     })
                     ->requiresConfirmation()
                     ->modalHeading('Proses Barang')
                     ->modalDescription('Apakah Anda yakin ingin memproses barang ini?')
                     ->color('warning')
                     ->icon('heroicon-o-arrow-path'),
-
+            
                 Action::make('Done')
                     ->visible(fn (Laporan $record) => $record->status === 'processed')
                     ->action(function (Laporan $record) {
-                        // Update status laporan
                         $record->update(['status' => 'done']);
-
-                        // Cari inventaris berdasarkan kode_barang
+            
                         $inventaris = Inventaris::where('kode_barang', $record->kode_barang)->first();
-
-                        // Jika ditemukan, update kondisi barang ke "Lengkap"
                         if ($inventaris) {
                             $inventaris->updateKondisiBarangToLengkap();
                         }
+            
+                        Notification::make()
+                            ->title('Barang Selesai')
+                            ->body('Status barang telah diubah menjadi "Done".')
+                            ->success()
+                            ->send();
                     })
                     ->requiresConfirmation()
                     ->modalHeading('Selesai')
@@ -194,6 +204,7 @@ class LaporanResource extends Resource implements CustomizeOverlookWidget
     {
         return [
             'index' => Pages\ListLaporans::route('/'),
+            'view' => Pages\ViewLaporan::route('/{record}'),
         ];
     }
 
