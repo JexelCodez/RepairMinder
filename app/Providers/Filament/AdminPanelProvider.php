@@ -17,6 +17,8 @@ use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\AuthenticateSession;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
+
+use Filament\Navigation\NavigationItem;
 // PLUGIN
 use Joaopaulolndev\FilamentEditProfile\FilamentEditProfilePlugin;
 use Awcodes\Overlook\OverlookPlugin;
@@ -40,6 +42,11 @@ class AdminPanelProvider extends PanelProvider
             ->brandLogo(asset('images/logo-sija.png'))
             ->favicon(asset('icons/remi-icon.png'))
             ->brandLogoHeight('5rem')
+            ->navigationItems([
+                NavigationItem::make('Scanner')
+                    ->url('/', shouldOpenInNewTab: true)
+                    ->icon('heroicon-o-qr-code')
+            ])            
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
             ->pages([
