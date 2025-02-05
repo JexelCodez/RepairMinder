@@ -72,7 +72,7 @@ class LaporController extends Controller
             Notification::make()
                 ->title('🔔 Laporan Baru')
                 ->color('warning')
-                ->body("📌 Laporan untuk {$laporan->nama_barang} telah dibuat. Klik untuk melihat detail.")
+                ->body("📌 Laporan untuk {$laporan->nama_barang} ({$laporan->kode_barang}) telah dibuat. Klik untuk melihat detail.")
                 ->actions([
                     Action::make('Lihat')
                         ->icon('heroicon-o-eye') // Menambah ikon mata
