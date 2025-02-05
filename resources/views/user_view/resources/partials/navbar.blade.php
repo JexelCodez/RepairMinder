@@ -26,11 +26,11 @@
             <ul class="navbar-nav ms-lg-auto">
 
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('home') }}">Home</a>
+                    <a class="nav-link{{ request()->routeIs('home') ? ' active' : '' }}" href="{{ route('home') }}">Home</a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('tentang') }}">Tentang REMI</a>
+                    <a class="nav-link{{ request()->routeIs('tentang') ? ' active' : '' }}" href="{{ route('tentang') }}">Tentang REMI</a>
                 </li>
 
                 <!-- <li class="nav-item dropdown">
@@ -45,7 +45,7 @@
                 </li> -->
 
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('kontak') }}">Kontak</a>
+                    <a class="nav-link{{ request()->routeIs('kontak') ? ' active' : '' }}" href="{{ route('kontak') }}">Kontak</a>
                 </li>
 
                 @auth
