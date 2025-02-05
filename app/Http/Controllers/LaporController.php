@@ -69,7 +69,7 @@ class LaporController extends Controller
         foreach ($teknisiUsers as $user) {
             Notification::make()
                 ->title('Laporan Baru')
-                ->body("Laporan untuk barang {$laporan->nama_barang} telah dibuat.")
+                ->body("Laporan untuk barang {$laporan->nama_barang} ({$laporan->kode_barang}) telah dibuat.")
                 ->sendToDatabase($user);
         }
     

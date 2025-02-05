@@ -49,6 +49,7 @@
     <div class="container flex justify-center px-4 py-8">
         @auth
         <div class="w-full max-w-lg mx-auto p-4 bg-white rounded-lg shadow-lg">
+            <div class="alert alert-danger hidden" id="error" role="alert"></div>
             <div class="flex justify-center items-center col-12 md:col-6 lg:col-4 m-auto mb-4">
                 <div id="reader"></div>
                 <!-- Start/Stop Button -->
@@ -142,8 +143,18 @@
                     document.getElementById('status').textContent = barang.kondisi_barang;
 
                     document.getElementById('result').classList.remove('hidden');
+                    document.getElementById('error').classList.add('hidden'); // Sembunyikan pesan error
                 } else {
-                    console.error("Error fetching barang data: ", data.message);
+                    document.getElementById('error').textContent = data.message;
+                    document.getElementById('error').classList.remove('hidden');
+
+                    // Stop scanner
+                    html5QrcodeScanner.stop().then(() => {
+                        isScanning = false;
+                        document.getElementById('toggle-scan-btn').textContent = 'Start Scan';
+                    }).catch(err => {
+                        console.error("Error stopping QR code scanner: ", err);
+                    });
                 }
             })
             .catch(error => {
@@ -151,19 +162,13 @@
             });
         }
 
-        document.getElementById('close-btn').addEventListener('click', () => {
-            document.getElementById('result').classList.add('hidden');
-        });
-
-
         function onScanFailure(error) {
-            // Log error untuk debugging
             console.warn(`Scan error: ${error}`);
         }
 
         // BUAT START/STOP BUTTON
-        
         document.getElementById('toggle-scan-btn').addEventListener('click', function() {
+            document.getElementById('error').classList.add('hidden');
             if (isScanning) {
                 html5QrcodeScanner.stop().then(() => {
                     document.getElementById('toggle-scan-btn').textContent = 'Start Scan';
@@ -188,6 +193,12 @@
                 });
             }
         });
+
+        document.getElementById('close-btn').addEventListener('click', () => {
+            document.getElementById('result').classList.add('hidden');
+            document.getElementById('error').classList.add('hidden');
+        });
+
 
         document.querySelector('.laporpak').addEventListener('click', function() {
             const namaBarang = document.getElementById('nama-barang').textContent;
