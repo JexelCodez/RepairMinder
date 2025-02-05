@@ -77,7 +77,7 @@
                 <div id="reader"></div>
                 <!-- Start/Stop Button -->
                 <div class="mt-3 text-center">
-                    <button id="toggle-scan-btn" class="btn custom-btn smoothscroll mt-3">Start Scan</button>
+                    <button id="toggle-scan-btn" class="btn custom-btn smoothscroll mt-3">Mulai Scan</button>
                 </div>
             </div>
 

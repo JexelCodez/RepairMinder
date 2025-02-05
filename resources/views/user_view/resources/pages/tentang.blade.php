@@ -21,18 +21,18 @@
 
                             <p>Mengembangkan aplikasi yang memusatkan catatan pemeliharaan, jadwal, dan kondisi perangkat, menyediakan cara cepat dan andal untuk melacak dan mengelola kondisi perangkat.</p>
 
-                            <img src="images/medium-shot-young-people-recording-podcat.jpg"
-                                class="about-image mt-5 img-fluid" alt="gambar anak sija betulin alat">
+                            <img src="images/instalasi-cctv-dkv-1.jpg"
+                                class="about-image mt-5 img-fluid" alt="gambar siswa sija betulin alat">
                         </div>
                     </div>
 
-                    <div class="col-lg-12 col-12">
+                    <!-- <div class="col-lg-12 col-12">
                         <div class="section-title-wrap mb-5">
                             <h4 class="section-title">Tim Teknisi Kami</h4>
                         </div>
-                    </div>
+                    </div> -->
 
-                    <div class="col-lg-3 col-md-6 col-12 mb-4 mb-lg-0">
+                    <!-- <div class="col-lg-3 col-md-6 col-12 mb-4 mb-lg-0">
                         <div class="team-thumb bg-white shadow-lg">
                             <img src="images/profile/cute-smiling-woan-outdoor-portrait.jpg"
                                 class="about-image img-fluid" alt="teknisi 1">
@@ -64,9 +64,9 @@
                                 </ul>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
 
-                    <div class="col-lg-3 col-md-6 col-12 mb-4 mb-lg-0">
+                    <!-- <div class="col-lg-3 col-md-6 col-12 mb-4 mb-lg-0">
                         <div class="team-thumb bg-white shadow-lg">
                             <img src="images/profile/handsome-asian-man-lisening-music-through-headphones.jpg"
                                 class="about-image img-fluid" alt="teknisi 2">
@@ -98,9 +98,9 @@
                                 </ul>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
 
-                    <div class="col-lg-3 col-md-6 col-12 mb-4 mb-lg-0 mb-md-0">
+                    <!-- <div class="col-lg-3 col-md-6 col-12 mb-4 mb-lg-0 mb-md-0">
                         <div class="team-thumb bg-white shadow-lg">
                             <img src="images/profile/smart-attractive-asian-glasses-male-stading-smile-with-freshness-joyful-casual-blue-shirt-portrait-white-background.jpg"
                                 class="about-image img-fluid" alt="teknisi 3">
@@ -126,9 +126,9 @@
                                 </ul>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
 
-                    <div class="col-lg-3 col-md-6 col-12">
+                    <!-- <div class="col-lg-3 col-md-6 col-12">
                         <div class="team-thumb bg-white shadow-lg">
                             <img src="images/profile/smiling-business-woman-with-flded-hands-against-white-wall-toothy-smile-crossed-arms.jpg"
                                 class="about-image img-fluid" alt="teknisi 4">
@@ -156,7 +156,7 @@
                                 </ul>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
 
                 </div>
             </div>

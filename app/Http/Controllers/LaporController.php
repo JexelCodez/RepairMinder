@@ -9,6 +9,7 @@ use Filament\Notifications\Notification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class LaporController extends Controller
 {
@@ -26,7 +27,6 @@ class LaporController extends Controller
             'kode_barang' => $request->get('kode_barang'),
             'lokasi_barang' => $request->get('lokasi_barang'),
         ]);
-        
     }
 
     public function store(Request $request)
@@ -72,14 +72,9 @@ class LaporController extends Controller
                 ->body("Laporan untuk barang {$laporan->nama_barang} telah dibuat.")
                 ->sendToDatabase($user);
         }
+
+        Alert::success('Laporan', 'Berhasil dikirim!');
     
         return redirect()->route('home')->with('success', 'Laporan berhasil dikirim dan status inventaris diperbarui.');
     }
-    
-    
-
-    
-    
-    
-
 }

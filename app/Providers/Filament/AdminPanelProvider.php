@@ -38,6 +38,7 @@ class AdminPanelProvider extends PanelProvider
                 'primary' => '#00bcd5',
             ])
             ->brandLogo(asset('images/logo-sija.png'))
+            ->brandName('Admin REMI')
             ->favicon(asset('icons/remi-icon.png'))
             ->brandLogoHeight('5rem')
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')

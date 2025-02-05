@@ -14,7 +14,7 @@
 
                     <div class="col-lg-5 col-12 pe-lg-5">
                         <div class="contact-info">
-                            <h3 class="mb-4">Siap Melayani Kebutuhan Anda. Silahkan Hubungi Kami</h3>
+                            <h3 class="mb-4">Bingung Mau Kontak Siapa? Cek Sini!</h3>
 
                             <p class="d-flex border-bottom pb-3 mb-4">
                                 <strong class="d-inline me-4">Telepon:</strong>
