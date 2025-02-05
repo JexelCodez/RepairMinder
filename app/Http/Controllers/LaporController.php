@@ -6,6 +6,8 @@ use App\Models\Inventaris;
 use App\Models\Laporan;
 use App\Models\User;
 use Filament\Notifications\Notification;
+use Filament\Notifications\Actions\Action;
+use App\Filament\Resources\LaporanResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
@@ -64,14 +66,21 @@ class LaporController extends Controller
             $inventaris->updateKondisiBarang('rusak');
         }
 
-            // 🚀 Notifikasi ke semua user dengan role "teknisi"
+        // 🚀 Notifikasi ke semua user dengan role "teknisi"
         $teknisiUsers = User::where('role', 'teknisi')->get();
         foreach ($teknisiUsers as $user) {
             Notification::make()
-                ->title('Laporan Baru')
-                ->body("Laporan untuk barang {$laporan->nama_barang} ({$laporan->kode_barang}) telah dibuat.")
+                ->title('🔔 Laporan Baru')
+                ->color('warning')
+                ->body("📌 Laporan untuk {$laporan->nama_barang} ({$laporan->kode_barang}) telah dibuat. Klik untuk melihat detail.")
+                ->actions([
+                    Action::make('Lihat')
+                        ->icon('heroicon-o-eye') // Menambah ikon mata
+                        ->url(LaporanResource::getUrl('view', ['record' => $laporan])),
+                ])
                 ->sendToDatabase($user);
         }
+
     
         return redirect()->route('home')->with('success', 'Laporan berhasil dikirim dan status inventaris diperbarui.');
     }

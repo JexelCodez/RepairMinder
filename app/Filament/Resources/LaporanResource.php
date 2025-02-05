@@ -194,6 +194,7 @@ class LaporanResource extends Resource implements CustomizeOverlookWidget
     {
         return [
             'index' => Pages\ListLaporans::route('/'),
+            'view' => Pages\ViewLaporan::route('/{record}'),
         ];
     }
 
