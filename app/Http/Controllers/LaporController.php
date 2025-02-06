@@ -85,6 +85,6 @@ class LaporController extends Controller
 
         Alert::success('Laporan', 'Berhasil dikirim!');
     
-        return redirect()->route('home')->with('success', 'Laporan berhasil dikirim dan status inventaris diperbarui.');
+        return redirect()->route('lapor.index')->with('success', 'Laporan berhasil dikirim dan status inventaris diperbarui.');
     }
 }
