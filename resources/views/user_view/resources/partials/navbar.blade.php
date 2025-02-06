@@ -26,26 +26,18 @@
             <ul class="navbar-nav ms-lg-auto">
 
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('home') }}">Home</a>
+                    <a class="nav-link {{ Request::routeIs('home') ? 'active' : '' }}" href="{{ route('home') }}">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {{ Request::routeIs('lapor.index') ? 'active' : '' }}" href="{{ route('lapor.index') }}">Laporan</a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('tentang') }}">Tentang REMI</a>
+                    <a class="nav-link {{ Request::routeIs('tentang') ? 'active' : '' }}" href="{{ route('tentang') }}">Tentang REMI</a>
                 </li>
 
-                <!-- <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarLightDropdownMenuLink" role="button"
-                        data-bs-toggle="dropdown" aria-expanded="false">Pages</a>
-
-                    <ul class="dropdown-menu dropdown-menu-light" aria-labelledby="navbarLightDropdownMenuLink">
-                        <li><a class="dropdown-item" href="listing-page.html">Listing Page</a></li>
-
-                        <li><a class="dropdown-item active" href="detail-page.html">Detail Page</a></li>
-                    </ul>
-                </li> -->
-
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('kontak') }}">Kontak</a>
+                    <a class="nav-link {{ Request::routeIs('kontak') ? 'active' : '' }}" href="{{ route('kontak') }}">Kontak</a>
                 </li>
 
                 @auth

@@ -18,7 +18,9 @@ class LaporController extends Controller
 
     public function index()
     {
-        
+        $userId = Auth::user()->id;
+        $laporan = Laporan::where('id_user', $userId)->get();
+        return view('user_view.resources.pages.lapor.lapor-index', compact('laporan'));
     }
 
     public function create(Request $request)
