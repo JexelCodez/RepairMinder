@@ -42,6 +42,12 @@ class LaporanResource extends Resource implements CustomizeOverlookWidget
 
     protected static ?string $navigationIcon = 'heroicon-o-document-text';
 
+    public static function getNavigationBadge(): ?string
+    {
+        return static::getModel()::where('status', 'pending')->count();
+    }
+    protected static ?string $navigationBadgeTooltip = 'Laporan Pending';
+
     public static function table(Table $table): Table
     {
         return $table
