@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>RepairMinder - Login</title>
-    <link rel="icon" href="{{ asset('icons/remi-icon.png') }}" type="image/x-icon">
+    <link rel="icon" href="{{ asset('icons/maskot.png') }}" type="image/x-icon">
     <!-- Custom CSS -->
     <link rel="stylesheet" href="{{ asset('css/login-page.css') }}">
     <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
@@ -35,7 +35,7 @@
             <div class="col-md-8 col-lg-6 col-xl-4">
                 <div class="card shadow-sm">
                     <div class="card-body">
-                        <img src="{{ asset('icons/remi-icon.png') }}" alt="Remi Logo" class="small-icon">
+                        <img src="{{ asset('icons/maskot.png') }}" alt="Remi Logo" class="small-icon">
                         <h3 class="text-center mb-4 fw-bold font-monospace">REPAIRMINDER</h3>
                         <form method="POST" action="{{ route('login') }}">
                             @csrf

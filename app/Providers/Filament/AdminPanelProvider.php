@@ -41,7 +41,7 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->brandLogo(asset('images/logo-sija.png'))
             ->brandName('Admin REMI')
-            ->favicon(asset('icons/remi-icon.png'))
+            ->favicon(asset('icons/maskot.png'))
             ->brandLogoHeight('5rem')
             ->navigationItems([
                 NavigationItem::make('Scanner')
