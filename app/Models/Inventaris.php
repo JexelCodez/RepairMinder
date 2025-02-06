@@ -29,6 +29,12 @@ class Inventaris extends Model
         'updated_at',
     ];
 
+    public function periodePemeliharaan()
+    {
+        return $this->hasMany(PeriodePemeliharaan::class, 'id_barang', 'id_barang');
+    }
+
+
     /**
      * Model Rows
      *

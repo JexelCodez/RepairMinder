@@ -21,4 +21,10 @@ class PeriodePemeliharaan extends Model
         'created_at',
         'updated_at',
     ];
+
+    public function inventaris()
+    {
+        return $this->belongsTo(Inventaris::class, 'id_barang', 'id_barang');
+    }
+
 }
