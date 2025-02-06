@@ -2,10 +2,11 @@
   LOGIN PAGE BACKGROUND 
 -----------------------------------------*/
 body {
-    background-image: url('../images/templatemo-wave-footer.jpg'), linear-gradient(#FFFFFF, #348CD2);
+    background-image: url("../images/templatemo-wave-footer.jpg"),
+        linear-gradient(#ffffff, #348cd2);
     background-repeat: no-repeat;
     background-position: center center;
-    background-size: cover;  /* Ensures the image covers the screen */
+    background-size: cover; /* Ensures the image covers the screen */
     height: 100vh;
     margin: 0;
     display: flex;
@@ -35,7 +36,7 @@ body {
 }
 
 .small-icon {
-    width: 50px;  /* Set the desired width */
+    width: 50px; /* Set the desired width */
     height: 50px; /* Ensure the height is the same to keep it square */
     object-fit: contain; /* Ensures the image maintains its aspect ratio */
     display: block;
@@ -47,7 +48,7 @@ body {
 /* Heading Style */
 h3 {
     font-size: 28px;
-    color: #348CD2; /* Match primary theme color */
+    color: #348cd2; /* Match primary theme color */
     margin-bottom: 25px;
 }
 
@@ -60,8 +61,8 @@ h3 {
 }
 
 .btn-primary {
-    background-color: #348CD2;
-    border-color: #348CD2;
+    background-color: #348cd2;
+    border-color: #348cd2;
     padding: 10px;
     border-radius: 8px;
 }
@@ -86,7 +87,7 @@ h3 {
 }
 
 #togglePassword::before {
-    content: '\f06e'; /* Unicode for "eye" icon */
+    content: "\f06e"; /* Unicode for "eye" icon */
     font-family: "Font Awesome 5 Free";
     font-weight: 900;
     font-size: 1rem; /* Adjust the icon size */
@@ -94,7 +95,7 @@ h3 {
 }
 
 #togglePassword.show::before {
-    content: '\f070'; /* Unicode for "eye-slash" icon */
+    content: "\f070"; /* Unicode for "eye-slash" icon */
 }
 
 /* Adjustments for Responsiveness */
@@ -119,7 +120,7 @@ h3 {
 }
 
 a {
-    color: #348CD2;
+    color: #348cd2;
 }
 
 a:hover {
@@ -164,8 +165,8 @@ a:hover {
 /* Additional Media Query for Mobile */
 @media screen and (max-width: 576px) {
     body {
-        background-size: cover;  /* Ensure the image still covers the screen */
-        background-position: center center;  /* Keeps the image centered */
+        background-size: cover; /* Ensure the image still covers the screen */
+        background-position: center center; /* Keeps the image centered */
     }
 
     .card {
