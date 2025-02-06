@@ -241,7 +241,7 @@
             const lokasiBarang = document.getElementById('lokasi-barang').textContent;
 
             // Redirect ke halaman laporan dengan data
-            const url = `/lapor?nama_barang=${encodeURIComponent(namaBarang)}&merk_barang=${encodeURIComponent(merkBarang)}&kode_barang=${encodeURIComponent(kodeBarang)}&lokasi_barang=${encodeURIComponent(lokasiBarang)}`;
+            const url = `/lapor/create?nama_barang=${encodeURIComponent(namaBarang)}&merk_barang=${encodeURIComponent(merkBarang)}&kode_barang=${encodeURIComponent(kodeBarang)}&lokasi_barang=${encodeURIComponent(lokasiBarang)}`;
             window.location.href = url;
         });
 
