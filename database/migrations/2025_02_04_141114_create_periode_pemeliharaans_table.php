@@ -13,10 +13,8 @@ return new class extends Migration
     {
         Schema::create('periode_pemeliharaans', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('id_barang');
             $table->string('periode');
             $table->text('deskripsi')->nullable();
-            $table->foreign('id_barang')->references('id')->on('barangs');
             $table->timestamps();
         });
     }
