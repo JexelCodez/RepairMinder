@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\PeriodePemeliharaanResource\Pages;
 use App\Models\PeriodePemeliharaan;
+use App\Models\Inventaris;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -29,16 +30,18 @@ class PeriodePemeliharaanResource extends Resource
             ->schema([
                 Forms\Components\Select::make('id_barang')
                     ->label('Barang')
-                    ->options(function () {
-                        // Fetch items via API or direct data
-                        return []; // Return an empty array for a fresh state
-                    })
+                    ->options(Inventaris::all()->mapWithKeys(function ($item) {
+                        return [$item->id_barang => "{$item->nama_barang} ({$item->kode_barang})"];
+                    }))
+                    ->searchable()
                     ->required(),
 
                 Forms\Components\TextInput::make('periode')
-                    ->label('Periode')
-                    ->required()
-                    ->placeholder('Enter maintenance period'),
+                    ->label('Periode (dalam hari)')
+                    ->numeric()
+                    ->minValue(1)
+                    ->placeholder('Masukkan jumlah hari'),
+                
 
                 Forms\Components\TextInput::make('deskripsi')
                     ->label('Deskripsi')
