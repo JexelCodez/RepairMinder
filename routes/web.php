@@ -25,7 +25,7 @@ Route::get('/barang/download-bulk-qrs', [BarangController::class, 'downloadBulkQ
 
 Route::post('/scan', [BarangController::class, 'scan'])->name('scan');
 
-Route::get('/lapor', [LaporController::class, 'create'])->name('lapor.index');
+Route::get('/lapor', [LaporController::class, 'index'])->name('lapor.index');
 Route::get('/lapor/create', [LaporController::class, 'create'])->name('lapor.create');
 Route::post('/lapor', [LaporController::class, 'store'])->name('lapor.store');
 

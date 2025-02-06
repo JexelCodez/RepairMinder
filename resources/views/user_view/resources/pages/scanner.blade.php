@@ -155,32 +155,41 @@
             })
             .then(response => response.json())
             .then(data => {
-                if (data.success) {
-                    const barang = data.data;
-                    document.getElementById('nama-barang').textContent = barang.nama_barang;
-                    document.getElementById('merk').textContent = barang.merek;
-                    document.getElementById('stok-barang').textContent = barang.stok_barang;
-                    document.getElementById('kode-barang').textContent = barang.kode_barang;
-                    document.getElementById('jenis-barang').textContent = barang.nama_jenis_barang;
-                    document.getElementById('updated-at').textContent = barang.updated_at;
-                    document.getElementById('lokasi-barang').textContent = barang.nama_ruangan;
-                    document.getElementById('status').textContent = barang.kondisi_barang;
+            if (data.success) {
+                const barang = data.data;
+                document.getElementById('nama-barang').textContent = barang.nama_barang;
+                document.getElementById('merk').textContent = barang.merek;
+                document.getElementById('stok-barang').textContent = barang.stok_barang;
+                document.getElementById('kode-barang').textContent = barang.kode_barang;
+                document.getElementById('jenis-barang').textContent = barang.nama_jenis_barang;
+                document.getElementById('updated-at').textContent = barang.updated_at;
+                document.getElementById('lokasi-barang').textContent = barang.nama_ruangan;
+                document.getElementById('status').textContent = barang.kondisi_barang;
 
-                    document.getElementById('result').classList.remove('hidden');
-                    document.getElementById('error').classList.add('hidden'); // Sembunyikan pesan error
+                // Cek kondisi barang dan sembunyikan tombol Lapor jika rusak
+                const laporButton = document.querySelector('.laporpak');
+                if (barang.kondisi_barang.toLowerCase() === 'rusak') {
+                    laporButton.classList.add('hidden');
                 } else {
-                    document.getElementById('error').textContent = data.message;
-                    document.getElementById('error').classList.remove('hidden');
-
-                    // Stop scanner
-                    html5QrcodeScanner.stop().then(() => {
-                        isScanning = false;
-                        document.getElementById('toggle-scan-btn').textContent = 'Start Scan';
-                    }).catch(err => {
-                        console.error("Error stopping QR code scanner: ", err);
-                    });
+                    laporButton.classList.remove('hidden');
                 }
-            })
+
+                document.getElementById('result').classList.remove('hidden');
+                document.getElementById('error').classList.add('hidden'); // Sembunyikan pesan error
+            } else {
+                document.getElementById('error').textContent = data.message;
+                document.getElementById('error').classList.remove('hidden');
+
+                // Stop scanner
+                html5QrcodeScanner.stop().then(() => {
+                    isScanning = false;
+                    document.getElementById('toggle-scan-btn').textContent = 'Start Scan';
+                }).catch(err => {
+                    console.error("Error stopping QR code scanner: ", err);
+                });
+            }
+        })
+
             .catch(error => {
                 console.error("Error:", error);
             });
@@ -193,6 +202,7 @@
         // BUAT START/STOP BUTTON
         document.getElementById('toggle-scan-btn').addEventListener('click', function() {
             document.getElementById('error').classList.add('hidden');
+            document.getElementById('result').classList.add('hidden');
             if (isScanning) {
                 html5QrcodeScanner.stop().then(() => {
                     document.getElementById('toggle-scan-btn').textContent = 'Start Scan';
