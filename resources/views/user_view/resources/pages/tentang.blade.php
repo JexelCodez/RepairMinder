@@ -21,7 +21,7 @@
 
                             <p>Mengembangkan aplikasi yang memusatkan catatan pemeliharaan, jadwal, dan kondisi perangkat, menyediakan cara cepat dan andal untuk melacak dan mengelola kondisi perangkat.</p>
 
-                            <img src="images/instalasi-cctv-dkv-1.jpg"
+                            <img src="icons/maskot.png"
                                 class="about-image mt-5 img-fluid" alt="gambar siswa sija betulin alat">
                         </div>
                     </div>
