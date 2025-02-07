@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('periode_pemeliharaans', function (Blueprint $table) {
             $table->id();
             $table->string('periode');
+            $table->string('kode_barang')->nullable();
             $table->text('deskripsi')->nullable();
             $table->timestamps();
         });

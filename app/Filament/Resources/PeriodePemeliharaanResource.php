@@ -28,10 +28,10 @@ class PeriodePemeliharaanResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\Select::make('id_barang')
-                    ->label('Barang')
+                Forms\Components\Select::make('kode_barang')
+                    ->label('Kode Barang')
                     ->options(Inventaris::all()->mapWithKeys(function ($item) {
-                        return [$item->id_barang => "{$item->nama_barang} ({$item->kode_barang})"];
+                        return [$item->kode_barang => "{$item->kode_barang}"];
                     }))
                     ->searchable()
                     ->required(),
@@ -54,8 +54,13 @@ class PeriodePemeliharaanResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('id_barang')
-                    ->label('ID Barang')
+                TextColumn::make('nama_barang')
+                    ->label('Nama Barang')
+                    ->sortable()
+                    ->searchable(),
+
+                TextColumn::make('kode_barang')
+                    ->label('Kode Barang')
                     ->sortable()
                     ->searchable(),
 

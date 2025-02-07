@@ -2,29 +2,23 @@
 
 namespace App\Models;
 
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Log;
-use Sushi\Sushi;
 
 class PeriodePemeliharaan extends Model
 {
     use HasFactory;
 
+    protected $table = 'periode_pemeliharaans';
+
     protected $fillable = [
-        'id_barang',
         'periode',
+        'kode_barang',
         'deskripsi',
-        'created_at',
-        'updated_at',
     ];
 
     public function inventaris()
     {
         return $this->belongsTo(Inventaris::class, 'id_barang', 'id_barang');
     }
-
 }
