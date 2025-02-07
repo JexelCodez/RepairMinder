@@ -43,7 +43,6 @@ class Inventaris extends Model
     public function getRows()
     {
         // Panggil API untuk mendapatkan data inventaris
-        $response = Http::get('https://zaikotrack-main.test/api/inventaris');
         $response = Http::get(env('API_DOMAIN').'/api/inventaris');
 
         if ($response->successful()) {
