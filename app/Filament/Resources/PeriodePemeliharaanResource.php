@@ -31,7 +31,7 @@ class PeriodePemeliharaanResource extends Resource
                 Forms\Components\Select::make('kode_barang')
                     ->label('Kode Barang')
                     ->options(Inventaris::all()->mapWithKeys(function ($item) {
-                        return [$item->kode_barang => "{$item->kode_barang}"];
+                        return [$item->kode_barang => "{$item->kode_barang} ({$item->nama_barang})"];
                     }))
                     ->searchable()
                     ->required(),
@@ -54,7 +54,7 @@ class PeriodePemeliharaanResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('nama_barang')
+                TextColumn::make('inventaris.nama_barang')
                     ->label('Nama Barang')
                     ->sortable()
                     ->searchable(),
