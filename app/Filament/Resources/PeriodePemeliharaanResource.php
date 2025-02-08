@@ -23,13 +23,14 @@ class PeriodePemeliharaanResource extends Resource
     protected static ?string $pluralModelLabel = 'Periode Pemeliharaan';
     protected static ?string $navigationLabel = 'Periode Pemeliharaan';
     protected static ?string $navigationIcon = 'heroicon-o-calendar';
+    protected static ?string $navigationGroup = 'Penjadwalan & Perbaikan';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
                 Forms\Components\Select::make('kode_barang')
-                    ->label('Kode Barang')
+                    ->label('Barang')
                     ->options(Inventaris::all()->mapWithKeys(function ($item) {
                         return [$item->kode_barang => "{$item->kode_barang} ({$item->nama_barang})"];
                     }))
@@ -59,6 +60,11 @@ class PeriodePemeliharaanResource extends Resource
                     ->sortable()
                     ->searchable(),
 
+                TextColumn::make('inventaris.merek')
+                    ->label('Merk Barang')
+                    ->sortable()
+                    ->searchable(),
+
                 TextColumn::make('kode_barang')
                     ->label('Kode Barang')
                     ->sortable()
@@ -72,6 +78,12 @@ class PeriodePemeliharaanResource extends Resource
                     ->label('Deskripsi')
                     ->limit(50)
                     ->tooltip(fn ($record) => $record->deskripsi),
+
+                TextColumn::make('tanggal_maintenance_selanjutnya')
+                    ->label('Maintenance Selanjutnya')
+                    ->date()
+                    ->sortable()
+                    ->placeholder('Belum tersedia'),
 
                 TextColumn::make('created_at')
                     ->label('Dibuat')

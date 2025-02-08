@@ -13,9 +13,10 @@ return new class extends Migration
     {
         Schema::create('periode_pemeliharaans', function (Blueprint $table) {
             $table->id();
-            $table->string('periode');
-            $table->string('kode_barang')->nullable();
+            $table->integer('periode');
+            $table->string('kode_barang');
             $table->text('deskripsi')->nullable();
+            $table->date('tanggal_maintenance_selanjutnya')->nullable();
             $table->timestamps();
         });
     }
@@ -25,6 +26,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('periode_pemeliharaans');
+        Schema::table('periode_pemeliharaans', function (Blueprint $table) {
+            $table->dropColumn('tanggal_maintenance_selanjutnya');
+        });
     }
 };

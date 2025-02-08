@@ -3,28 +3,34 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\MaintenanceResource\Pages;
+use App\Models\Inventaris;
 use App\Models\Maintenance;
 use App\Models\PeriodePemeliharaan;
 use App\Models\User;
 use Filament\Forms;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Columns\TextColumn;
 
 class MaintenanceResource extends Resource
 {
     protected static ?string $model = Maintenance::class;
-
+    protected static ?string $modelLabel = 'Maintenance';
+    protected static ?string $pluralModelLabel = 'Maintenance';
+    protected static ?string $navigationLabel = 'Maintenance';
     protected static ?string $navigationIcon = 'heroicon-o-cog';
-    protected static ?string $navigationGroup = 'Maintenance';
-    protected static ?string $navigationLabel = 'Maintenance Barang';
+    protected static ?string $navigationGroup = 'Penjadwalan & Perbaikan';
 
     public static function form(Forms\Form $form): Forms\Form
     {
         return $form
             ->schema([
-                Forms\Components\Select::make('id_periode_pemeliharaan')
-                    ->label('Periode Pemeliharaan')
-                    ->options(PeriodePemeliharaan::all()->pluck('periode', 'id'))
+                Forms\Components\Select::make('kode_barang')
+                    ->label('Barang')
+                    ->options(Inventaris::all()->mapWithKeys(function ($item) {
+                        return [$item->kode_barang => "{$item->kode_barang} ({$item->nama_barang})"];
+                    }))
+                    ->searchable()
                     ->required(),
 
                 Forms\Components\Select::make('id_user')
@@ -56,22 +62,34 @@ class MaintenanceResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('periode_pemeliharaan.periode')
-                    ->label('Periode Pemeliharaan')
+
+                TextColumn::make('inventaris.nama_barang')
+                    ->label('Nama Barang')
+                    ->sortable()
                     ->searchable(),
 
-                Tables\Columns\TextColumn::make('user.name')
-                    ->label('Assigned User')
+                TextColumn::make('inventaris.merek')
+                    ->label('Merk Barang')
+                    ->sortable()
+                    ->searchable(),
+                
+                TextColumn::make('kode_barang')
+                    ->label('Kode Barang')
+                    ->sortable()
                     ->searchable(),
 
-                Tables\Columns\TextColumn::make('deskripsi_tugas')
-                    ->label('Task Description')
+                TextColumn::make('user.name')
+                    ->label('User Pelaksana')
+                    ->searchable(),
+
+                TextColumn::make('deskripsi_tugas')
+                    ->label('Deskripsi Tugas')
                     ->limit(50),
 
-                Tables\Columns\TextColumn::make('status')
+                TextColumn::make('status')
                     ->label('Status'),
 
-                Tables\Columns\TextColumn::make('tanggal_pelaksanaan')
+                TextColumn::make('tanggal_pelaksanaan')
                     ->label('Tanggal Pelaksanaan')
                     ->date(),
             ])
