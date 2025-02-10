@@ -33,7 +33,7 @@ class AdminPanelProvider extends PanelProvider
         return $panel
             ->default()
             ->id('admin')
-            ->path('admin')
+            ->path('sija')
             ->login()
             ->passwordReset()
             ->sidebarCollapsibleOnDesktop()
@@ -42,7 +42,7 @@ class AdminPanelProvider extends PanelProvider
                 'primary' => '#00bcd5',
             ])
             ->brandLogo(asset('images/logo-sija.png'))
-            ->brandName('Admin REMI')
+            ->brandName('REMI SIJA')
             ->favicon(asset('icons/maskot.png'))
             ->brandLogoHeight('5rem')
             ->navigationItems([
