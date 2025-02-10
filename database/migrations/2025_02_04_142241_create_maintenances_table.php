@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('id_user');
             $table->string('kode_barang');
+            $table->string('kode_barang_kecil')->nullable();
             $table->text('deskripsi_tugas');
             $table->enum('status', ['sedang diproses', 'dalam perbaikan', 'selesai']);
             $table->date('tanggal_pelaksanaan');

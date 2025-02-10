@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->integer('periode');
             $table->string('kode_barang');
+            $table->string('kode_barang_kecil')->nullable();
             $table->text('deskripsi')->nullable();
             $table->date('tanggal_maintenance_selanjutnya')->nullable();
             $table->timestamps();

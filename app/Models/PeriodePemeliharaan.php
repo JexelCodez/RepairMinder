@@ -14,27 +14,19 @@ class PeriodePemeliharaan extends Model
     protected $fillable = [
         'periode',
         'kode_barang',
+        'kode_barang_kecil',
         'deskripsi',
         'tanggal_maintenance_selanjutnya',
     ];
 
+    public function setKodeBarangAttribute($value)
+    {
+        $this->attributes['kode_barang'] = $value;
+        $this->attributes['kode_barang_kecil'] = strtolower($value);
+    }
+
     public function inventaris()
     {
         return $this->belongsTo(Inventaris::class, 'kode_barang', 'kode_barang');
-    }
-
-    protected static function boot()
-    {
-        parent::boot();
-
-        static::created(function ($maintenance) {
-            $periode = PeriodePemeliharaan::where('kode_barang', $maintenance->kode_barang)->first();
-
-            if ($periode) {
-                $periode->update([
-                    'tanggal_maintenance_selanjutnya' => now()->addDays($periode->periode),
-                ]);
-            }
-        });
     }
 }
