@@ -18,9 +18,11 @@ use Illuminate\Session\Middleware\AuthenticateSession;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 
+
 use Filament\Navigation\NavigationItem;
 // PLUGIN
 use Joaopaulolndev\FilamentEditProfile\FilamentEditProfilePlugin;
+use GeoSot\FilamentEnvEditor\FilamentEnvEditorPlugin;
 use Awcodes\Overlook\OverlookPlugin;
 use Awcodes\Overlook\Widgets\OverlookWidget;
 
@@ -61,6 +63,12 @@ class AdminPanelProvider extends PanelProvider
                 OverlookWidget::class,
             ])
             ->plugins([
+                FilamentEnvEditorPlugin::make()
+                    ->navigationGroup('System Tools')
+                    ->navigationLabel('My Env')
+                    ->navigationIcon('heroicon-o-cog-8-tooth')
+                    ->navigationSort(1)
+                    ->slug('env-editor'),
                 FilamentEditProfilePlugin::make()
                     ->setIcon('heroicon-o-user')
                     ->setTitle('My Profile')
