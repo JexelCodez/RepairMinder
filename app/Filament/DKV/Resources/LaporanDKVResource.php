@@ -1,11 +1,10 @@
 <?php
 
-namespace App\Filament\Resources;
+namespace App\Filament\DKV\Resources;
 
-use App\Filament\Resources\LaporanResource\Pages;
-use App\Filament\Resources\LaporanResource\RelationManagers;
+use App\Filament\DKV\Resources\LaporanDKVResource\Pages;
+use App\Filament\DKV\Resources\LaporanDKVResource\RelationManagers;
 use App\Models\Laporan;
-use App\Models\Inventaris;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -28,13 +27,8 @@ use Filament\Infolists\Components\ImageEntry;
 use Filament\Infolists\Components\Tabs;
 use Filament\Infolists\Components\Section;
 
-//Plugin
-use Awcodes\Overlook\Contracts\CustomizeOverlookWidget;
-use Awcodes\Overlook\Concerns\HandlesOverlookWidgetCustomization;
-
-class LaporanResource extends Resource implements CustomizeOverlookWidget
+class LaporanDKVResource extends Resource
 {
-    use HandlesOverlookWidgetCustomization;
     protected static ?string $model = Laporan::class;
 
     protected static ?string $modelLabel = 'Laporan';
@@ -121,7 +115,7 @@ class LaporanResource extends Resource implements CustomizeOverlookWidget
                     ->action(function (Laporan $record) {
                         $record->update(['status' => 'done']);
             
-                        $inventaris = Inventaris::where('kode_barang', $record->kode_barang)->first();
+                        $inventaris = InventarisDKV::where('kode_barang', $record->kode_barang)->first();
                         if ($inventaris) {
                             $inventaris->updateKondisiBarangToLengkap();
                         }
@@ -207,20 +201,19 @@ class LaporanResource extends Resource implements CustomizeOverlookWidget
         ])->columns(1);
     }
 
-    public static function getPages(): array
+    public static function getRelations(): array
     {
         return [
-            'index' => Pages\ListLaporans::route('/'),
-            'view' => Pages\ViewLaporan::route('/{record}'),
+            //
         ];
     }
 
-    public static function getOverlookWidgetQuery(Builder $query): Builder
+    public static function getPages(): array
     {
-        return $query->where('status','=','pending');
-    }
-    public static function getOverlookWidgetTitle(): string
-    {
-        return 'Laporan Pending';
+        return [
+            'index' => Pages\ListLaporanDKVS::route('/'),
+            // 'create' => Pages\CreateLaporanDKV::route('/create'),
+            'edit' => Pages\EditLaporanDKV::route('/{record}/edit'),
+        ];
     }
 }

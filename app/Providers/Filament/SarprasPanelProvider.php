@@ -30,9 +30,17 @@ class SarprasPanelProvider extends PanelProvider
         return $panel
             ->id('sarpras')
             ->path('sarpras')
+            ->login()
+            ->passwordReset()
+            ->sidebarCollapsibleOnDesktop()
+            ->databaseNotifications()
             ->colors([
-                'primary' => Color::Amber,
+                'primary' => Color::Gray,
             ])
+            // ->brandLogo(asset('images/logo-sija.png'))
+            ->brandName('REMI SARPRAS')
+            ->favicon(asset('icons/maskot.png'))
+            ->brandLogoHeight('5rem')
             ->discoverResources(in: app_path('Filament/Sarpras/Resources'), for: 'App\\Filament\\Sarpras\\Resources')
             ->discoverPages(in: app_path('Filament/Sarpras/Pages'), for: 'App\\Filament\\Sarpras\\Pages')
             ->pages([
@@ -41,7 +49,7 @@ class SarprasPanelProvider extends PanelProvider
             ->discoverWidgets(in: app_path('Filament/Sarpras/Widgets'), for: 'App\\Filament\\Sarpras\\Widgets')
             ->widgets([
                 Widgets\AccountWidget::class,
-                Widgets\FilamentInfoWidget::class,
+                // Widgets\FilamentInfoWidget::class,
             ])
             ->plugins([
                 FilamentEditProfilePlugin::make()
