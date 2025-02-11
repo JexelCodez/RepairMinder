@@ -72,7 +72,7 @@ class PeriodePemeliharaanSarprasResource extends Resource
 
                 TextColumn::make('periode')
                     ->label('Periode Pemeliharaan')
-                    ->formatStateUsing(fn($state) => $state . ' Hari'),
+                    ->formatStateUsing(fn($state) => $state . ' Hari')
                     ->sortable(),
 
                 TextColumn::make('deskripsi')
