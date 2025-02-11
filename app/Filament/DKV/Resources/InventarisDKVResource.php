@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Filament\Resources;
+namespace App\Filament\DKV\Resources;
 
-use App\Filament\Resources\InventarisResource\Pages;
-use App\Filament\Resources\InventarisResource\RelationManagers;
-use App\Models\Inventaris;
+use App\Filament\DKV\Resources\InventarisDKVResource\Pages;
+use App\Filament\DKV\Resources\InventarisDKVResource\RelationManagers;
+use App\Models\InventarisDKV;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -30,14 +30,9 @@ use Filament\Infolists\Components\ViewEntry;
 use Filament\Infolists\Components\Grid;
 use Filament\Infolists\Components\ImageEntry;
 
-//Plugin
-use Awcodes\Overlook\Contracts\CustomizeOverlookWidget;
-use Awcodes\Overlook\Concerns\HandlesOverlookWidgetCustomization;
-
-class InventarisResource extends Resource implements CustomizeOverlookWidget
+class InventarisDKVResource extends Resource
 {
-    use HandlesOverlookWidgetCustomization;
-    protected static ?string $model = Inventaris::class;
+    protected static ?string $model = InventarisDKV::class;
     protected static ?string $modelLabel = 'Inventaris';
     protected static ?string $pluralModelLabel = 'Inventaris';
     protected static ?string $navigationLabel = 'Inventaris';
@@ -121,7 +116,7 @@ class InventarisResource extends Resource implements CustomizeOverlookWidget
             ->filters([
                 SelectFilter::make('nama_ruangan')
                     ->label('Filter Ruangan')
-                    ->options(fn () => Inventaris::pluck('nama_ruangan', 'nama_ruangan')->toArray())
+                    ->options(fn () => InventarisDKV::pluck('nama_ruangan', 'nama_ruangan')->toArray())
                     ->searchable(),
 
                 SelectFilter::make('kondisi_barang')
@@ -229,18 +224,9 @@ class InventarisResource extends Resource implements CustomizeOverlookWidget
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListInventaris::route('/'),
+            'index' => Pages\ListInventarisDKVS::route('/'),
             // 'create' => Pages\CreateInventaris::route('/create'),
             // 'edit' => Pages\EditInventaris::route('/{record}/edit'),
         ];
-    }
-
-    public static function getOverlookWidgetQuery(Builder $query): Builder
-    {
-        return $query->where('kondisi_barang','=','rusak');
-    }
-    public static function getOverlookWidgetTitle(): string
-    {
-        return 'Barang Rusak';
     }
 }

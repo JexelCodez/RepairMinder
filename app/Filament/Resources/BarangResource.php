@@ -39,6 +39,7 @@ class BarangResource extends Resource
     protected static ?string $pluralModelLabel = 'Barang';
     protected static ?string $navigationLabel = 'Barang';
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationGroup = 'Inventaris';
     
 
     public static function table(Table $table): Table

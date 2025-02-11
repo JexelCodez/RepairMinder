@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Sushi\Sushi;
 
-class Inventaris extends Model
+class InventarisDKV extends Model
 {
     use HasFactory, Sushi;
 
@@ -31,7 +31,7 @@ class Inventaris extends Model
 
     public function periodePemeliharaan()
     {
-        return $this->hasMany(PeriodePemeliharaan::class, 'id_barang', 'id_barang');
+        return $this->hasMany(PeriodePemeliharaanDKV::class, 'id_barang', 'id_barang');
     }
 
 
@@ -43,7 +43,7 @@ class Inventaris extends Model
     public function getRows()
     {
         // Panggil API untuk mendapatkan data inventaris
-        $response = Http::get(env('API_SIJA').'/api/inventaris');
+        $response = Http::get(env('API_DOMAIN').'/api/inventaris');
 
         if ($response->successful()) {
             $inventaris = $response->json();
@@ -81,7 +81,7 @@ class Inventaris extends Model
     public function updateKondisiBarang($kondisi_barang)
     {
         // Kirim permintaan PUT ke API
-        $response = Http::put(env('API_SIJA')."/api/inventaris/{$this->id_inventaris}/kondisi", [
+        $response = Http::put(env('API_DOMAIN')."/api/inventaris/{$this->id_inventaris}/kondisi", [
             'kondisi_barang' => $kondisi_barang,
         ]);
 

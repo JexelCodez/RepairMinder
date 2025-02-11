@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Filament\Resources;
+namespace App\Filament\Sarpras\Resources;
 
-use App\Filament\Resources\PeriodePemeliharaanResource\Pages;
+use App\Filament\Sarpras\Resources\PeriodePemeliharaanSarprasResource\Pages;
+use App\Filament\Sarpras\Resources\PeriodePemeliharaanSarprasResource\RelationManagers;
 use App\Models\PeriodePemeliharaan;
-use App\Models\Inventaris;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -16,7 +16,7 @@ use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Actions\Action;
 use Filament\Tables\Actions\EditAction;
 
-class PeriodePemeliharaanResource extends Resource
+class PeriodePemeliharaanSarprasResource extends Resource
 {
     protected static ?string $model = PeriodePemeliharaan::class;
     protected static ?string $modelLabel = 'Periode Pemeliharaan';
@@ -31,7 +31,7 @@ class PeriodePemeliharaanResource extends Resource
             ->schema([
                 Forms\Components\Select::make('kode_barang')
                     ->label('Barang')
-                    ->options(Inventaris::all()->mapWithKeys(function ($item) {
+                    ->options(InventarisSarpras::all()->mapWithKeys(function ($item) {
                         return [$item->kode_barang => "{$item->kode_barang} ({$item->nama_barang})"];
                     }))
                     ->searchable()
@@ -72,8 +72,8 @@ class PeriodePemeliharaanResource extends Resource
 
                 TextColumn::make('periode')
                     ->label('Periode Pemeliharaan')
-                    ->sortable()
                     ->formatStateUsing(fn($state) => $state . ' Hari'),
+                    ->sortable(),
 
                 TextColumn::make('deskripsi')
                     ->label('Deskripsi')
@@ -141,12 +141,19 @@ class PeriodePemeliharaanResource extends Resource
             ]);
     }
 
+    public static function getRelations(): array
+    {
+        return [
+            //
+        ];
+    }
+
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListPeriodePemeliharaans::route('/'),
-            'create' => Pages\CreatePeriodePemeliharaan::route('/create'),
-            'edit' => Pages\EditPeriodePemeliharaan::route('/{record}/edit'),
+            'index' => Pages\ListPeriodePemeliharaanSarpras::route('/'),
+            'create' => Pages\CreatePeriodePemeliharaanSarpras::route('/create'),
+            'edit' => Pages\EditPeriodePemeliharaanSarpras::route('/{record}/edit'),
         ];
     }
 }

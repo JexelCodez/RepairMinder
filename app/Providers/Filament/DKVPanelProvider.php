@@ -30,9 +30,18 @@ class DKVPanelProvider extends PanelProvider
         return $panel
             ->id('dKV')
             ->path('dkv')
+            ->login()
+            ->passwordReset()
+            ->sidebarCollapsibleOnDesktop()
+            ->databaseNotifications()
             ->colors([
-                'primary' => Color::Amber,
+                'primary' => '#b70000',
+                'secondary' => '#00008b',
             ])
+            // ->brandLogo(asset('images/logo-sija.png'))
+            ->brandName('REMI DKV')
+            ->favicon(asset('icons/maskot.png'))
+            ->brandLogoHeight('5rem')
             ->discoverResources(in: app_path('Filament/DKV/Resources'), for: 'App\\Filament\\DKV\\Resources')
             ->discoverPages(in: app_path('Filament/DKV/Pages'), for: 'App\\Filament\\DKV\\Pages')
             ->pages([
@@ -41,7 +50,7 @@ class DKVPanelProvider extends PanelProvider
             ->discoverWidgets(in: app_path('Filament/DKV/Widgets'), for: 'App\\Filament\\DKV\\Widgets')
             ->widgets([
                 Widgets\AccountWidget::class,
-                Widgets\FilamentInfoWidget::class,
+                // Widgets\FilamentInfoWidget::class,
             ])
             ->plugins([
                 FilamentEditProfilePlugin::make()
