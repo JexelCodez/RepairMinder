@@ -28,11 +28,17 @@ class LoginController extends Controller
             if ($user->role === 'guru') {
                 return redirect()->route('home.guru');
             }
-            if ($user->role === 'teknisi') {
-                return redirect('/sija');
-            }
             if ($user->role === 'admin') {
                 return redirect('/sija');
+            }
+            if ($user->role === 'teknisi' && optional($user->zoneUser)->zone_name === 'sija') {
+                return redirect('/sija');
+            }
+            if ($user->role === 'teknisi' && optional($user->zoneUser)->zone_name === 'dkv') {
+                return redirect('/dkv');
+            }
+            if ($user->role === 'teknisi' && optional($user->zoneUser)->zone_name === 'sarpras') {
+                return redirect('/sarpras');
             }
         }
 
