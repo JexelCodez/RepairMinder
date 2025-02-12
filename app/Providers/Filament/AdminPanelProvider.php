@@ -103,7 +103,8 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->authMiddleware([
                 Authenticate::class,
-                'role.admin_teknisi',
+                'role.admin_teknisi_sija',
+                
             ]);
     }
 }
