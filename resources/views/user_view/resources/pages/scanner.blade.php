@@ -113,6 +113,7 @@
                     </div>
                     <div class="flex justify-end p-4 border-t">
                         <button id="close-btn" class="btn custom-btn smoothscroll mt-3">Tutup</button>
+                        <button id="close-btn" class="btn danger-btn smoothscroll mt-3 laporpak">Lapor</button>
                     </div>
                 </div>
             </div>
@@ -182,6 +183,13 @@
                         document.getElementById('updated-at').textContent = barang.updated_at;
                         document.getElementById('lokasi-barang').textContent = barang.nama_ruangan;
                         document.getElementById('status').textContent = barang.kondisi_barang;
+
+                        const laporButton = document.querySelector('.laporpak');
+                            if (barang.kondisi_barang.toLowerCase() === 'rusak') {
+                                laporButton.classList.add('hidden');
+                            } else {
+                                laporButton.classList.remove('hidden');
+                            }
 
                         detailBarang.classList.remove('hidden');
                         barangRusak.classList.add('hidden');

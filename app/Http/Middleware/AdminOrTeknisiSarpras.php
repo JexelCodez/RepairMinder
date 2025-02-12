@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
-class AdminMiddleware
+class AdminOrTeknisiSarpras
 {
     /**
      * Handle an incoming request.
@@ -16,9 +16,19 @@ class AdminMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if(Auth::user()->role== 'admin'){
+        $user = Auth::user();
+        if (!$user) {
+            abort(403, 'Unauthorized access - Please log in.');
+        }
+
+        if ($user->role === 'admin') {
             return $next($request);
         }
-        abort(403, 'Unauthorized access');
+
+        if ($user->role === 'teknisi' && optional($user->zoneUser)->zone_name === 'sarpras') {
+            return $next($request);
+        }
+
+        abort(403, 'Unauthorized access - Admin or Teknisi SIJA required.');
     }
 }
