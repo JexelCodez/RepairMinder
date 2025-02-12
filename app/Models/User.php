@@ -22,6 +22,7 @@ class User extends Authenticatable
         'email',
         'password',
         'role',
+        'id_zone',
     ];
 
     public function siswa()
@@ -37,6 +38,11 @@ class User extends Authenticatable
     public function teknisi()
     {
         return $this->hasMany(Teknisi::class, 'user_id');
+    }
+
+    public function zone()
+    {
+        return $this->hasMany(ZoneUser::class, 'id_user');
     }
 
     /**

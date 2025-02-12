@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Middleware\AdminMiddleware;
 use App\Http\Middleware\GuruMiddleware;
+use App\Http\Middleware\RoleAdminOrTeknisiMiddleware;
 use App\Http\Middleware\SiswaMiddleware;
 use App\Http\Middleware\TeknisiMiddleware;
 use Illuminate\Foundation\Application;
@@ -17,7 +19,9 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware -> alias ([
             'guru' => GuruMiddleware :: class,
             'siswa' => SiswaMiddleware :: class,
-            'teknisi' => TeknisiMiddleware :: class,
+            'role.teknisi' => TeknisiMiddleware :: class,
+            'role.admin' => AdminMiddleware :: class,
+            'role.admin_teknisi' => RoleAdminOrTeknisiMiddleware :: class,
        ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
