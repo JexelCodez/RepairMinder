@@ -83,6 +83,7 @@ class DKVPanelProvider extends PanelProvider
             ])
             ->authMiddleware([
                 Authenticate::class,
+                'role.admin_teknisi',
             ]);
     }
 }

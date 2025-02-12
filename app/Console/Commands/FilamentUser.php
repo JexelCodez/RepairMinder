@@ -35,13 +35,13 @@ class FilamentUser extends Command
             'name' => $name,
             'email' => $email,
             'password' => Hash::make($password),
-            'role' => 'teknisi', 
+            'role' => 'admin', 
         ]);
 
         if ($user) {
-            $this->info("Technician user {$name} has been created successfully!");
+            $this->info("Admin user {$name} has been created successfully!");
         } else {
-            $this->error("Failed to create technician user.");
+            $this->error("Failed to create admin user.");
         }
 
         return Command::SUCCESS;

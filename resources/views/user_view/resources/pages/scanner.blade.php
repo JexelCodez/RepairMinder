@@ -89,27 +89,34 @@
                         <h3 class="text-xl font-bold">Hasil Scan</h3>
                     </div>
                     <div class="p-4">
-                        <div class="grid grid-cols-2 gap-4">
-                            <div>
-                                <p><strong>Nama Barang:</strong> <span id="nama-barang"></span></p>
-                                <p><strong>Merk:</strong> <span id="merk"></span></p>
-                                <p><strong>Stok:</strong> <span id="stok-barang"></span></p>
-                                <p><strong>Kode Barang:</strong> <span id="kode-barang"></span></p>
-                                <p><strong>Jenis Barang:</strong> <span id="jenis-barang"></span></p>
-                                <p><strong>Nama Ruangan:</strong> <span id="lokasi-barang"></span></p>
-                                <p><strong>Kondisi:</strong> <span id="status"></span></p>
+                        <div id="result-content"> 
+                            <div class="grid grid-cols-2 gap-4" id="detail-barang">
+                                <div>
+                                    <p><strong>Nama Barang:</strong> <span id="nama-barang"></span></p>
+                                    <p><strong>Merk:</strong> <span id="merk"></span></p>
+                                    <p><strong>Stok:</strong> <span id="stok-barang"></span></p>
+                                    <p><strong>Kode Barang:</strong> <span id="kode-barang"></span></p>
+                                    <p><strong>Jenis Barang:</strong> <span id="jenis-barang"></span></p>
+                                    <p><strong>Nama Ruangan:</strong> <span id="lokasi-barang"></span></p>
+                                    <p><strong>Kondisi:</strong> <span id="status"></span></p>
+                                </div>
+                                <div>
+                                    <p><strong>Terakhir Diperbarui:</strong> <span id="updated-at"></span></p>
+                                </div>
                             </div>
-                            <div>
-                                <p><strong>Terakhir Diperbarui:</strong> <span id="updated-at"></span></p>
+            
+                            <!-- Tampilan khusus jika barang rusak -->
+                            <div id="barang-rusak" class="hidden text-center text-red-600 font-bold text-xl p-4">
+                                <h1>⚠️ Barang ini sedang rusak ⚠️</h1>
                             </div>
                         </div>
                     </div>
                     <div class="flex justify-end p-4 border-t">
                         <button id="close-btn" class="btn custom-btn smoothscroll mt-3">Tutup</button>
-                        <button id="close-btn" class="btn danger-btn smoothscroll mt-3 laporpak">Lapor</button>
                     </div>
                 </div>
             </div>
+            
 
             <p id="error" class="text-red-600 mt-2 hidden"></p>
             
@@ -155,45 +162,50 @@
             })
             .then(response => response.json())
             .then(data => {
-            if (data.success) {
-                const barang = data.data;
-                document.getElementById('nama-barang').textContent = barang.nama_barang;
-                document.getElementById('merk').textContent = barang.merek;
-                document.getElementById('stok-barang').textContent = barang.stok_barang;
-                document.getElementById('kode-barang').textContent = barang.kode_barang;
-                document.getElementById('jenis-barang').textContent = barang.nama_jenis_barang;
-                document.getElementById('updated-at').textContent = barang.updated_at;
-                document.getElementById('lokasi-barang').textContent = barang.nama_ruangan;
-                document.getElementById('status').textContent = barang.kondisi_barang;
+                if (data.success) {
+                    const barang = data.data;
+                    const resultModal = document.getElementById('result');
+                    const detailBarang = document.getElementById('detail-barang');
+                    const barangRusak = document.getElementById('barang-rusak');
 
-                // Cek kondisi barang dan sembunyikan tombol Lapor jika rusak
-                const laporButton = document.querySelector('.laporpak');
-                if (barang.kondisi_barang.toLowerCase() === 'rusak') {
-                    laporButton.classList.add('hidden');
+                    if (barang.kondisi_barang.toLowerCase() === 'rusak') {
+                        // Jika barang rusak, tampilkan pesan khusus
+                        detailBarang.classList.add('hidden');
+                        barangRusak.classList.remove('hidden');
+                    } else {
+                        // Jika barang tidak rusak, tampilkan detailnya
+                        document.getElementById('nama-barang').textContent = barang.nama_barang;
+                        document.getElementById('merk').textContent = barang.merek;
+                        document.getElementById('stok-barang').textContent = barang.stok_barang;
+                        document.getElementById('kode-barang').textContent = barang.kode_barang;
+                        document.getElementById('jenis-barang').textContent = barang.nama_jenis_barang;
+                        document.getElementById('updated-at').textContent = barang.updated_at;
+                        document.getElementById('lokasi-barang').textContent = barang.nama_ruangan;
+                        document.getElementById('status').textContent = barang.kondisi_barang;
+
+                        detailBarang.classList.remove('hidden');
+                        barangRusak.classList.add('hidden');
+                    }
+
+                    resultModal.classList.remove('hidden');
+                    document.getElementById('error').classList.add('hidden'); // Sembunyikan pesan error
                 } else {
-                    laporButton.classList.remove('hidden');
+                    document.getElementById('error').textContent = data.message;
+                    document.getElementById('error').classList.remove('hidden');
+
+                    html5QrcodeScanner.stop().then(() => {
+                        isScanning = false;
+                        document.getElementById('toggle-scan-btn').textContent = 'Start Scan';
+                    }).catch(err => {
+                        console.error("Error stopping QR code scanner: ", err);
+                    });
                 }
-
-                document.getElementById('result').classList.remove('hidden');
-                document.getElementById('error').classList.add('hidden'); // Sembunyikan pesan error
-            } else {
-                document.getElementById('error').textContent = data.message;
-                document.getElementById('error').classList.remove('hidden');
-
-                // Stop scanner
-                html5QrcodeScanner.stop().then(() => {
-                    isScanning = false;
-                    document.getElementById('toggle-scan-btn').textContent = 'Start Scan';
-                }).catch(err => {
-                    console.error("Error stopping QR code scanner: ", err);
-                });
-            }
-        })
-
+            })
             .catch(error => {
                 console.error("Error:", error);
             });
         }
+
 
         function onScanFailure(error) {
             console.warn(`Scan error: ${error}`);
