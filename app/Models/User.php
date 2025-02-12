@@ -40,9 +40,9 @@ class User extends Authenticatable
         return $this->hasMany(Teknisi::class, 'user_id');
     }
 
-    public function zone()
+    public function zoneUser()
     {
-        return $this->belongsTo(ZoneUser::class, 'id');
+        return $this->belongsTo(ZoneUser::class, 'id_zone');
     }
 
     /**
