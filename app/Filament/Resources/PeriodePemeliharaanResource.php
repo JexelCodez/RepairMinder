@@ -53,7 +53,7 @@ class PeriodePemeliharaanResource extends Resource
             ]);
     }
 
-        public static function table(Table $table): Table
+    public static function table(Table $table): Table
     {
         return $table
             ->columns([
@@ -110,10 +110,11 @@ class PeriodePemeliharaanResource extends Resource
                 SelectFilter::make('jurusan')
                     ->label('Filter Berdasarkan Jurusan')
                     ->options([
-                        'sija' => 'SIJA',
-                        'dkv' => 'DKV',
-                        'sarpras' => 'SARPRAS',
+                        'sija'   => 'SIJA',
+                        'dkv'    => 'DKV',
+                        'sarpras'=> 'SARPRAS',
                     ])
+                    ->default('sija')
                     ->query(function ($query, $data) {
                         if ($data['value'] === 'sija') {
                             return $query->whereIn('kode_barang', Inventaris::pluck('kode_barang'));
