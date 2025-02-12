@@ -6,6 +6,8 @@ use App\Filament\Resources\LaporanResource\Pages;
 use App\Filament\Resources\LaporanResource\RelationManagers;
 use App\Models\Laporan;
 use App\Models\Inventaris;
+use App\Models\InventarisDKV;
+use App\Models\InventarisSarpras;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -16,6 +18,7 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Tables\Actions\Action;
 use Filament\Tables\Columns\BadgeColumn;
 use Filament\Notifications\Notification;
+use Filament\Tables\Filters\SelectFilter;
 
 // INFOLIST
 use Filament\Infolists\Infolist;
@@ -95,6 +98,27 @@ class LaporanResource extends Resource implements CustomizeOverlookWidget
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
+            ])
+            ->filters([
+                SelectFilter::make('jurusan')
+                    ->label('Filter Berdasarkan Jurusan')
+                    ->options([
+                        'sija'   => 'SIJA',
+                        'dkv'    => 'DKV',
+                        'sarpras'=> 'SARPRAS',
+                    ])
+                    ->default('sija')
+                    ->query(function ($query, $data) {
+                        if ($data['value'] === 'sija') {
+                            return $query->whereIn('kode_barang', Inventaris::pluck('kode_barang'));
+                        } elseif ($data['value'] === 'dkv') {
+                            return $query->whereIn('kode_barang', InventarisDKV::pluck('kode_barang'));
+                        } elseif ($data['value'] === 'sarpras') {
+                            return $query->whereIn('kode_barang', InventarisSarpras::pluck('kode_barang'));
+                        }
+                        return $query;
+                    })
+                    ->placeholder('Pilih Jurusan'),
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
