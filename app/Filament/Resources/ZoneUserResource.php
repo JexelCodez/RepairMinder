@@ -69,9 +69,9 @@ class ZoneUserResource extends Resource
     {
         return [
             'index' => Pages\ListZoneUsers::route('/'),
-            'create' => Pages\CreateZoneUser::route('/create'),
+            // 'create' => Pages\CreateZoneUser::route('/create'),
             'view' => Pages\ViewZoneUser::route('/{record}'),
-            'edit' => Pages\EditZoneUser::route('/{record}/edit'),
+            // 'edit' => Pages\EditZoneUser::route('/{record}/edit'),
         ];
     }
 }

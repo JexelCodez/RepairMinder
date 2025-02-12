@@ -53,60 +53,56 @@ class PeriodePemeliharaanResource extends Resource
             ]);
     }
 
-    public static function table(Table $table): Table
+        public static function table(Table $table): Table
     {
         return $table
             ->columns([
-                TextColumn::make('inventaris.nama_barang')
+                TextColumn::make('nama_barang')
                     ->label('Nama Barang')
                     ->sortable()
-                    ->searchable(),
-
-                TextColumn::make('inventaris.merek')
+                    ->searchable()
+                    ->getStateUsing(fn($record) =>
+                        $record->inventaris->nama_barang ?? 
+                        $record->inventarisDKV->nama_barang ?? 
+                        $record->inventarisSarpras->nama_barang ?? 'N/A'
+                    ),
+                TextColumn::make('merek')
                     ->label('Merk Barang')
                     ->sortable()
-                    ->searchable(),
-
+                    ->searchable()
+                    ->getStateUsing(fn($record) =>
+                        $record->inventaris->merek ?? 
+                        $record->inventarisDKV->merek ?? 
+                        $record->inventarisSarpras->merek ?? 'N/A'
+                    ),
                 TextColumn::make('kode_barang')
                     ->label('Kode Barang')
                     ->sortable()
                     ->searchable(),
-
                 TextColumn::make('periode')
                     ->label('Periode Pemeliharaan')
                     ->sortable()
                     ->formatStateUsing(fn($state) => $state . ' Hari'),
-
                 TextColumn::make('deskripsi')
                     ->label('Deskripsi')
                     ->limit(50)
                     ->tooltip(fn ($record) => $record->deskripsi),
-
                 TextColumn::make('tanggal_maintenance_selanjutnya')
                     ->label('Maintenance Selanjutnya')
                     ->date()
                     ->sortable()
                     ->placeholder('Belum tersedia'),
-
                 TextColumn::make('created_at')
                     ->label('Dibuat')
                     ->dateTime()
                     ->sortable(),
-
                 TextColumn::make('updated_at')
                     ->label('Diperbarui')
                     ->dateTime()
                     ->sortable(),
             ])
             ->filters([
-                SelectFilter::make('periode')
-                    ->label('Filter Periode')
-                    ->options([
-                        '3 months' => '3 months',
-                        '6 months' => '6 months',
-                        '12 months' => '12 months',
-                    ])
-                    ->placeholder('Select Period'),
+                
             ])
             ->actions([
                 EditAction::make()
@@ -121,12 +117,10 @@ class PeriodePemeliharaanResource extends Resource
                             })
                             ->default($record->id_barang)
                             ->required(),
-
                         Forms\Components\TextInput::make('periode')
                             ->label('Periode Pemeliharaan')
                             ->default($record->periode)
                             ->required(),
-
                         Forms\Components\TextInput::make('deskripsi')
                             ->label('Deskripsi')
                             ->nullable()
@@ -135,9 +129,9 @@ class PeriodePemeliharaanResource extends Resource
                     ->action(function ($record, array $data) {
                         // Update the PeriodePemeliharaan
                         $record->update([
-                            'id_barang' => $data['id_barang'],
-                            'periode' => $data['periode'],
-                            'deskripsi' => $data['deskripsi'],
+                            'id_barang'  => $data['id_barang'],
+                            'periode'    => $data['periode'],
+                            'deskripsi'  => $data['deskripsi'],
                         ]);
                     }),
             ]);
