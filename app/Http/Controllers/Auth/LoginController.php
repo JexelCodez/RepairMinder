@@ -31,6 +31,9 @@ class LoginController extends Controller
             if ($user->role === 'teknisi') {
                 return redirect('/sija');
             }
+            if ($user->role === 'admin') {
+                return redirect('/sija');
+            }
         }
 
         return redirect()->back()->withErrors(['email' => 'Invalid credentials'])->withInput();
