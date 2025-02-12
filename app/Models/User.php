@@ -42,7 +42,7 @@ class User extends Authenticatable
 
     public function zone()
     {
-        return $this->hasMany(ZoneUser::class, 'id_user');
+        return $this->belongsTo(ZoneUser::class, 'id');
     }
 
     /**
