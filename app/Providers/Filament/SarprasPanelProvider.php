@@ -62,7 +62,8 @@ class SarprasPanelProvider extends PanelProvider
                     ->navigationLabel('My Env')
                     ->navigationIcon('heroicon-o-cog-8-tooth')
                     ->navigationSort(1)
-                    ->slug('env-editor'),     
+                    ->slug('env-editor')
+                    ->authorize(fn() => auth()->check() && auth()->user()->role === 'admin'),    
             ])
             ->navigationItems([
                 NavigationItem::make('Scanner')

@@ -36,6 +36,16 @@ class Maintenance extends Model
         return $this->belongsTo(Inventaris::class, 'kode_barang', 'kode_barang');
     }
 
+    public function inventarisDKV()
+    {
+        return $this->belongsTo(InventarisDKV::class, 'kode_barang', 'kode_barang');
+    }
+
+    public function inventarisSarpras()
+    {
+        return $this->belongsTo(InventarisSarpras::class, 'kode_barang', 'kode_barang');
+    }
+
     protected static function boot()
     {
         parent::boot();
