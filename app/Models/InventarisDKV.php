@@ -13,7 +13,6 @@ class InventarisDKV extends Model
     protected $fillable = [
         'id_inventaris',
         'id_barang',
-        'kode_barang',
         'nama_barang',
         'merek',
         'qrcode_image',
@@ -31,34 +30,43 @@ class InventarisDKV extends Model
         return [
             [
                 'id_inventaris' => 1,
-                'id_barang' => 101,
-                'kode_barang' => 'DKV-001',
-                'nama_barang' => 'Kamera DSLR',
-                'merek' => 'Canon EOS 90D',
-                'qrcode_image' => 'qrcode_dkv_001.png',
-                'id_ruangan' => 10,
-                'nama_ruangan' => 'Studio Fotografi',
-                'jumlah_barang' => 5,
-                'kondisi_barang' => 'lengkap',
-                'ket_barang' => 'Digunakan untuk kelas fotografi',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'id_inventaris' => 2,
-                'id_barang' => 102,
-                'kode_barang' => 'DKV-002',
+                'id_barang' => 201,
+                'nama_jenis_barang' => 'Peralatan Desain',
                 'nama_barang' => 'Drawing Tablet',
                 'merek' => 'Wacom Intuos Pro',
-                'qrcode_image' => 'qrcode_dkv_002.png',
+                'kode_barang' => 'DKV-001',
+                'qrcode_image' => 'https://example.com/qrcode_dkv_001.png',
+                'stok_barang' => 10,
                 'id_ruangan' => 11,
                 'nama_ruangan' => 'Lab Desain',
                 'jumlah_barang' => 10,
                 'kondisi_barang' => 'lengkap',
                 'ket_barang' => 'Digunakan untuk ilustrasi digital',
-                'created_at' => now(),
-                'updated_at' => now(),
+                'created_at' => now()->format('Y-m-d H:i:s'),
+                'updated_at' => now()->format('Y-m-d H:i:s'),
+            ],
+            [
+                'id_inventaris' => 2,
+                'id_barang' => 202,
+                'nama_jenis_barang' => 'Peralatan Fotografi',
+                'nama_barang' => 'Kamera DSLR',
+                'merek' => 'Canon EOS 90D',
+                'kode_barang' => 'DKV-002',
+                'qrcode_image' => 'https://example.com/qrcode_dkv_002.png',
+                'stok_barang' => 5,
+                'id_ruangan' => 10,
+                'nama_ruangan' => 'Studio Fotografi',
+                'jumlah_barang' => 5,
+                'kondisi_barang' => 'lengkap',
+                'ket_barang' => 'Digunakan untuk kelas fotografi',
+                'created_at' => now()->format('Y-m-d H:i:s'),
+                'updated_at' => now()->format('Y-m-d H:i:s'),
             ],
         ];
+    }
+
+    public function periodePemeliharaan()
+    {
+        return $this->hasMany(PeriodePemeliharaan::class, 'id_barang', 'id_barang');
     }
 }

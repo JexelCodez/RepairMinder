@@ -6,6 +6,8 @@ use App\Filament\DKV\Resources\PeriodePemeliharaanDKVResource\Pages;
 use App\Filament\DKV\Resources\PeriodePemeliharaanDKVResource\RelationManagers;
 use App\Models\PeriodePemeliharaan;
 use App\Models\InventarisDKV;
+use App\Models\Inventaris;
+use App\Models\InventarisSarpras;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -106,6 +108,14 @@ class PeriodePemeliharaanDKVResource extends Resource
                         '12 months' => '12 months',
                     ])
                     ->placeholder('Select Period'),
+                SelectFilter::make('kode_barang')
+                    ->label('Filter Berdasarkan Barang')
+                    ->options(array_merge(
+                        Inventaris::pluck('nama_barang', 'kode_barang')->toArray(),
+                        InventarisDKV::pluck('nama_barang', 'kode_barang')->toArray(),
+                        InventarisSarpras::pluck('nama_barang', 'kode_barang')->toArray()
+                    ))
+                    ->searchable(),        
             ])
             ->actions([
                 EditAction::make()
