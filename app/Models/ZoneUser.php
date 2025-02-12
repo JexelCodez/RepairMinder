@@ -15,8 +15,12 @@ class ZoneUser extends Model
         'zone_name',
     ];
 
-    public function user()
+    /**
+     * Relasi ke User (satu zone bisa memiliki banyak user).
+     */
+    public function users()
     {
-        return $this->hasMany(User::class, 'id');
+        return $this->hasMany(User::class, 'id_zone');
     }
+
 }

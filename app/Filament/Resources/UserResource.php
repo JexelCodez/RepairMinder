@@ -76,7 +76,7 @@ class UserResource extends Resource
                     ->sortable()
                     ->searchable(),
 
-                TextColumn::make('id_zone')
+                TextColumn::make('zoneUser.zone_name')
                     ->label('Zone')
                     ->sortable()
                     ->searchable(),
