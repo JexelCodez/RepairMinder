@@ -24,7 +24,22 @@ class UserResource extends Resource
 {
     protected static ?string $model = User::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-user-group';
+    protected static ?string $modelLabel = 'Users';
+    protected static ?string $pluralModelLabel = 'Users';
+    protected static ?string $navigationLabel = 'Users';
+    protected static ?string $navigationGroup = 'Manage User';
+
+    public static function shouldRegisterNavigation(): bool
+    {
+        return auth()->check() && auth()->user()->role === 'admin';
+    }
+
+    // Tambahkan metode ini agar hanya admin yang bisa mengakses resource ini
+    public static function canViewAny(): bool
+    {
+        return auth()->check() && auth()->user()->role === 'admin';
+    }
 
     public static function form(Form $form): Form
     {

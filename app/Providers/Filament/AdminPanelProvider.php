@@ -68,7 +68,8 @@ class AdminPanelProvider extends PanelProvider
                     ->navigationLabel('My Env')
                     ->navigationIcon('heroicon-o-cog-8-tooth')
                     ->navigationSort(1)
-                    ->slug('env-editor'),
+                    ->slug('env-editor')
+                    ->authorize(fn() => auth()->check() && auth()->user()->role === 'admin'),
                 FilamentEditProfilePlugin::make()
                     ->setIcon('heroicon-o-user')
                     ->setTitle('My Profile')

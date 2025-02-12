@@ -17,7 +17,22 @@ class ZoneUserResource extends Resource
 {
     protected static ?string $model = ZoneUser::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-map-pin';
+    protected static ?string $modelLabel = 'Area User';
+    protected static ?string $pluralModelLabel = 'Area User';
+    protected static ?string $navigationLabel = 'Area User';
+    protected static ?string $navigationGroup = 'Manage User';
+
+    public static function shouldRegisterNavigation(): bool
+    {
+        return auth()->check() && auth()->user()->role === 'admin';
+    }
+
+    // Tambahkan metode ini agar hanya admin yang bisa mengakses resource ini
+    public static function canViewAny(): bool
+    {
+        return auth()->check() && auth()->user()->role === 'admin';
+    }
 
     public static function form(Form $form): Form
     {

@@ -5,6 +5,8 @@ namespace App\Filament\Sarpras\Resources;
 use App\Filament\Sarpras\Resources\MaintenanceSarprasResource\Pages;
 use App\Filament\Sarpras\Resources\MaintenanceSarprasResource\RelationManagers;
 use App\Models\Maintenance;
+use App\Models\Inventaris;
+use App\Models\InventarisDKV;
 use App\Models\InventarisSarpras;
 use App\Models\PeriodePemeliharaan;
 use App\Models\User;
@@ -67,16 +69,24 @@ class MaintenanceSarprasResource extends Resource
     {
         return $table
             ->columns([
-
-                TextColumn::make('inventaris.nama_barang')
+                TextColumn::make('nama_barang')
                     ->label('Nama Barang')
                     ->sortable()
-                    ->searchable(),
-
-                TextColumn::make('inventaris.merek')
+                    ->searchable()
+                    ->getStateUsing(fn($record) =>
+                        $record->inventaris->nama_barang ?? 
+                        $record->inventarisDKV->nama_barang ?? 
+                        $record->inventarisSarpras->nama_barang ?? 'N/A'
+                    ),
+                TextColumn::make('merek')
                     ->label('Merk Barang')
                     ->sortable()
-                    ->searchable(),
+                    ->searchable()
+                    ->getStateUsing(fn($record) =>
+                        $record->inventaris->merek ?? 
+                        $record->inventarisDKV->merek ?? 
+                        $record->inventarisSarpras->merek ?? 'N/A'
+                    ),
                 
                 TextColumn::make('kode_barang')
                     ->label('Kode Barang')
@@ -99,7 +109,24 @@ class MaintenanceSarprasResource extends Resource
                     ->date(),
             ])
             ->filters([
-                // Define any filters if necessary
+                SelectFilter::make('jurusan')
+                    ->label('Filter Berdasarkan Jurusan')
+                    ->options([
+                        'sija'   => 'SIJA',
+                        'dkv'    => 'DKV',
+                        'sarpras'=> 'SARPRAS',
+                    ])
+                    ->query(function ($query, $data) {
+                        if ($data['value'] === 'sija') {
+                            return $query->whereIn('kode_barang', Inventaris::pluck('kode_barang'));
+                        } elseif ($data['value'] === 'dkv') {
+                            return $query->whereIn('kode_barang', InventarisDKV::pluck('kode_barang'));
+                        } elseif ($data['value'] === 'sarpras') {
+                            return $query->whereIn('kode_barang', InventarisSarpras::pluck('kode_barang'));
+                        }
+                        return $query;
+                    })
+                    ->placeholder('Pilih Jurusan'),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
