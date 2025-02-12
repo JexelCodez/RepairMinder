@@ -55,56 +55,74 @@ class PeriodePemeliharaanSarprasResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('inventaris.nama_barang')
+                TextColumn::make('nama_barang')
                     ->label('Nama Barang')
                     ->sortable()
-                    ->searchable(),
-
-                TextColumn::make('inventaris.merek')
+                    ->searchable()
+                    ->getStateUsing(fn($record) =>
+                        $record->inventaris->nama_barang ?? 
+                        $record->inventarisDKV->nama_barang ?? 
+                        $record->inventarisSarpras->nama_barang ?? 'N/A'
+                    ),
+                TextColumn::make('merek')
                     ->label('Merk Barang')
                     ->sortable()
-                    ->searchable(),
-
+                    ->searchable()
+                    ->getStateUsing(fn($record) =>
+                        $record->inventaris->merek ?? 
+                        $record->inventarisDKV->merek ?? 
+                        $record->inventarisSarpras->merek ?? 'N/A'
+                    ),
                 TextColumn::make('kode_barang')
                     ->label('Kode Barang')
                     ->sortable()
                     ->searchable(),
-
+    
                 TextColumn::make('periode')
                     ->label('Periode Pemeliharaan')
-                    ->formatStateUsing(fn($state) => $state . ' Hari')
-                    ->sortable(),
-
+                    ->sortable()
+                    ->formatStateUsing(fn($state) => $state . ' Hari'),
+    
                 TextColumn::make('deskripsi')
                     ->label('Deskripsi')
                     ->limit(50)
                     ->tooltip(fn ($record) => $record->deskripsi),
-
+    
                 TextColumn::make('tanggal_maintenance_selanjutnya')
                     ->label('Maintenance Selanjutnya')
                     ->date()
                     ->sortable()
                     ->placeholder('Belum tersedia'),
-
+    
                 TextColumn::make('created_at')
                     ->label('Dibuat')
                     ->dateTime()
                     ->sortable(),
-
+    
                 TextColumn::make('updated_at')
                     ->label('Diperbarui')
                     ->dateTime()
                     ->sortable(),
             ])
             ->filters([
-                SelectFilter::make('periode')
-                    ->label('Filter Periode')
+                SelectFilter::make('jurusan')
+                    ->label('Filter Berdasarkan Jurusan')
                     ->options([
-                        '3 months' => '3 months',
-                        '6 months' => '6 months',
-                        '12 months' => '12 months',
+                        'sija' => 'SIJA',
+                        'dkv' => 'DKV',
+                        'sarpras' => 'SARPRAS',
                     ])
-                    ->placeholder('Select Period'),
+                    ->query(function ($query, $data) {
+                        if ($data['value'] === 'sija') {
+                            return $query->whereIn('kode_barang', Inventaris::pluck('kode_barang'));
+                        } elseif ($data['value'] === 'dkv') {
+                            return $query->whereIn('kode_barang', InventarisDKV::pluck('kode_barang'));
+                        } elseif ($data['value'] === 'sarpras') {
+                            return $query->whereIn('kode_barang', InventarisSarpras::pluck('kode_barang'));
+                        }
+                        return $query;
+                    })
+                    ->placeholder('Pilih Jurusan'),
             ])
             ->actions([
                 EditAction::make()
@@ -114,28 +132,26 @@ class PeriodePemeliharaanSarprasResource extends Resource
                         Forms\Components\Select::make('id_barang')
                             ->label('Barang')
                             ->options(function () {
-                                // Fetch fresh list of barang
-                                return []; // Return an empty array for fresh data
+                                return [];
                             })
                             ->default($record->id_barang)
                             ->required(),
-
+    
                         Forms\Components\TextInput::make('periode')
                             ->label('Periode Pemeliharaan')
                             ->default($record->periode)
                             ->required(),
-
+    
                         Forms\Components\TextInput::make('deskripsi')
                             ->label('Deskripsi')
                             ->nullable()
                             ->default($record->deskripsi),
                     ])
                     ->action(function ($record, array $data) {
-                        // Update the PeriodePemeliharaan
                         $record->update([
-                            'id_barang' => $data['id_barang'],
-                            'periode' => $data['periode'],
-                            'deskripsi' => $data['deskripsi'],
+                            'id_barang'  => $data['id_barang'],
+                            'periode'    => $data['periode'],
+                            'deskripsi'  => $data['deskripsi'],
                         ]);
                     }),
             ]);

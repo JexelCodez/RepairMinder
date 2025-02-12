@@ -17,6 +17,8 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Forms\Components\Select;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules\Password;
+use Filament\Tables\Filters\SelectFilter;
+
 
 class UserResource extends Resource
 {
@@ -82,7 +84,9 @@ class UserResource extends Resource
                     ->searchable(),
             ])
             ->filters([
-                //
+                SelectFilter::make('id_zone')
+                    ->label('Area')
+                    ->options(\App\Models\ZoneUser::all()->pluck('zone_name', 'id'))
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),

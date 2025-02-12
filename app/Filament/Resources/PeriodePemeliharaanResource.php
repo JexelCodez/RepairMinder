@@ -57,16 +57,24 @@ class PeriodePemeliharaanResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('inventaris.nama_barang')
+                TextColumn::make('nama_barang')
                     ->label('Nama Barang')
                     ->sortable()
-                    ->searchable(),
-    
-                TextColumn::make('inventaris.merek')
+                    ->searchable()
+                    ->getStateUsing(fn($record) =>
+                        $record->inventaris->nama_barang ?? 
+                        $record->inventarisDKV->nama_barang ?? 
+                        $record->inventarisSarpras->nama_barang ?? 'N/A'
+                    ),
+                TextColumn::make('merek')
                     ->label('Merk Barang')
                     ->sortable()
-                    ->searchable(),
-    
+                    ->searchable()
+                    ->getStateUsing(fn($record) =>
+                        $record->inventaris->merek ?? 
+                        $record->inventarisDKV->merek ?? 
+                        $record->inventarisSarpras->merek ?? 'N/A'
+                    ),
                 TextColumn::make('kode_barang')
                     ->label('Kode Barang')
                     ->sortable()
@@ -102,10 +110,11 @@ class PeriodePemeliharaanResource extends Resource
                 SelectFilter::make('jurusan')
                     ->label('Filter Berdasarkan Jurusan')
                     ->options([
-                        'sija' => 'SIJA',
-                        'dkv' => 'DKV',
-                        'sarpras' => 'SARPRAS',
+                        'sija'   => 'SIJA',
+                        'dkv'    => 'DKV',
+                        'sarpras'=> 'SARPRAS',
                     ])
+                    ->default('sija')
                     ->query(function ($query, $data) {
                         if ($data['value'] === 'sija') {
                             return $query->whereIn('kode_barang', Inventaris::pluck('kode_barang'));
@@ -143,9 +152,9 @@ class PeriodePemeliharaanResource extends Resource
                     ])
                     ->action(function ($record, array $data) {
                         $record->update([
-                            'id_barang' => $data['id_barang'],
-                            'periode' => $data['periode'],
-                            'deskripsi' => $data['deskripsi'],
+                            'id_barang'  => $data['id_barang'],
+                            'periode'    => $data['periode'],
+                            'deskripsi'  => $data['deskripsi'],
                         ]);
                     }),
             ]);
