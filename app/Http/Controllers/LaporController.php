@@ -67,26 +67,27 @@ class LaporController extends Controller
         $teknisiUsers = User::where('role', 'admin')
             ->orWhere(fn($query) => 
                 $query->where('role', 'teknisi')
-                    ->whereHas('zoneUser', fn($q) => $q->where('zone_name', 'dkv'))
+                      ->whereHas('zoneUser', fn($q) => $q->where('zone_name', 'dkv'))
             )->get();
         
-        $laporUrl = LaporanDKVResource::getUrl('view', ['record' => $laporan]);
+        // Tentukan panel untuk route DKV, misalnya panel slugnya 'dkv'
+        $laporUrl = LaporanDKVResource::getUrl('view', ['record' => $laporan], panel: 'dKV');
     } elseif (InventarisSarpras::where('kode_barang', $validatedData['kode_barang'])->exists()) {
         $teknisiUsers = User::where('role', 'admin')
             ->orWhere(fn($query) => 
                 $query->where('role', 'teknisi')
-                    ->whereHas('zoneUser', fn($q) => $q->where('zone_name', 'sarpras'))
+                      ->whereHas('zoneUser', fn($q) => $q->where('zone_name', 'sarpras'))
             )->get();
-
-        $laporUrl = LaporanSarprasResource::getUrl('view', ['record' => $laporan]);
+    
+        $laporUrl = LaporanSarprasResource::getUrl('view', ['record' => $laporan], panel: 'sarpras');
     } else {
         $teknisiUsers = User::where('role', 'admin')
-            ->orWhere(fn($query) => 
+            ->orWhere(fn($query) =>
                 $query->where('role', 'teknisi')
-                    ->whereHas('zoneUser', fn($q) => $q->where('zone_name', 'sija'))
+                      ->whereHas('zoneUser', fn($q) => $q->where('zone_name', 'sija'))
             )->get();
-
-        $laporUrl = LaporanResource::getUrl('view', ['record' => $laporan]);
+    
+        $laporUrl = LaporanResource::getUrl('view', ['record' => $laporan], panel: 'admin');
     }
 
     foreach ($teknisiUsers as $user) {
