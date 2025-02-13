@@ -69,4 +69,11 @@ class InventarisDKV extends Model
     {
         return $this->hasMany(PeriodePemeliharaan::class, 'id_barang', 'id_barang');
     }
+
+    public function updateKondisiBarang($kondisi_barang)
+    {
+        $this->kondisi_barang = $kondisi_barang;
+        
+        return $this->save();
+    }
 }
