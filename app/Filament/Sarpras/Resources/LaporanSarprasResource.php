@@ -5,6 +5,9 @@ namespace App\Filament\Sarpras\Resources;
 use App\Filament\Sarpras\Resources\LaporanSarprasResource\Pages;
 use App\Filament\Sarpras\Resources\LaporanSarprasResource\RelationManagers;
 use App\Models\Laporan;
+use App\Models\Inventaris;
+use App\Models\InventarisDKV;
+use App\Models\InventarisSarpras;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -15,6 +18,8 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Tables\Actions\Action;
 use Filament\Tables\Columns\BadgeColumn;
 use Filament\Notifications\Notification;
+use Filament\Tables\Filters\SelectFilter;
+
 
 // INFOLIST
 use Filament\Infolists\Infolist;
@@ -89,6 +94,26 @@ class LaporanSarprasResource extends Resource
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
+            ])
+            ->filters([
+                SelectFilter::make('jurusan')
+                    ->label('Filter Berdasarkan Jurusan')
+                    ->options([
+                        'sija'   => 'SIJA',
+                        'dkv'    => 'DKV',
+                        'sarpras'=> 'SARPRAS',
+                    ])
+                    ->query(function ($query, $data) {
+                        if ($data['value'] === 'sija') {
+                            return $query->whereIn('kode_barang', Inventaris::pluck('kode_barang'));
+                        } elseif ($data['value'] === 'dkv') {
+                            return $query->whereIn('kode_barang', InventarisDKV::pluck('kode_barang'));
+                        } elseif ($data['value'] === 'sarpras') {
+                            return $query->whereIn('kode_barang', InventarisSarpras::pluck('kode_barang'));
+                        }
+                        return $query;
+                    })
+                    ->placeholder('Pilih Jurusan'),
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
@@ -212,8 +237,7 @@ class LaporanSarprasResource extends Resource
     {
         return [
             'index' => Pages\ListLaporanSarpras::route('/'),
-            'create' => Pages\CreateLaporanSarpras::route('/create'),
-            'edit' => Pages\EditLaporanSarpras::route('/{record}/edit'),
+            'view' => Pages\ViewLaporanSarpras::route('/{record}'),
         ];
     }
 }

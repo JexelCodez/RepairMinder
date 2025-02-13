@@ -18,6 +18,8 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\SelectFilter;
+
 
 class MaintenanceSarprasResource extends Resource
 {
@@ -127,6 +129,22 @@ class MaintenanceSarprasResource extends Resource
                         return $query;
                     })
                     ->placeholder('Pilih Jurusan'),
+                SelectFilter::make('status')
+                    ->label('Filter Status')
+                    ->options([
+                        ''                 => 'Semua',
+                        'sedang diproses'  => 'Sedang Diproses',
+                        'dalam perbaikan'  => 'Dalam Perbaikan',
+                        'selesai'          => 'Selesai',
+                    ])
+                    ->default('')
+                    ->query(function ($query, $data) {
+                        if (isset($data['value']) && $data['value'] !== '') {
+                            return $query->where('status', $data['value']);
+                        }
+                        return $query;
+                    })
+                    ->placeholder('Pilih Status'),    
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),

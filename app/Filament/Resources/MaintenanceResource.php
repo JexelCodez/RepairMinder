@@ -124,6 +124,22 @@ class MaintenanceResource extends Resource
                         return $query;
                     })
                     ->placeholder('Pilih Jurusan'),
+                SelectFilter::make('status')
+                    ->label('Filter Status')
+                    ->options([
+                        ''                 => 'Semua',
+                        'sedang diproses'  => 'Sedang Diproses',
+                        'dalam perbaikan'  => 'Dalam Perbaikan',
+                        'selesai'          => 'Selesai',
+                    ])
+                    ->default('')
+                    ->query(function ($query, $data) {
+                        if (isset($data['value']) && $data['value'] !== '') {
+                            return $query->where('status', $data['value']);
+                        }
+                        return $query;
+                    })
+                    ->placeholder('Pilih Status'),    
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),

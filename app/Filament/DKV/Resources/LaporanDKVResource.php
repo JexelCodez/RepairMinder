@@ -5,6 +5,9 @@ namespace App\Filament\DKV\Resources;
 use App\Filament\DKV\Resources\LaporanDKVResource\Pages;
 use App\Filament\DKV\Resources\LaporanDKVResource\RelationManagers;
 use App\Models\Laporan;
+use App\Models\Inventaris;
+use App\Models\InventarisDKV;
+use App\Models\InventarisSarpras;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -15,6 +18,7 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Tables\Actions\Action;
 use Filament\Tables\Columns\BadgeColumn;
 use Filament\Notifications\Notification;
+use Filament\Tables\Filters\SelectFilter;
 
 // INFOLIST
 use Filament\Infolists\Infolist;
@@ -89,6 +93,27 @@ class LaporanDKVResource extends Resource
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
+            ])
+            ->filters([
+                SelectFilter::make('jurusan')
+                    ->label('Filter Berdasarkan Jurusan')
+                    ->options([
+                        'sija'   => 'SIJA',
+                        'dkv'    => 'DKV',
+                        'sarpras'=> 'SARPRAS',
+                    ])
+                    ->default('dkv')
+                    ->query(function ($query, $data) {
+                        if ($data['value'] === 'sija') {
+                            return $query->whereIn('kode_barang', Inventaris::pluck('kode_barang'));
+                        } elseif ($data['value'] === 'dkv') {
+                            return $query->whereIn('kode_barang', InventarisDKV::pluck('kode_barang'));
+                        } elseif ($data['value'] === 'sarpras') {
+                            return $query->whereIn('kode_barang', InventarisSarpras::pluck('kode_barang'));
+                        }
+                        return $query;
+                    })
+                    ->placeholder('Pilih Jurusan'),
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
@@ -212,8 +237,7 @@ class LaporanDKVResource extends Resource
     {
         return [
             'index' => Pages\ListLaporanDKVS::route('/'),
-            // 'create' => Pages\CreateLaporanDKV::route('/create'),
-            'edit' => Pages\EditLaporanDKV::route('/{record}/edit'),
+            'view' => Pages\ViewLaporanDKV::route('/{record}'),
         ];
     }
 }
