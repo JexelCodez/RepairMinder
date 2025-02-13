@@ -18,6 +18,8 @@ use Filament\Tables\Columns\BadgeColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Actions\Action;
 use Filament\Tables\Actions\EditAction;
+use Filament\Tables\Filters\Filter;
+
 
 class PeriodePemeliharaanDKVResource extends Resource
 {
@@ -127,6 +129,40 @@ class PeriodePemeliharaanDKVResource extends Resource
                         return $query;
                     })
                     ->placeholder('Pilih Jurusan'),
+                    // Filter opsi periode standar
+                SelectFilter::make('periode_filter')
+                ->label('Filter Periode Umum')
+                ->options([
+                    '1' => '1 Bulan',
+                    '3' => '3 Bulan',
+                    '6' => '6 Bulan',
+                ])
+                ->query(function ($query, $data) {
+                    if ($data['value'] === '1') {
+                        return $query->where('periode', 30);
+                    } elseif ($data['value'] === '3') {
+                        return $query->where('periode', 90);
+                    } elseif ($data['value'] === '6') {
+                        return $query->where('periode', 180);
+                    }
+                    return $query;
+                })
+                ->placeholder('Pilih Periode'),
+        
+            // Filter custom input periode
+            Filter::make('custom_periode')
+                ->label('Filter Periode Custom')
+                ->form([
+                    Forms\Components\TextInput::make('periode_value')
+                        ->numeric()
+                        ->label('Periode (dalam hari)'),
+                ])
+                ->query(function ($query, array $data) {
+                    if (! empty($data['periode_value'])) {
+                        return $query->where('periode', $data['periode_value']);
+                    }
+                    return $query;
+                }),
             ])
             ->actions([
                 EditAction::make()
