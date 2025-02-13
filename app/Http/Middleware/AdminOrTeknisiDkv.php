@@ -6,6 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Support\Str;
 
 class AdminOrTeknisiDkv
 {
@@ -25,10 +26,10 @@ class AdminOrTeknisiDkv
             return $next($request);
         }
 
-        if ($user->role === 'teknisi' && optional($user->zoneUser)->zone_name === 'dkv') {
+        if ($user->role === 'teknisi' && Str::lower(optional($user->zoneUser)->zone_name) === 'dkv') {
             return $next($request);
         }
 
-        abort(403, 'Unauthorized access - Admin or Teknisi SIJA required.');
+        abort(403, 'Unauthorized access - Admin or Teknisi DKV required.');
     }
 }

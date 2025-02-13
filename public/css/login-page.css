@@ -28,11 +28,18 @@ body {
     border-radius: 15px;
     overflow: hidden;
     box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1); /* Soft shadow */
+    border: none;
+    border-color: linear-gradient(#ffffff, #348cd2);
 }
 
 .card-body {
     padding: 40px;
-    background-color: rgb(236, 230, 230);
+    background: linear-gradient(
+        rgba(255, 255, 255, 0.6),
+        rgba(52, 140, 210, 0.6)
+    );
+    border: none;
+    /* border-color: linear-gradient(#348cd2, #ffffff); */
 }
 
 .small-icon {
