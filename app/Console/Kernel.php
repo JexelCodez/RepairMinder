@@ -14,7 +14,7 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        \App\Console\Commands\SyncBarangCommand::class,
+        \App\Console\Commands\SendMaintenanceReminder::class,
         \App\Console\Commands\FilamentUser::class,
     ];
 
@@ -26,8 +26,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // Menjalankan SyncBarangJob setiap menit
-        $schedule->job(new SyncBarangJob())->everyMinute();
+        $schedule->command('maintenance:reminder')->everyMinute();
     }
 
     /**
