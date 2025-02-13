@@ -2,12 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Filament\DKV\Resources\LaporanDKVResource;
 use App\Models\Inventaris;
 use App\Models\Laporan;
 use App\Models\User;
 use Filament\Notifications\Notification;
 use Filament\Notifications\Actions\Action;
 use App\Filament\Resources\LaporanResource;
+use App\Filament\Sarpras\Resources\LaporanSarprasResource;
+use App\Models\InventarisDKV;
+use App\Models\InventarisSarpras;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
@@ -34,57 +38,74 @@ class LaporController extends Controller
     }
 
     public function store(Request $request)
-    {
-        $userId = Auth::user()->id;
-        
-        // Validasi data laporan
-        $validatedData = $request->validate([
-            'nama_barang' => 'required|string|max:255',
-            'merk_barang' => 'required|string|max:255',
-            'kode_barang' => 'required|string|max:255',
-            'deskripsi_laporan' => 'required|string',
-            'lokasi_barang' => 'required|string|max:255',
-            'bukti_laporan' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
-        ]);
+{
+    $userId = Auth::user()->id;
     
-        // Jika ada file bukti laporan, simpan file tersebut
-        if ($request->hasFile('bukti_laporan')) {
-            $filePath = $request->file('bukti_laporan')->store('bukti_laporan', 'public');
-            $validatedData['bukti_laporan'] = $filePath;
-        }
-    
-        // Tambahkan data user dan tanggal laporan
-        $validatedData['id_user'] = $userId;
-        $validatedData['tanggal_laporan'] = now();
-    
-        // Simpan laporan baru
-        $laporan = Laporan::create($validatedData);
-    
-        // Cari inventaris berdasarkan kode_barang
-        $inventaris = Inventaris::where('kode_barang', $validatedData['kode_barang'])->first();
-    
-        // Jika inventaris ditemukan, update kondisi barang menjadi "rusak"
-        if ($inventaris) {
-            $inventaris->updateKondisiBarang('rusak');
-        }
+    $validatedData = $request->validate([
+        'nama_barang' => 'required|string|max:255',
+        'merk_barang' => 'required|string|max:255',
+        'kode_barang' => 'required|string|max:255',
+        'deskripsi_laporan' => 'required|string',
+        'lokasi_barang' => 'required|string|max:255',
+        'bukti_laporan' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+    ]);
 
-        // 🚀 Notifikasi ke semua user dengan role "teknisi"
-        $teknisiUsers = User::where('role', 'teknisi')->get();
-        foreach ($teknisiUsers as $user) {
-            Notification::make()
-                ->title('🔔 Laporan Baru')
-                ->color('warning')
-                ->body("📌 Laporan untuk {$laporan->nama_barang} ({$laporan->kode_barang}) telah dibuat. Klik untuk melihat detail.")
-                ->actions([
-                    Action::make('Lihat')
-                        ->icon('heroicon-o-eye') // Menambah ikon mata
-                        ->url(LaporanResource::getUrl('view', ['record' => $laporan])),
-                ])
-                ->sendToDatabase($user);
-        }
-
-        Alert::success('Laporan', 'Berhasil dikirim!');
-    
-        return redirect()->route('lapor.index')->with('success', 'Laporan berhasil dikirim dan status inventaris diperbarui.');
+    if ($request->hasFile('bukti_laporan')) {
+        $filePath = $request->file('bukti_laporan')->store('bukti_laporan', 'public');
+        $validatedData['bukti_laporan'] = $filePath;
     }
+
+    $validatedData['id_user'] = $userId;
+    $validatedData['tanggal_laporan'] = now();
+
+    $laporan = Laporan::create($validatedData);
+
+    // 🚀 Notifikasi ke user yang sesuai dengan kode_barang
+    $teknisiUsers = collect();
+
+    if (InventarisDKV::where('kode_barang', $validatedData['kode_barang'])->exists()) {
+        $teknisiUsers = User::where('role', 'admin')
+            ->orWhere(fn($query) => 
+                $query->where('role', 'teknisi')
+                    ->whereHas('zoneUser', fn($q) => $q->where('zone_name', 'dkv'))
+            )->get();
+        
+        $laporUrl = LaporanDKVResource::getUrl('view', ['record' => $laporan]);
+    } elseif (InventarisSarpras::where('kode_barang', $validatedData['kode_barang'])->exists()) {
+        $teknisiUsers = User::where('role', 'admin')
+            ->orWhere(fn($query) => 
+                $query->where('role', 'teknisi')
+                    ->whereHas('zoneUser', fn($q) => $q->where('zone_name', 'sarpras'))
+            )->get();
+
+        $laporUrl = LaporanSarprasResource::getUrl('view', ['record' => $laporan]);
+    } else {
+        $teknisiUsers = User::where('role', 'admin')
+            ->orWhere(fn($query) => 
+                $query->where('role', 'teknisi')
+                    ->whereHas('zoneUser', fn($q) => $q->where('zone_name', 'sija'))
+            )->get();
+
+        $laporUrl = LaporanResource::getUrl('view', ['record' => $laporan]);
+    }
+
+    foreach ($teknisiUsers as $user) {
+        Notification::make()
+            ->title('🔔 Laporan Baru')
+            ->color('warning')
+            ->body("📌 Laporan untuk {$laporan->nama_barang} ({$laporan->kode_barang}) telah dibuat. Klik untuk melihat detail.")
+            ->actions([
+                Action::make('Lihat')
+                    ->icon('heroicon-o-eye')
+                    ->url($laporUrl),
+            ])
+            ->sendToDatabase($user);
+    }
+
+
+    Alert::success('Laporan', 'Berhasil dikirim!');
+    
+    return redirect()->route('lapor.index')->with('success', 'Laporan berhasil dikirim dan status inventaris diperbarui.');
+}
+
 }
