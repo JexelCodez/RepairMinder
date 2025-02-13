@@ -57,6 +57,7 @@ class UserResource extends Resource
                         ->password()
                         ->required()
                         ->visibleOn('create')
+                        ->revealable()
                         ->dehydrated(fn ($state) => filled($state))
                         ->dehydrateStateUsing(fn ($state) => Hash::make($state))
                         ->rule(Password::default()),

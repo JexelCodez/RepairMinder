@@ -1,8 +1,13 @@
 /*---------------------------------------
   REGISTER PAGE BACKGROUND
 -----------------------------------------*/
+:root {
+    --secondary-color: #348cd2;
+}
+
 body {
-    background-image: url('../images/templatemo-wave-footer.jpg'), linear-gradient(#FFFFFF, #348CD2);
+    background-image: url("../images/templatemo-wave-footer.jpg"),
+        linear-gradient(#ffffff, #348cd2);
     background-repeat: no-repeat;
     background-position: center center;
     background-size: cover;
@@ -14,6 +19,10 @@ body {
     flex-direction: column;
 }
 
+h3 {
+    color: var(--secondary-color);
+}
+
 /* Wrapper for centering form */
 .form-wrapper {
     max-width: 400px;
@@ -22,20 +31,22 @@ body {
     height: 100%; /* Ensures that the wrapper takes up the full height */
 }
 
-/* Card styling */
 .card {
     border-radius: 15px;
     overflow: hidden;
-    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
-    background-color: rgb(236, 230, 230);
-    height: 80%; /* Sets the card's height to leave room for scrolling */
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1); /* Soft shadow */
+    border: none;
+    border-color: linear-gradient(#ffffff, #348cd2);
 }
 
-/* Card body to allow scrolling */
 .card-body {
-    padding: 30px;
-    max-height: 80%; /* Allows the card to expand but also be scrollable */
-    overflow-y: auto; /* Enables scrolling when content overflows */
+    padding: 40px;
+    background: linear-gradient(
+        rgba(255, 255, 255, 0.6),
+        rgba(52, 140, 210, 0.6)
+    );
+    border: none;
+    /* border-color: linear-gradient(#348cd2, #ffffff); */
 }
 
 /* Form groups */
@@ -81,7 +92,7 @@ label {
 
 /* Button styles */
 .btn-primary {
-    background-color: #348CD2;
+    background-color: #348cd2;
     border: none;
     color: white;
     padding: 10px;
@@ -97,7 +108,7 @@ label {
 
 /* Links */
 .text-link {
-    color: #348CD2;
+    color: #348cd2;
     text-decoration: none;
 }
 

@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Str;
 
 class LoginController extends Controller
 {
@@ -31,14 +32,11 @@ class LoginController extends Controller
             if ($user->role === 'admin') {
                 return redirect('/sija');
             }
-            if ($user->role === 'teknisi' && optional($user->zoneUser)->zone_name === 'sija') {
-                return redirect('/sija');
-            }
-            if ($user->role === 'teknisi' && optional($user->zoneUser)->zone_name === 'dkv') {
-                return redirect('/dkv');
-            }
-            if ($user->role === 'teknisi' && optional($user->zoneUser)->zone_name === 'sarpras') {
-                return redirect('/sarpras');
+            if ($user->role === 'teknisi') {
+                $zone = Str::lower(optional($user->zoneUser)->zone_name);
+                if (in_array($zone, ['sija', 'dkv', 'sarpras'])) {
+                    return redirect("/{$zone}");
+                }
             }
         }
 

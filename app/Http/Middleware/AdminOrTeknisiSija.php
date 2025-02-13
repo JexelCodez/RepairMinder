@@ -6,6 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Support\Str;
 
 class AdminOrTeknisiSija
 {
@@ -25,7 +26,7 @@ class AdminOrTeknisiSija
             return $next($request);
         }
 
-        if ($user->role === 'teknisi' && optional($user->zoneUser)->zone_name === 'sija') {
+        if ($user->role === 'teknisi' && Str::lower(optional($user->zoneUser)->zone_name) === 'sija') {
             return $next($request);
         }
 

@@ -6,6 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Support\Str;
 
 class AdminOrTeknisiSarpras
 {
@@ -17,6 +18,7 @@ class AdminOrTeknisiSarpras
     public function handle(Request $request, Closure $next): Response
     {
         $user = Auth::user();
+
         if (!$user) {
             abort(403, 'Unauthorized access - Please log in.');
         }
@@ -25,10 +27,10 @@ class AdminOrTeknisiSarpras
             return $next($request);
         }
 
-        if ($user->role === 'teknisi' && optional($user->zoneUser)->zone_name === 'sarpras') {
+        if ($user->role === 'teknisi' && Str::lower(optional($user->zoneUser)->zone_name) === 'sarpras') {
             return $next($request);
         }
 
-        abort(403, 'Unauthorized access - Admin or Teknisi SIJA required.');
+        abort(403, 'Unauthorized access - Admin or Teknisi SARPRAS required.');
     }
 }
