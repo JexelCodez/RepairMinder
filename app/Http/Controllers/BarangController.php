@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Barang;
 use App\Models\Inventaris;
+use App\Models\InventarisDKV;
+use App\Models\InventarisSarpras;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
@@ -26,14 +28,17 @@ class BarangController extends Controller
         $request->validate([
             'kode_barang' => 'required|string|max:255',
         ]);
-
-        // Ambil data inventaris dari API melalui model
-        $inventarisModel = new Inventaris();
-        $inventaris = $inventarisModel->getRows(); // Pastikan method getRows() mengambil data dari API
-
-        // Cari barang berdasarkan kode_barang
-        $barang = collect($inventaris)->firstWhere('kode_barang', $request->kode_barang);
-
+    
+        $inventarisSija = (new Inventaris())->getRows();
+        $inventarisDkv = (new InventarisDKV())->getRows();
+        $inventarisSarpras = (new InventarisSarpras())->getRows();
+    
+        $allInventaris = collect($inventarisSija)
+            ->merge($inventarisDkv)
+            ->merge($inventarisSarpras);
+    
+        $barang = $allInventaris->firstWhere('kode_barang', $request->kode_barang);
+    
         if ($barang) {
             return response()->json([
                 'success' => true,
@@ -46,6 +51,7 @@ class BarangController extends Controller
             ]);
         }
     }
+    
 
     
 }
