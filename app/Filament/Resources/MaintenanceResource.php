@@ -30,7 +30,10 @@ class MaintenanceResource extends Resource
             ->schema([
                 Forms\Components\Select::make('id_periode_pemeliharaan')
                     ->label('Barang')
-                    ->options(PeriodePemeliharaan::pluck('kode_barang', 'id'))
+                    ->options(
+                        PeriodePemeliharaan::whereIn('kode_barang', Inventaris::pluck('kode_barang'))
+                            ->pluck('kode_barang', 'id')
+                    )
                     ->searchable()
                     ->required(),
 
@@ -68,42 +71,42 @@ class MaintenanceResource extends Resource
                     ->label('Kode Barang')
                     ->sortable()
                     ->searchable(),
-
+            
                 TextColumn::make('nama_barang')
                     ->label('Nama Barang')
                     ->sortable()
                     ->searchable()
                     ->getStateUsing(fn($record) =>
-                        $record->inventaris->nama_barang ?? 
-                        $record->inventarisDKV->nama_barang ?? 
-                        $record->inventarisSarpras->nama_barang ?? 'N/A'
+                        $record->periode?->inventaris->nama_barang ??
+                        $record->periode?->inventarisDKV->nama_barang ??
+                        $record->periode?->inventarisSarpras->nama_barang ?? 'N/A'
                     ),
-
+            
                 TextColumn::make('merek')
                     ->label('Merk Barang')
                     ->sortable()
                     ->searchable()
                     ->getStateUsing(fn($record) =>
-                        $record->inventaris->merek ?? 
-                        $record->inventarisDKV->merek ?? 
-                        $record->inventarisSarpras->merek ?? 'N/A'
+                        $record->periode?->inventaris->merek ??
+                        $record->periode?->inventarisDKV->merek ??
+                        $record->periode?->inventarisSarpras->merek ?? 'N/A'
                     ),
-
+            
                 TextColumn::make('user.name')
                     ->label('User Pelaksana')
                     ->searchable(),
-
+            
                 TextColumn::make('deskripsi_tugas')
                     ->label('Deskripsi Tugas')
                     ->limit(50),
-
+            
                 TextColumn::make('status')
                     ->label('Status'),
-
+            
                 TextColumn::make('tanggal_pelaksanaan')
                     ->label('Tanggal Pelaksanaan')
                     ->date(),
-            ])
+            ])        
             ->filters([
                 SelectFilter::make('jurusan')
             ->label('Filter Berdasarkan Jurusan')
