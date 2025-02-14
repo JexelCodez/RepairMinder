@@ -36,12 +36,18 @@ class MaintenanceDKVResource extends Resource
             ->schema([
                 Forms\Components\Select::make('id_periode_pemeliharaan')
                     ->label('Barang')
-                    ->options(
-                        PeriodePemeliharaan::whereIn('kode_barang', InventarisDKV::pluck('kode_barang'))
-                            ->pluck('kode_barang', 'id')
-                    )
+                    ->options(function () {
+                        return PeriodePemeliharaan::whereIn('kode_barang', InventarisDKV::pluck('kode_barang'))
+                            ->with('inventarisDKV') // Hanya ambil relasi inventaris
+                            ->get()
+                            ->mapWithKeys(function ($item) {
+                                $namaBarang = $item->inventarisDKV->nama_barang ?? 'Tanpa Nama';
+                                return [$item->id => "{$item->kode_barang} ({$namaBarang})"];
+                            });
+                    })
                     ->searchable()
-                    ->required(),
+                    ->required()
+                    ->placeholder('Pilih Barang'),
 
                 Forms\Components\Select::make('id_user')
                     ->label('Assigned User')

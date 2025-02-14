@@ -37,9 +37,9 @@ class MaintenanceSarprasResource extends Resource
                 Forms\Components\Select::make('sumber_data')
                     ->label('Pilih Sumber Data')
                     ->options([
-                        'inventaris' => 'Inventaris',
-                        'inventaris_dkv' => 'Inventaris DKV',
-                        'inventaris_sarpras' => 'Inventaris Sarpras',
+                        'inventaris' => 'SIJA',
+                        'inventaris_dkv' => 'DKV',
+                        'inventaris_sarpras' => 'Sarpras',
                     ])
                     ->searchable()
                     ->reactive()
@@ -48,7 +48,7 @@ class MaintenanceSarprasResource extends Resource
                 Forms\Components\Select::make('id_periode_pemeliharaan')
                     ->label('Barang')
                     ->options(function (callable $get) {
-                        $sumberData = $get('sumber_data'); // Ambil pilihan user
+                        $sumberData = $get('sumber_data');
 
                         if (!$sumberData) {
                             return ['' => 'Pilih sumber data terlebih dahulu'];
@@ -56,11 +56,14 @@ class MaintenanceSarprasResource extends Resource
 
                         return match ($sumberData) {
                             'inventaris' => PeriodePemeliharaan::whereIn('kode_barang', Inventaris::pluck('kode_barang'))
-                                ->pluck('kode_barang', 'id'),
+                                ->get()
+                                ->mapWithKeys(fn ($item) => [$item->id => "{$item->kode_barang} ({$item->inventaris->nama_barang})"]),
                             'inventaris_dkv' => PeriodePemeliharaan::whereIn('kode_barang', InventarisDKV::pluck('kode_barang'))
-                                ->pluck('kode_barang', 'id'),
+                                ->get()
+                                ->mapWithKeys(fn ($item) => [$item->id => "{$item->kode_barang} ({$item->inventarisDKV->nama_barang})"]),
                             'inventaris_sarpras' => PeriodePemeliharaan::whereIn('kode_barang', InventarisSarpras::pluck('kode_barang'))
-                                ->pluck('kode_barang', 'id'),
+                                ->get()
+                                ->mapWithKeys(fn ($item) => [$item->id => "{$item->kode_barang} ({$item->inventarisSarpras->nama_barang})"]),
                             default => [],
                         };
                     })
