@@ -30,12 +30,19 @@ class MaintenanceResource extends Resource
             ->schema([
                 Forms\Components\Select::make('id_periode_pemeliharaan')
                     ->label('Barang')
-                    ->options(
-                        PeriodePemeliharaan::whereIn('kode_barang', Inventaris::pluck('kode_barang'))
-                            ->pluck('kode_barang', 'id')
-                    )
+                    ->options(function () {
+                        return PeriodePemeliharaan::whereIn('kode_barang', Inventaris::pluck('kode_barang'))
+                            ->with('inventaris') // Hanya ambil relasi inventaris
+                            ->get()
+                            ->mapWithKeys(function ($item) {
+                                $namaBarang = $item->inventaris->nama_barang ?? 'Tanpa Nama';
+                                return [$item->id => "{$item->kode_barang} ({$namaBarang})"];
+                            });
+                    })
                     ->searchable()
-                    ->required(),
+                    ->required()
+                    ->placeholder('Pilih Barang'),
+
 
                 Forms\Components\Select::make('id_user')
                     ->label('Assigned User')
