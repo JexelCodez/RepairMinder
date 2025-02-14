@@ -20,13 +20,12 @@ class PeriodePemeliharaan extends Model
         'tanggal_maintenance_selanjutnya',
     ];
 
-<<<<<<< HEAD
     // public function setKodeBarangAttribute($value)
     // {
     //     $this->attributes['kode_barang'] = $value;
     //     $this->attributes['kode_barang_kecil'] = strtolower($value);
     // }
-=======
+
     protected static function boot()
     {
         parent::boot();
@@ -57,13 +56,6 @@ class PeriodePemeliharaan extends Model
                 ->sendToDatabase($user);
         }
     }
-
-    public function setKodeBarangAttribute($value)
-    {
-        $this->attributes['kode_barang'] = $value;
-        $this->attributes['kode_barang_kecil'] = strtolower($value);
-    }
->>>>>>> 4a0a9540a8a91c032dea7bb32e9905572f9c9826
 
     public function inventaris()
     {
