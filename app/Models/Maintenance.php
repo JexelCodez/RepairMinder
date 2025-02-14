@@ -37,18 +37,19 @@ class Maintenance extends Model
 
     public function inventaris()
     {
-        return $this->belongsTo(Inventaris::class, 'kode_barang', 'kode_barang');
+        return $this->hasOneThrough(Inventaris::class, PeriodePemeliharaan::class, 'id', 'kode_barang', 'id_periode_pemeliharaan', 'kode_barang');
     }
 
     public function inventarisDKV()
     {
-        return $this->belongsTo(InventarisDKV::class, 'kode_barang', 'kode_barang');
+        return $this->hasOneThrough(InventarisDKV::class, PeriodePemeliharaan::class, 'id', 'kode_barang', 'id_periode_pemeliharaan', 'kode_barang');
     }
 
     public function inventarisSarpras()
     {
-        return $this->belongsTo(InventarisSarpras::class, 'kode_barang', 'kode_barang');
+        return $this->hasOneThrough(InventarisSarpras::class, PeriodePemeliharaan::class, 'id', 'kode_barang', 'id_periode_pemeliharaan', 'kode_barang');
     }
+
 
     protected static function boot()
     {

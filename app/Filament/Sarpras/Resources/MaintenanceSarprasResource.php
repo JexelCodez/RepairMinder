@@ -34,13 +34,41 @@ class MaintenanceSarprasResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\Select::make('kode_barang')
-                    ->label('Barang')
-                    ->options(InventarisSarpras::all()->mapWithKeys(function ($item) {
-                        return [$item->kode_barang => "{$item->kode_barang} ({$item->nama_barang})"];
-                    }))
+                Forms\Components\Select::make('sumber_data')
+                    ->label('Pilih Sumber Data')
+                    ->options([
+                        'inventaris' => 'Inventaris',
+                        'inventaris_dkv' => 'Inventaris DKV',
+                        'inventaris_sarpras' => 'Inventaris Sarpras',
+                    ])
                     ->searchable()
+                    ->reactive()
                     ->required(),
+
+                Forms\Components\Select::make('id_periode_pemeliharaan')
+                    ->label('Barang')
+                    ->options(function (callable $get) {
+                        $sumberData = $get('sumber_data'); // Ambil pilihan user
+
+                        if (!$sumberData) {
+                            return ['' => 'Pilih sumber data terlebih dahulu'];
+                        }
+
+                        return match ($sumberData) {
+                            'inventaris' => PeriodePemeliharaan::whereIn('kode_barang', Inventaris::pluck('kode_barang'))
+                                ->pluck('kode_barang', 'id'),
+                            'inventaris_dkv' => PeriodePemeliharaan::whereIn('kode_barang', InventarisDKV::pluck('kode_barang'))
+                                ->pluck('kode_barang', 'id'),
+                            'inventaris_sarpras' => PeriodePemeliharaan::whereIn('kode_barang', InventarisSarpras::pluck('kode_barang'))
+                                ->pluck('kode_barang', 'id'),
+                            default => [],
+                        };
+                    })
+                    ->searchable()
+                    ->required()
+                    ->reactive()
+                    ->placeholder('Pilih Barang'),
+            
 
                 Forms\Components\Select::make('id_user')
                     ->label('Assigned User')
@@ -71,60 +99,67 @@ class MaintenanceSarprasResource extends Resource
     {
         return $table
             ->columns([
+                TextColumn::make('periode.kode_barang')
+                    ->label('Kode Barang')
+                    ->sortable()
+                    ->searchable(),
+            
                 TextColumn::make('nama_barang')
                     ->label('Nama Barang')
                     ->sortable()
                     ->searchable()
                     ->getStateUsing(fn($record) =>
-                        $record->inventaris->nama_barang ?? 
-                        $record->inventarisDKV->nama_barang ?? 
-                        $record->inventarisSarpras->nama_barang ?? 'N/A'
+                        $record->periode?->inventaris->nama_barang ??
+                        $record->periode?->inventarisDKV->nama_barang ??
+                        $record->periode?->inventarisSarpras->nama_barang ?? 'N/A'
                     ),
+            
                 TextColumn::make('merek')
                     ->label('Merk Barang')
                     ->sortable()
                     ->searchable()
                     ->getStateUsing(fn($record) =>
-                        $record->inventaris->merek ?? 
-                        $record->inventarisDKV->merek ?? 
-                        $record->inventarisSarpras->merek ?? 'N/A'
+                        $record->periode?->inventaris->merek ??
+                        $record->periode?->inventarisDKV->merek ??
+                        $record->periode?->inventarisSarpras->merek ?? 'N/A'
                     ),
-                
-                TextColumn::make('kode_barang')
-                    ->label('Kode Barang')
-                    ->sortable()
-                    ->searchable(),
-
+            
                 TextColumn::make('user.name')
                     ->label('User Pelaksana')
                     ->searchable(),
-
+            
                 TextColumn::make('deskripsi_tugas')
                     ->label('Deskripsi Tugas')
                     ->limit(50),
-
+            
                 TextColumn::make('status')
                     ->label('Status'),
-
+            
                 TextColumn::make('tanggal_pelaksanaan')
                     ->label('Tanggal Pelaksanaan')
                     ->date(),
-            ])
+            ])        
             ->filters([
                 SelectFilter::make('jurusan')
                     ->label('Filter Berdasarkan Jurusan')
                     ->options([
-                        'sija'   => 'SIJA',
-                        'dkv'    => 'DKV',
-                        'sarpras'=> 'SARPRAS',
+                        'sija'    => 'SIJA',
+                        'dkv'     => 'DKV',
+                        'sarpras' => 'SARPRAS',
                     ])
                     ->query(function ($query, $data) {
                         if ($data['value'] === 'sija') {
-                            return $query->whereIn('kode_barang', Inventaris::pluck('kode_barang'));
+                            return $query->whereHas('periode', function ($q) {
+                                $q->whereIn('kode_barang', Inventaris::pluck('kode_barang'));
+                            });
                         } elseif ($data['value'] === 'dkv') {
-                            return $query->whereIn('kode_barang', InventarisDKV::pluck('kode_barang'));
+                            return $query->whereHas('periode', function ($q) {
+                                $q->whereIn('kode_barang', InventarisDKV::pluck('kode_barang'));
+                            });
                         } elseif ($data['value'] === 'sarpras') {
-                            return $query->whereIn('kode_barang', InventarisSarpras::pluck('kode_barang'));
+                            return $query->whereHas('periode', function ($q) {
+                                $q->whereIn('kode_barang', InventarisSarpras::pluck('kode_barang'));
+                            });
                         }
                         return $query;
                     })
