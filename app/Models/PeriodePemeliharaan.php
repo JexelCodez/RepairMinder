@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Filament\Notifications\Actions\Action;
+use Filament\Notifications\Notification;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -18,11 +20,50 @@ class PeriodePemeliharaan extends Model
         'tanggal_maintenance_selanjutnya',
     ];
 
+<<<<<<< HEAD
     // public function setKodeBarangAttribute($value)
     // {
     //     $this->attributes['kode_barang'] = $value;
     //     $this->attributes['kode_barang_kecil'] = strtolower($value);
     // }
+=======
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::retrieved(function ($periode) {
+            $periode->checkMaintenanceDue();
+        });
+
+        static::updated(function ($periode) {
+            $periode->checkMaintenanceDue();
+        });
+    }
+
+    public function checkMaintenanceDue()
+    {
+        if ($this->tanggal_maintenance_selanjutnya && now()->greaterThanOrEqualTo($this->tanggal_maintenance_selanjutnya)) {
+            $user = auth()->user();
+
+            Notification::make()
+                ->title('⚠️ Maintenance Due!')
+                ->color('warning')
+                ->body("🛠️ Maintenance untuk {$this->kode_barang} sudah jatuh tempo. Segera lakukan tindakan.")
+                ->actions([
+                    Action::make('Proses')
+                        ->icon('heroicon-o-eye')
+                        // ->url($laporUrl),
+                ])
+                ->sendToDatabase($user);
+        }
+    }
+
+    public function setKodeBarangAttribute($value)
+    {
+        $this->attributes['kode_barang'] = $value;
+        $this->attributes['kode_barang_kecil'] = strtolower($value);
+    }
+>>>>>>> 4a0a9540a8a91c032dea7bb32e9905572f9c9826
 
     public function inventaris()
     {
