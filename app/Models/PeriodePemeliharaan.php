@@ -51,7 +51,7 @@ class PeriodePemeliharaan extends Model
                 ->actions([
                     Action::make('Proses')
                         ->icon('heroicon-o-eye')
-                        // ->url($laporUrl),
+                        // ->url(),
                 ])
                 ->sendToDatabase($user);
         }
