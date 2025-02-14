@@ -14,16 +14,15 @@ class PeriodePemeliharaan extends Model
     protected $fillable = [
         'periode',
         'kode_barang',
-        'kode_barang_kecil',
         'deskripsi',
         'tanggal_maintenance_selanjutnya',
     ];
 
-    public function setKodeBarangAttribute($value)
-    {
-        $this->attributes['kode_barang'] = $value;
-        $this->attributes['kode_barang_kecil'] = strtolower($value);
-    }
+    // public function setKodeBarangAttribute($value)
+    // {
+    //     $this->attributes['kode_barang'] = $value;
+    //     $this->attributes['kode_barang_kecil'] = strtolower($value);
+    // }
 
     public function inventaris()
     {
