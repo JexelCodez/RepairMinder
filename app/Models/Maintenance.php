@@ -12,23 +12,27 @@ class Maintenance extends Model
     protected $table = 'maintenances';
 
     protected $fillable = [
-        'kode_barang',
-        'kode_barang_kecil',
+        'id_periode_pemeliharaan',
         'id_user',
         'deskripsi_tugas',	
         'status',
         'tanggal_pelaksanaan',
     ];
 
-    public function setKodeBarangAttribute($value)
-    {
-        $this->attributes['kode_barang'] = $value;
-        $this->attributes['kode_barang_kecil'] = strtolower($value);
-    }
+    // public function setKodeBarangAttribute($value)
+    // {
+    //     $this->attributes['kode_barang'] = $value;
+    //     $this->attributes['kode_barang_kecil'] = strtolower($value);
+    // }
 
     public function user()
     {
         return $this->belongsTo(User::class, 'id_user');
+    }
+
+    public function periode()
+    {
+        return $this->belongsTo(PeriodePemeliharaan::class, 'id_periode_pemeliharaan');
     }
 
     public function inventaris()
@@ -52,7 +56,7 @@ class Maintenance extends Model
 
         // Saat maintenance baru dibuat, set tanggal maintenance selanjutnya
         static::created(function ($maintenance) {
-            $periode = PeriodePemeliharaan::where('kode_barang', $maintenance->kode_barang)->first();
+            $periode = $maintenance->periode; // Menggunakan relasi langsung
 
             if ($periode) {
                 $periode->update([
@@ -64,7 +68,7 @@ class Maintenance extends Model
         // Saat maintenance diupdate (misalnya status diubah jadi "selesai"), update tanggal maintenance selanjutnya
         static::updated(function ($maintenance) {
             if ($maintenance->isDirty('status') && $maintenance->status === 'selesai') {
-                $periode = PeriodePemeliharaan::where('kode_barang', $maintenance->kode_barang)->first();
+                $periode = $maintenance->periode;
 
                 if ($periode) {
                     $periode->update([
