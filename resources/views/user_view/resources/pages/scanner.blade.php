@@ -107,7 +107,7 @@
             
                             <!-- Tampilan khusus jika barang rusak -->
                             <div id="barang-rusak" class="hidden text-center text-red-600 font-bold text-xl p-4">
-                                <h1>⚠️ Barang ini sedang rusak ⚠️</h1>
+                                <h1><span id="nama-barang-rusak"></span> ini sedang rusak</h1>
                             </div>
                         </div>
                     </div>
@@ -170,9 +170,16 @@
                     const barangRusak = document.getElementById('barang-rusak');
 
                     if (barang.kondisi_barang.toLowerCase() === 'rusak') {
+                        document.getElementById('nama-barang-rusak').textContent = barang.nama_barang;
                         // Jika barang rusak, tampilkan pesan khusus
                         detailBarang.classList.add('hidden');
                         barangRusak.classList.remove('hidden');
+                        const laporButton = document.querySelector('.laporpak');
+                            if (barang.kondisi_barang.toLowerCase() === 'rusak') {
+                                laporButton.classList.add('hidden');
+                            } else {
+                                laporButton.classList.remove('hidden');
+                            }
                     } else {
                         // Jika barang tidak rusak, tampilkan detailnya
                         document.getElementById('nama-barang').textContent = barang.nama_barang;
@@ -183,13 +190,6 @@
                         document.getElementById('updated-at').textContent = barang.updated_at;
                         document.getElementById('lokasi-barang').textContent = barang.nama_ruangan;
                         document.getElementById('status').textContent = barang.kondisi_barang;
-
-                        const laporButton = document.querySelector('.laporpak');
-                            if (barang.kondisi_barang.toLowerCase() === 'rusak') {
-                                laporButton.classList.add('hidden');
-                            } else {
-                                laporButton.classList.remove('hidden');
-                            }
 
                         detailBarang.classList.remove('hidden');
                         barangRusak.classList.add('hidden');
