@@ -1,5 +1,4 @@
 <?php
-// filepath: /c:/LARAVEL/RepairMinder/app/Console/Commands/SendMaintenanceReminder.php
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
@@ -30,7 +29,7 @@ class SendMaintenanceReminder extends Command
         }
 
         // Ambil semua user yang role teknisi
-        $teknisiUsers = User::where('role', 'teknisi')->get();
+        $teknisiUsers = User::where('role', ['teknisi', 'admin'])->get();
         \Log::info('Found ' . $teknisiUsers->count() . ' teknisi users.');
 
         foreach ($maintenanceList as $maintenance) {
