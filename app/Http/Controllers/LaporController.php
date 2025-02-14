@@ -60,6 +60,20 @@ class LaporController extends Controller
 
     $laporan = Laporan::create($validatedData);
 
+        // Cari dari model mana kode_barang ini berasal
+        $inventaris = Inventaris::where('kode_barang', $validatedData['kode_barang'])->first();
+        $inventarisDkv = InventarisDKV::where('kode_barang', $validatedData['kode_barang'])->first();
+        $inventarisSarpras = InventarisSarpras::where('kode_barang', $validatedData['kode_barang'])->first();
+    
+        // Jika inventaris ditemukan, update kondisi barang menjadi "rusak"
+        if ($inventaris) {
+            $inventaris->updateKondisiBarang('rusak');
+        } elseif ($inventarisDkv) {
+            $inventarisDkv->updateKondisiBarang('rusak');
+        } elseif ($inventarisSarpras) {
+            $inventarisSarpras->updateKondisiBarang('rusak');
+        }
+
     // 🚀 Notifikasi ke user yang sesuai dengan kode_barang
     $teknisiUsers = collect();
 
@@ -88,6 +102,14 @@ class LaporController extends Controller
             )->get();
     
         $laporUrl = LaporanResource::getUrl('view', ['record' => $laporan], panel: 'admin');
+    }
+
+    if ($inventaris) {
+        $inventaris->updateKondisiBarang('rusak');
+    } elseif ($inventarisDkv) {
+        $inventarisDkv->updateKondisiBarang('rusak');
+    } elseif ($inventarisSarpras) {
+        $inventarisSarpras->updateKondisiBarang('rusak');
     }
 
     foreach ($teknisiUsers as $user) {

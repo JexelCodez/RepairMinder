@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Filament\Notifications\Actions\Action;
+use Filament\Notifications\Notification;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -18,6 +20,37 @@ class PeriodePemeliharaan extends Model
         'deskripsi',
         'tanggal_maintenance_selanjutnya',
     ];
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::retrieved(function ($periode) {
+            $periode->checkMaintenanceDue();
+        });
+
+        static::updated(function ($periode) {
+            $periode->checkMaintenanceDue();
+        });
+    }
+
+    public function checkMaintenanceDue()
+    {
+        if ($this->tanggal_maintenance_selanjutnya && now()->greaterThanOrEqualTo($this->tanggal_maintenance_selanjutnya)) {
+            $user = auth()->user();
+
+            Notification::make()
+                ->title('⚠️ Maintenance Due!')
+                ->color('warning')
+                ->body("🛠️ Maintenance untuk {$this->kode_barang} sudah jatuh tempo. Segera lakukan tindakan.")
+                ->actions([
+                    Action::make('Proses')
+                        ->icon('heroicon-o-eye')
+                        // ->url($laporUrl),
+                ])
+                ->sendToDatabase($user);
+        }
+    }
 
     public function setKodeBarangAttribute($value)
     {
