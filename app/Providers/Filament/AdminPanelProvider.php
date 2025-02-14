@@ -88,7 +88,7 @@ class AdminPanelProvider extends PanelProvider
                     ->columns([
                         'lg' => 4,
                     ]),
-                // \Mvenghaus\FilamentScheduleMonitor\FilamentPlugin::make(),
+                \Mvenghaus\FilamentScheduleMonitor\FilamentPlugin::make(),
             ])
             ->middleware([
                 EncryptCookies::class,
