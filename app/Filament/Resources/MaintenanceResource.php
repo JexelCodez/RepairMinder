@@ -47,6 +47,7 @@ class MaintenanceResource extends Resource
                 Forms\Components\Select::make('id_user')
                     ->label('Assigned User')
                     ->options(User::pluck('name', 'id'))
+                    ->default(fn() => auth()->id())
                     ->searchable()
                     ->required(),
 

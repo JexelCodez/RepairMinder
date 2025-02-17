@@ -3,9 +3,9 @@
 namespace App\Filament\Sarpras\Resources\MaintenanceSarprasResource\Pages;
 
 use App\Filament\Sarpras\Resources\MaintenanceSarprasResource;
-use Filament\Actions;
 use Filament\Resources\Pages\CreateRecord;
 use App\Models\PeriodePemeliharaan;
+use Filament\Actions;
 
 class CreateMaintenanceSarpras extends CreateRecord
 {
@@ -19,16 +19,31 @@ class CreateMaintenanceSarpras extends CreateRecord
     public function mount(): void
     {
         parent::mount();
-        // Periksa apakah query parameter kode_barang ada
+        
+        // Mulai dengan data default id_user
+        $data = [
+            'id_user' => auth()->id(),
+        ];
+
+        // Jika terdapat query parameter kode_barang, cari data periode dan isi sumber_data & id_periode_pemeliharaan
         if ($kodeBarang = request()->query('kode_barang')) {
-            // Cari record PeriodePemeliharaan dengan kode_barang tersebut
             $periode = PeriodePemeliharaan::where('kode_barang', $kodeBarang)->first();
             if ($periode) {
-                // Isi field select dengan record id dari periode
-                $this->form->fill([
-                    'id_periode_pemeliharaan' => $periode->id,
-                ]);
+                if ($periode->inventarisSarpras) {
+                    $data['sumber_data'] = 'inventaris_sarpras';
+                } elseif ($periode->inventarisDKV) {
+                    $data['sumber_data'] = 'inventaris_dkv';
+                } elseif ($periode->inventaris) {
+                    $data['sumber_data'] = 'inventaris';
+                }
+                // Isi id_periode_pemeliharaan jika sumber_data telah ditentukan
+                if (isset($data['sumber_data'])) {
+                    $data['id_periode_pemeliharaan'] = $periode->id;
+                }
             }
         }
+
+        // Isi form dengan data gabungan; id_user akan tetap terisi default bila tidak ada nilai lain yang menimpanya
+        $this->form->fill($data);
     }
 }

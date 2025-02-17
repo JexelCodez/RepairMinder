@@ -75,7 +75,9 @@ class MaintenanceSarprasResource extends Resource
 
                 Forms\Components\Select::make('id_user')
                     ->label('Assigned User')
-                    ->options(User::all()->pluck('name', 'id'))
+                    ->options(User::pluck('name', 'id'))
+                    ->default(fn() => auth()->id())
+                    ->searchable()
                     ->required(),
 
                 Forms\Components\TextInput::make('deskripsi_tugas')
