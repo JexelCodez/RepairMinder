@@ -1,6 +1,9 @@
 <?php
 namespace App\Console\Commands;
 
+use App\Filament\DKV\Resources\LaporanDKVResource;
+use App\Filament\Resources\LaporanResource;
+use App\Filament\Sarpras\Resources\LaporanSarprasResource;
 use Illuminate\Console\Command;
 use App\Models\PeriodePemeliharaan;
 use App\Models\InventarisDKV;
@@ -33,8 +36,7 @@ class SendMaintenanceReminder extends Command
 
         foreach ($maintenanceList as $maintenance) {
             $teknisiUsers = collect();
-            $laporUrl = '/admin/maintenance';
-
+        
             // Cek barang ada di model inventaris mana
             if (InventarisDKV::where('kode_barang', $maintenance->kode_barang)->exists()) {
                 $teknisiUsers = User::where('role', 'admin')
@@ -42,41 +44,39 @@ class SendMaintenanceReminder extends Command
                         $query->where('role', 'teknisi')
                               ->whereHas('zoneUser', fn($q) => $q->where('zone_name', 'dkv'))
                     )->get();
-
-                $laporUrl = "/admin/maintenance/dkv";
+        
+                // Menggunakan LaporanDKVResource untuk route laporan DKV
+                $laporUrl = LaporanDKVResource::getUrl('view', ['record' => $maintenance], panel: 'dKV');
             } elseif (InventarisSarpras::where('kode_barang', $maintenance->kode_barang)->exists()) {
                 $teknisiUsers = User::where('role', 'admin')
                     ->orWhere(fn($query) => 
                         $query->where('role', 'teknisi')
                               ->whereHas('zoneUser', fn($q) => $q->where('zone_name', 'sarpras'))
                     )->get();
-
-                $laporUrl = "/admin/maintenance/sarpras";
+        
+                $laporUrl = LaporanSarprasResource::getUrl('view', ['record' => $maintenance], panel: 'sarpras');
             } else {
                 $teknisiUsers = User::where('role', 'admin')
                     ->orWhere(fn($query) =>
                         $query->where('role', 'teknisi')
                               ->whereHas('zoneUser', fn($q) => $q->where('zone_name', 'sija'))
                     )->get();
-
-                $laporUrl = "/admin/maintenance/sija";
+        
+                $laporUrl = LaporanResource::getUrl('view', ['record' => $maintenance], panel: 'admin');
             }
-
-            \Log::info("Maintenance for {$maintenance->kode_barang}: scheduled date {$maintenance->tanggal_maintenance_selanjutnya}");
-
+        
             foreach ($teknisiUsers as $user) {
-                \Log::info("Notifying teknisi {$user->email} for maintenance {$maintenance->kode_barang}");
-
                 Notification::make()
                     ->title('🔧 Maintenance Reminder')
                     ->color('info')
-                    ->body("Barang {$maintenance->kode_barang} perlu maintenance dalam 1-10 hari. Klik untuk melihat detail.")
+                    ->body("Barang {$maintenance->kode_barang} perlu maintenance dalam 7 hari terakhir hingga hari ini. Klik untuk melihat detail.")
                     ->actions([
                         Action::make('Lihat')->icon('heroicon-o-eye')->url($laporUrl),
                     ])
                     ->sendToDatabase($user);
             }
         }
+        
 
         return self::SUCCESS;
     }
