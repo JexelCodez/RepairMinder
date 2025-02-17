@@ -1,9 +1,9 @@
 <?php
 namespace App\Console\Commands;
 
-use App\Filament\DKV\Resources\LaporanDKVResource;
-use App\Filament\Resources\LaporanResource;
-use App\Filament\Sarpras\Resources\LaporanSarprasResource;
+use App\Filament\DKV\Resources\PeriodePemeliharaanDKVResource;
+use App\Filament\Resources\PeriodePemeliharaanResource;
+use App\Filament\Sarpras\Resources\PeriodePemeliharaanSarprasResource;
 use Illuminate\Console\Command;
 use App\Models\PeriodePemeliharaan;
 use App\Models\InventarisDKV;
@@ -46,7 +46,7 @@ class SendMaintenanceReminder extends Command
                     )->get();
         
                 // Menggunakan LaporanDKVResource untuk route laporan DKV
-                $laporUrl = LaporanDKVResource::getUrl('view', ['record' => $maintenance], panel: 'dKV');
+                $laporUrl = PeriodePemeliharaanDKVResource::getUrl('view', ['record' => $maintenance], panel: 'dKV');
             } elseif (InventarisSarpras::where('kode_barang', $maintenance->kode_barang)->exists()) {
                 $teknisiUsers = User::where('role', 'admin')
                     ->orWhere(fn($query) => 
@@ -54,7 +54,7 @@ class SendMaintenanceReminder extends Command
                               ->whereHas('zoneUser', fn($q) => $q->where('zone_name', 'sarpras'))
                     )->get();
         
-                $laporUrl = LaporanSarprasResource::getUrl('view', ['record' => $maintenance], panel: 'sarpras');
+                $laporUrl = PeriodePemeliharaanSarprasResource::getUrl('view', ['record' => $maintenance], panel: 'sarpras');
             } else {
                 $teknisiUsers = User::where('role', 'admin')
                     ->orWhere(fn($query) =>
@@ -62,7 +62,7 @@ class SendMaintenanceReminder extends Command
                               ->whereHas('zoneUser', fn($q) => $q->where('zone_name', 'sija'))
                     )->get();
         
-                $laporUrl = LaporanResource::getUrl('view', ['record' => $maintenance], panel: 'admin');
+                $laporUrl = PeriodePemeliharaanResource::getUrl('view', ['record' => $maintenance], panel: 'admin');
             }
         
             foreach ($teknisiUsers as $user) {

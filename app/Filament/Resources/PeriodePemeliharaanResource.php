@@ -19,6 +19,17 @@ use Filament\Tables\Actions\Action;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Filters\Filter;
 
+// INFOLIST
+use Filament\Infolists\Infolist;
+use Filament\Infolists\Components\TextEntry;
+use Filament\Infolists\Components\RepeatableEntry;
+use Filament\Infolists\Components\Fieldset;
+use Filament\Infolists\Components\ViewEntry;
+use Filament\Infolists\Components\Grid;
+use Filament\Infolists\Components\ImageEntry;
+use Filament\Infolists\Components\Tabs;
+use Filament\Infolists\Components\Section;
+
 class PeriodePemeliharaanResource extends Resource
 {
     protected static ?string $model = PeriodePemeliharaan::class;
@@ -164,6 +175,7 @@ class PeriodePemeliharaanResource extends Resource
                     }),
             ])
             ->actions([
+                Tables\Actions\ViewAction::make(),
                 EditAction::make()
                     ->modalHeading('Edit Periode Pemeliharaan')
                     ->modalWidth('lg')
@@ -196,6 +208,55 @@ class PeriodePemeliharaanResource extends Resource
             ]);
     }
     
+    public static function infolist(Infolist $infolist): Infolist
+    {
+        return $infolist
+        ->schema([
+            Tabs::make('Tabs')
+                ->tabs([
+                    Tabs\Tab::make('Informasi Pemeliharaan')
+                        ->schema([
+                            Fieldset::make('Informasi Pemeliharaan')
+                                ->schema([
+                                    TextEntry::make('nama_barang')
+                                        ->label('Nama Barang')
+                                        ->getStateUsing(fn($record) =>
+                                            $record->inventaris->nama_barang ?? 
+                                            $record->inventarisDKV->nama_barang ?? 
+                                            $record->inventarisSarpras->nama_barang ?? 'N/A'
+                                        ),
+                                    TextEntry::make('merek')
+                                        ->label('Merek Barang')
+                                        ->getStateUsing(fn($record) =>
+                                            $record->inventaris->merek ?? 
+                                            $record->inventarisDKV->merek ?? 
+                                            $record->inventarisSarpras->merek ?? 'N/A'
+                                        ),
+                                    TextEntry::make('periode'),
+                                    TextEntry::make('kode_barang'),                                                              
+                                ])->columnSpan(2)->columns(2),
+                            Grid::make()
+                                ->schema([
+                                    Section::make('Tanggal Maintenance')
+                                        ->schema([
+                                            TextEntry::make('tanggal_maintenance_selanjutnya')
+                                                ->label('Maintenance Selanjutnya')
+                                                ->date(),         
+                                        ])->columns(1),
+                                ])->columnSpan(1),
+                        ])->columns(3),
+                    Tabs\Tab::make('Deksripsi Maintenance')
+                        ->schema([
+                            Section::make('Bukti Laporan')
+                                ->description('Foto bukti laporan')
+                                ->schema([
+                                    TextEntry::make('deskripsi')
+                                        ->columnSpan(2),
+                                ]),
+                        ]),
+                ]),    
+        ])->columns(1);
+    }
     
 
     public static function getPages(): array
@@ -204,6 +265,7 @@ class PeriodePemeliharaanResource extends Resource
             'index' => Pages\ListPeriodePemeliharaans::route('/'),
             'create' => Pages\CreatePeriodePemeliharaan::route('/create'),
             'edit' => Pages\EditPeriodePemeliharaan::route('/{record}/edit'),
+            'view' => Pages\ViewPeriodePemeliharaan::route('/{record}'),
         ];
     }
 }

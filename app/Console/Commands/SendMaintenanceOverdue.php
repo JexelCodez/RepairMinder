@@ -2,9 +2,9 @@
 
 namespace App\Console\Commands;
 
-use App\Filament\DKV\Resources\LaporanDKVResource;
-use App\Filament\Resources\LaporanResource;
-use App\Filament\Sarpras\Resources\LaporanSarprasResource;
+use App\Filament\DKV\Resources\MaintenanceDKVResource;
+use App\Filament\Resources\MaintenanceResource;
+use App\Filament\Sarpras\Resources\MaintenanceSarprasResource;
 use Illuminate\Console\Command;
 use App\Models\PeriodePemeliharaan;
 use App\Models\InventarisDKV;
@@ -16,32 +16,15 @@ use Carbon\Carbon;
 
 class SendMaintenanceOverdue extends Command
 {
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
     protected $signature = 'maintenance:overdue';
-
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
     protected $description = 'Command description';
 
-    /**
-     * Execute the console command.
-     */
     public function handle(): int
     {
         \Log::info('Maintenance reminder command triggered at: ' . now()->toDateTimeString());
 
         $kemarin = Carbon::yesterday()->toDateString();
-
         $maintenanceList = PeriodePemeliharaan::whereDate('tanggal_maintenance_selanjutnya', $kemarin)->get();
-        
-
 
         \Log::info('Total maintenance list matching criteria: ' . $maintenanceList->count());
 
@@ -52,47 +35,60 @@ class SendMaintenanceOverdue extends Command
 
         foreach ($maintenanceList as $maintenance) {
             $teknisiUsers = collect();
-        
-            // Cek barang ada di model inventaris mana
+            $kodeBarang = $maintenance->kode_barang; // default
+
+            // Cek barang ada di model inventaris mana dan ambil data kode barang dari relasinya
             if (InventarisDKV::where('kode_barang', $maintenance->kode_barang)->exists()) {
                 $teknisiUsers = User::where('role', 'admin')
-                    ->orWhere(fn($query) => 
+                    ->orWhere(fn($query) =>
                         $query->where('role', 'teknisi')
                               ->whereHas('zoneUser', fn($q) => $q->where('zone_name', 'dkv'))
                     )->get();
-        
-                // Menggunakan LaporanDKVResource untuk route laporan DKV
-                $laporUrl = LaporanDKVResource::getUrl('view', ['record' => $maintenance], panel: 'dKV');
+
+                // Mengambil data dari relasi inventarisDKV
+                $kodeBarang = $maintenance->inventarisDKV->kode_barang ?? $maintenance->kode_barang;
+                $laporUrl = MaintenanceDKVResource::getUrl('create', [
+                    'kode_barang' => $kodeBarang,
+                ], panel: 'dKV');
             } elseif (InventarisSarpras::where('kode_barang', $maintenance->kode_barang)->exists()) {
                 $teknisiUsers = User::where('role', 'admin')
-                    ->orWhere(fn($query) => 
+                    ->orWhere(fn($query) =>
                         $query->where('role', 'teknisi')
                               ->whereHas('zoneUser', fn($q) => $q->where('zone_name', 'sarpras'))
                     )->get();
-        
-                $laporUrl = LaporanSarprasResource::getUrl('view', ['record' => $maintenance], panel: 'sarpras');
+
+                // Mengambil data dari relasi inventarisSarpras
+                $kodeBarang = $maintenance->inventarisSarpras->kode_barang ?? $maintenance->kode_barang;
+                $laporUrl = MaintenanceSarprasResource::getUrl('create', [
+                    'kode_barang' => $kodeBarang,
+                ], panel: 'sarpras');
             } else {
                 $teknisiUsers = User::where('role', 'admin')
                     ->orWhere(fn($query) =>
                         $query->where('role', 'teknisi')
                               ->whereHas('zoneUser', fn($q) => $q->where('zone_name', 'sija'))
                     )->get();
-        
-                $laporUrl = LaporanResource::getUrl('view', ['record' => $maintenance], panel: 'admin');
+
+                // Mengambil data dari relasi inventaris (default)
+                $kodeBarang = $maintenance->inventaris->kode_barang ?? $maintenance->kode_barang;
+                $laporUrl = MaintenanceResource::getUrl('create', [
+                    'kode_barang' => $kodeBarang,
+                ], panel: 'admin');
             }
-        
+
             foreach ($teknisiUsers as $user) {
                 Notification::make()
-                    ->title('🔧 Maintenance Reminder')
+                    ->title('🔧 Maintenance Overdue')
                     ->color('info')
-                    ->body("Barang {$maintenance->kode_barang} seharusnya sudah maintenance lebih dari 1 hari yang lalu! Klik untuk melihat detail.")
+                    ->body("Barang {$kodeBarang} seharusnya sudah maintenance lebih dari 1 hari yang lalu! Klik tombol Proses untuk mengisi laporan maintenance.")
                     ->actions([
-                        Action::make('Lihat')->icon('heroicon-o-eye')->url($laporUrl),
+                        Action::make('Proses')
+                            ->icon('heroicon-o-cog')
+                            ->url($laporUrl),
                     ])
                     ->sendToDatabase($user);
             }
         }
-        
 
         return self::SUCCESS;
     }
