@@ -68,7 +68,7 @@
 
             <div class="col-lg-2 col-md-3 col-12">
                 <a class="navbar-brand">
-                    <img src="images/logo-sija.png" class="logo-image img-fluid" alt="templatemo pod talk">
+                    <img src="{{ asset('images/logo-sija.png')}}" class="logo-image img-fluid" alt="templatemo pod talk">
                 </a>
             </div>
 

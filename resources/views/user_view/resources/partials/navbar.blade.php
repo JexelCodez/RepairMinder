@@ -47,7 +47,25 @@
                         {{ Auth::user()->name }}
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                        @if (auth()->check() && (auth()->user()->role === 'admin' || auth()->user()->role === 'teknisi'))
+                        @if (Auth::user()->role === 'teknisi' && Str::lower(optional(Auth::user()->zoneUser)->zone_name) === 'dkv')
+                            <li>
+                                <a class="dropdown-item" href="{{ url('/dkv') }}">
+                                    Dashboard
+                                </a>
+                            </li>
+                        @elseif (Auth::user()->role === 'teknisi' && Str::lower(optional(Auth::user()->zoneUser)->zone_name) === 'sija')
+                            <li>
+                                <a class="dropdown-item" href="{{ url('/sija') }}">
+                                    Dashboard
+                                </a>
+                            </li>
+                        @elseif (Auth::user()->role === 'teknisi' && Str::lower(optional(Auth::user()->zoneUser)->zone_name) === 'sarpras')
+                            <li>
+                                <a class="dropdown-item" href="{{ url('/sarpras') }}">
+                                    Dashboard
+                                </a>
+                            </li>
+                        @elseif (Auth::user()->role === 'admin')
                             <li>
                                 <a class="dropdown-item" href="{{ url('/sija') }}">
                                     Dashboard

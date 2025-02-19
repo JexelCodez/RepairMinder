@@ -248,10 +248,11 @@ class PeriodePemeliharaanSarprasResource extends Resource
                         ])->columns(3),
                     Tabs\Tab::make('Deksripsi Maintenance')
                         ->schema([
-                            Section::make('Bukti Laporan')
-                                ->description('Foto bukti laporan')
+                            Section::make('Deskripsi')
+                                ->description('Deskripsi Maintenance')
                                 ->schema([
                                     TextEntry::make('deskripsi')
+                                        ->label('')
                                         ->columnSpan(2),
                                 ]),
                         ]),
