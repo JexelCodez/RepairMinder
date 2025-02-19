@@ -57,6 +57,8 @@ class PeriodePemeliharaanDKVResource extends Resource
                     ->label('Periode (dalam hari)')
                     ->numeric()
                     ->minValue(1)
+                    ->suffix('Hari')
+                    ->suffixIcon('heroicon-o-calendar-days')
                     ->placeholder('Masukkan jumlah hari'),
                 
 
