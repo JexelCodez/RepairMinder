@@ -47,9 +47,16 @@
                         {{ Auth::user()->name }}
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                        @if (auth()->check() && (auth()->user()->role === 'admin' || auth()->user()->role === 'teknisi'))
+                            <li>
+                                <a class="dropdown-item" href="{{ url('/sija') }}">
+                                    Dashboard
+                                </a>
+                            </li>
+                        @endif
                         <li>
                             <a class="dropdown-item" href="{{ route('logout') }}"
-                               onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                            onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                                 Log Out
                             </a>
                         </li>
