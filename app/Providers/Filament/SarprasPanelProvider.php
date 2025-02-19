@@ -35,7 +35,7 @@ class SarprasPanelProvider extends PanelProvider
             ->sidebarCollapsibleOnDesktop()
             ->databaseNotifications()
             ->colors([
-                'primary' => Color::Gray,
+                'primary' => '#3f821e',
             ])
             // ->brandLogo(asset('images/logo-sija.png'))
             ->brandName('REMI SARPRAS')

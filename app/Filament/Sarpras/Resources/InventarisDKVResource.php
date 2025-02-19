@@ -2,9 +2,9 @@
 
 namespace App\Filament\Sarpras\Resources;
 
-use App\Filament\Sarpras\Resources\InventarisSarprasResource\Pages;
-use App\Filament\Sarpras\Resources\InventarisSarprasResource\RelationManagers;
-use App\Models\InventarisSarpras;
+use App\Filament\Sarpras\Resources\InventarisDKVResource\Pages;
+use App\Filament\Sarpras\Resources\InventarisDKVResource\RelationManagers;
+use App\Models\InventarisDKV;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -30,12 +30,12 @@ use Filament\Infolists\Components\ViewEntry;
 use Filament\Infolists\Components\Grid;
 use Filament\Infolists\Components\ImageEntry;
 
-class InventarisSarprasResource extends Resource
+class InventarisDKVResource extends Resource
 {
-    protected static ?string $model = InventarisSarpras::class;
-    protected static ?string $modelLabel = 'Barang Sarpras';
-    protected static ?string $pluralModelLabel = 'Barang Sarpras';
-    protected static ?string $navigationLabel = 'Barang Sarpras';
+    protected static ?string $model = InventarisDKV::class;
+    protected static ?string $modelLabel = 'Barang DKV';
+    protected static ?string $pluralModelLabel = 'Barang DKV';
+    protected static ?string $navigationLabel = 'Barang DKV';
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
     protected static ?string $navigationGroup = 'Inventaris';
 
@@ -116,7 +116,7 @@ class InventarisSarprasResource extends Resource
             ->filters([
                 SelectFilter::make('nama_ruangan')
                     ->label('Filter Ruangan')
-                    ->options(fn () => InventarisSarpras::pluck('nama_ruangan', 'nama_ruangan')->toArray())
+                    ->options(fn () => InventarisDKV::pluck('nama_ruangan', 'nama_ruangan')->toArray())
                     ->searchable(),
 
                 SelectFilter::make('kondisi_barang')
@@ -224,9 +224,10 @@ class InventarisSarprasResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListInventarisSarpras::route('/'),
-            // 'create' => Pages\CreateInventarisSarpras::route('/create'),
-            // 'edit' => Pages\EditInventarisSarpras::route('/{record}/edit'),
+            'index' => Pages\ListInventarisDKVS::route('/'),
+            'create' => Pages\CreateInventarisDKV::route('/create'),
+            'view' => Pages\ViewInventarisDKV::route('/{record}'),
+            'edit' => Pages\EditInventarisDKV::route('/{record}/edit'),
         ];
     }
 }
