@@ -44,13 +44,41 @@ class PeriodePemeliharaanSarprasResource extends Resource
     {
         return $form
             ->schema([
+                Forms\Components\Select::make('sumber_data')
+                    ->label('Pilih Sumber Data')
+                    ->options([
+                        'inventaris' => 'SIJA',
+                        'inventaris_dkv' => 'DKV',
+                        'inventaris_sarpras' => 'Sarpras',
+                    ])
+                    ->searchable()
+                    ->reactive()
+                    ->required()
+                    ->afterStateUpdated(fn ($set) => $set('kode_barang', null)), // Reset kode_barang jika sumber data berubah
+
                 Forms\Components\Select::make('kode_barang')
                     ->label('Barang')
-                    ->options(InventarisSarpras::all()->mapWithKeys(function ($item) {
-                        return [$item->kode_barang => "{$item->kode_barang} ({$item->nama_barang})"];
-                    }))
+                    ->options(function (callable $get) {
+                        $sumberData = $get('sumber_data');
+
+                        if (!$sumberData) {
+                            return ['' => 'Pilih sumber data terlebih dahulu'];
+                        }
+
+                        return match ($sumberData) {
+                            'inventaris' => Inventaris::all()
+                                ->mapWithKeys(fn ($item) => [$item->kode_barang => "{$item->kode_barang} ({$item->nama_barang})"]),
+                            'inventaris_dkv' => InventarisDKV::all()
+                                ->mapWithKeys(fn ($item) => [$item->kode_barang => "{$item->kode_barang} ({$item->nama_barang})"]),
+                            'inventaris_sarpras' => InventarisSarpras::all()
+                                ->mapWithKeys(fn ($item) => [$item->kode_barang => "{$item->kode_barang} ({$item->nama_barang})"]),
+                            default => [],
+                        };
+                    })
                     ->searchable()
-                    ->required(),
+                    ->required()
+                    ->reactive()
+                    ->placeholder('Pilih Barang'),
 
                 Forms\Components\TextInput::make('periode')
                     ->label('Periode (dalam hari)')
@@ -61,7 +89,7 @@ class PeriodePemeliharaanSarprasResource extends Resource
                     ->placeholder('Masukkan jumlah hari'),
                 
 
-                Forms\Components\TextInput::make('deskripsi')
+                Forms\Components\TextArea::make('deskripsi')
                     ->label('Deskripsi')
                     ->nullable()
                     ->placeholder('Provide maintenance description'),
