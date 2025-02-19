@@ -121,6 +121,9 @@ class LaporController extends Controller
                 Action::make('Lihat')
                     ->icon('heroicon-o-eye')
                     ->url($laporUrl),
+                Action::make('Dibaca')
+                    ->icon('heroicon-o-check-circle')
+                    ->markAsRead(),
             ])
             ->sendToDatabase($user);
     }

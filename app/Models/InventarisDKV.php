@@ -76,4 +76,9 @@ class InventarisDKV extends Model
         
         return $this->save();
     }
+
+    public function updateKondisiBarangToLengkap()
+    {
+        return $this->updateKondisiBarang('lengkap');
+    }
 }
