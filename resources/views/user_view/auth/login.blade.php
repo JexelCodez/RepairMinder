@@ -184,10 +184,6 @@
                             
                             <!-- Submit Button -->
                             <button type="submit" class="btn btn-login mb-3">Login</button>
-                            <!-- Forgot Password Link -->
-                            <div class="mt-2 text-end">
-                                <a href="{{ route('password.request') }}" class="text-decoration-none small">Lupa Password?</a>
-                            </div>
                         </form>
                         <!-- Register Link -->
                         <div class="mt-3 text-center">
