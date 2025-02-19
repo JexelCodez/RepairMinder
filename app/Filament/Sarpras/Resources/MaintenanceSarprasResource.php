@@ -9,6 +9,7 @@ use App\Models\Inventaris;
 use App\Models\InventarisDKV;
 use App\Models\InventarisSarpras;
 use App\Models\PeriodePemeliharaan;
+use App\Models\Teknisi;
 use App\Models\User;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -76,6 +77,13 @@ class MaintenanceSarprasResource extends Resource
                 Forms\Components\Select::make('id_user')
                     ->label('Assigned User')
                     ->options(User::pluck('name', 'id'))
+                    ->default(fn() => auth()->id())
+                    ->searchable()
+                    ->required(),
+
+                Forms\Components\Select::make('id_teknisi')
+                    ->label('Teknisi')
+                    ->options(Teknisi::pluck('nama', 'id'))
                     ->default(fn() => auth()->id())
                     ->searchable()
                     ->required(),
