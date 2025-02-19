@@ -16,8 +16,11 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 class TeknisiResource extends Resource
 {
     protected static ?string $model = Teknisi::class;
-
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $modelLabel = 'Teknisi';
+    protected static ?string $pluralModelLabel = 'Teknisi';
+    protected static ?string $navigationLabel = 'Teknisi';
+    protected static ?string $navigationIcon = 'heroicon-o-users';
+    protected static ?string $navigationGroup = 'Teknisi';
 
     public static function form(Form $form): Form
     {
@@ -27,9 +30,8 @@ class TeknisiResource extends Resource
                     ->required()
                     ->maxLength(255),
                 Forms\Components\Textarea::make('informasi')
-                    ->required()
-                    ->columnSpanFull(),
-            ]);
+                    ->required(),
+            ])->columns(2);
     }
 
     public static function table(Table $table): Table

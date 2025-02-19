@@ -105,7 +105,7 @@ class MaintenanceSarprasResource extends Resource
                     ->searchable()
                     ->required(),
 
-                Forms\Components\TextInput::make('deskripsi_tugas')
+                Forms\Components\TextArea::make('deskripsi_tugas')
                     ->label('Task Description')
                     ->required()
                     ->maxLength(255),
@@ -117,11 +117,14 @@ class MaintenanceSarprasResource extends Resource
                         'dalam perbaikan' => 'Dalam Perbaikan',
                         'selesai' => 'Selesai',
                     ])
+                    ->default('sedang diproses') // Menetapkan default
                     ->required(),
-
+                
                 Forms\Components\DatePicker::make('tanggal_pelaksanaan')
                     ->label('Tanggal Pelaksanaan')
+                    ->default(now()) // Menetapkan default ke hari ini
                     ->required(),
+                
             ]);
     }
 
