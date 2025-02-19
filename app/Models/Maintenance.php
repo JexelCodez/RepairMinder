@@ -14,7 +14,7 @@ class Maintenance extends Model
     protected $fillable = [
         'id_periode_pemeliharaan',
         'id_user',
-        'id_maintenance',
+        'id_teknisi',
         'deskripsi_tugas',	
         'status',
         'tanggal_pelaksanaan',
@@ -30,9 +30,9 @@ class Maintenance extends Model
     {
         return $this->belongsTo(User::class, 'id_user');
     }
-    public function maintenance()
+    public function teknisi()
     {
-        return $this->belongsTo(Maintenance::class, 'id_maintenance');
+        return $this->belongsTo(Teknisi::class, 'id_teknisi');
     }
 
     public function periode()

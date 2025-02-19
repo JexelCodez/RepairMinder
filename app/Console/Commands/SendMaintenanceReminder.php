@@ -43,7 +43,13 @@ class SendMaintenanceReminder extends Command
                     ->orWhere(fn($query) => 
                         $query->where('role', 'teknisi')
                               ->whereHas('zoneUser', fn($q) => $q->where('zone_name', 'dkv'))
-                    )->get();
+                    )
+                    ->orWhere(fn($query) =>
+                        $query->where('role', 'teknisi')
+                            ->whereHas('zoneUser', fn($q) => $q->where('zone_name', 'sarpras'))
+                    )
+                    ->get();
+                    
         
                 // Menggunakan LaporanDKVResource untuk route laporan DKV
                 $laporUrl = PeriodePemeliharaanDKVResource::getUrl('view', ['record' => $maintenance], panel: 'dKV');
@@ -60,7 +66,12 @@ class SendMaintenanceReminder extends Command
                     ->orWhere(fn($query) =>
                         $query->where('role', 'teknisi')
                               ->whereHas('zoneUser', fn($q) => $q->where('zone_name', 'sija'))
-                    )->get();
+                    )
+                    ->orWhere(fn($query) =>
+                        $query->where('role', 'teknisi')
+                            ->whereHas('zoneUser', fn($q) => $q->where('zone_name', 'sarpras'))
+                    )
+                    ->get();
         
                 $laporUrl = PeriodePemeliharaanResource::getUrl('view', ['record' => $maintenance], panel: 'admin');
             }

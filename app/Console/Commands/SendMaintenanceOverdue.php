@@ -43,7 +43,12 @@ class SendMaintenanceOverdue extends Command
                     ->orWhere(fn($query) =>
                         $query->where('role', 'teknisi')
                               ->whereHas('zoneUser', fn($q) => $q->where('zone_name', 'dkv'))
-                    )->get();
+                    )
+                    ->orWhere(fn($query) =>
+                        $query->where('role', 'teknisi')
+                              ->whereHas('zoneUser', fn($q) => $q->where('zone_name', 'sarpras'))
+                    )
+                    ->get();
 
                 // Mengambil data dari relasi inventarisDKV
                 $kodeBarang = $maintenance->inventarisDKV->kode_barang ?? $maintenance->kode_barang;
@@ -67,7 +72,12 @@ class SendMaintenanceOverdue extends Command
                     ->orWhere(fn($query) =>
                         $query->where('role', 'teknisi')
                               ->whereHas('zoneUser', fn($q) => $q->where('zone_name', 'sija'))
-                    )->get();
+                    )
+                    ->orWhere(fn($query) =>
+                        $query->where('role', 'teknisi')
+                            ->whereHas('zoneUser', fn($q) => $q->where('zone_name', 'sarpras'))
+                    )
+                    ->get();
 
                 // Mengambil data dari relasi inventaris (default)
                 $kodeBarang = $maintenance->inventaris->kode_barang ?? $maintenance->kode_barang;
