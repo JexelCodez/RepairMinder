@@ -2,6 +2,8 @@
 
 namespace Database\Seeders;
 
+use App\Models\User;
+use App\Models\ZoneUser;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
@@ -14,13 +16,34 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        //
-        DB::table('users')->insert([
-            'name' => 'Muhadi',
-            'email' => 'Muhadi@gmail.com',
-            'password' => Hash::make('Muhadi2430506'),
-            'role' => 'teknisi',
+        // Ambil data zone berdasarkan nama
+        $dkvZone = ZoneUser::where('zone_name', 'dkv')->first();
+        $sarprasZone = ZoneUser::where('zone_name', 'sarpras')->first();
+        $sijaZone = ZoneUser::where('zone_name', 'sija')->first();
 
+        // Tambahkan user dengan id_zone yang sesuai
+        User::insert([
+            [
+                'name' => 'Teknisi DKV',
+                'email' => 'teknisi.dkv@example.com',
+                'password' => Hash::make('password'),
+                'role' => 'teknisi',
+                'id_zone' => $dkvZone->id ?? null,
+            ],
+            [
+                'name' => 'Teknisi Sarpras',
+                'email' => 'teknisi.sarpras@example.com',
+                'password' => Hash::make('password'),
+                'role' => 'teknisi',
+                'id_zone' => $sarprasZone->id ?? null,
+            ],
+            [
+                'name' => 'Teknisi SIJA',
+                'email' => 'teknisi.sija@example.com',
+                'password' => Hash::make('password'),
+                'role' => 'teknisi',
+                'id_zone' => $sijaZone->id ?? null,
+            ],
         ]);
     }
 }

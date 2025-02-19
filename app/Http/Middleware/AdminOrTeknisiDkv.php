@@ -30,6 +30,10 @@ class AdminOrTeknisiDkv
             return $next($request);
         }
 
+        if ($user->role === 'teknisi' && Str::lower(optional($user->zoneUser)->zone_name) === 'sarpras') {
+            return $next($request);
+        }
+
         abort(403, 'Unauthorized access - Admin or Teknisi DKV required.');
     }
 }
