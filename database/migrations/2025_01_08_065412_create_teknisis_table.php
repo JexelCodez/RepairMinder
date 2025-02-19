@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('teknisis', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('id_user');
-            $table->foreign('id_user')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
+            $table->string('nama');
+            $table->text('informasi');
             $table->timestamps();
         });
     }
