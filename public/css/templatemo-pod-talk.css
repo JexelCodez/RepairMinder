@@ -18,6 +18,8 @@ https://templatemo.com/tm-584-pod-talk
     --custom-btn-bg-hover-color: #00cc99;
     --danger-btn-bg-color: #cc0000; /* Merah terang */
     --danger-btn-bg-hover-color: #990000; /* Merah lebih gelap saat hover */
+    --secondary-btn-bg-color: #808080;
+    --secondary-btn-bg-hover-color: #626262;
     --dark-color: #000000;
     --p-color: #717275;
     --border-color: #7fffd4;
@@ -270,6 +272,40 @@ main {
 }
 
 .danger-btn-bg-white {
+    border-color: var(--white-color);
+    color: var(--white-color);
+}
+.secondary-btn {
+    background: var(--secondary-btn-bg-color);
+    border: 2px solid transparent;
+    border-radius: var(--border-radius-large);
+    color: var(--white-color);
+    font-family: var(--title-font-family);
+    font-size: var(--p-font-size);
+    font-weight: var(--font-weight-semibold);
+    line-height: normal;
+    transition: all 0.3s;
+    padding: 10px 20px;
+}
+
+.secondary-btn:hover {
+    background: var(--secondary-btn-bg-hover-color);
+    color: var(--white-color);
+}
+
+.secondary-border-btn {
+    background: transparent;
+    border: 2px solid var(--secondary-btn-bg-color);
+    color: var(--secondary-btn-bg-color);
+}
+
+.secondary-border-btn:hover {
+    background: var(--secondary-btn-bg-color);
+    border-color: transparent;
+    color: var(--primary-color);
+}
+
+.secondary-btn-bg-white {
     border-color: var(--white-color);
     color: var(--white-color);
 }
