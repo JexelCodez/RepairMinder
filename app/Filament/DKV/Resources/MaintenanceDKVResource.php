@@ -152,12 +152,6 @@ class MaintenanceDKVResource extends Resource
                 Forms\Components\DatePicker::make('tanggal_pelaksanaan')
                     ->label('Tanggal Pelaksanaan')
                     ->required(),
-
-                Forms\Components\TextArea::make('hasil_maintenance')
-                    ->label('Hasil Maintenance')
-                    ->maxLength(255)
-                    ->visible(fn (callable $get) => $get('status') === 'selesai')
-                    ->required(fn (callable $get) => $get('status') === 'selesai')
             ]);
     }
 
@@ -276,6 +270,27 @@ class MaintenanceDKVResource extends Resource
             ->actions([
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
+                Tables\Actions\Action::make('isi_hasil_maintenance')
+                    ->label('Isi Hasil')
+                    ->icon('heroicon-o-document-text')
+                    ->modalHeading('Isi Hasil Maintenance')
+                    ->form([
+                        Forms\Components\Textarea::make('hasil_maintenance')
+                            ->label('Hasil Maintenance')
+                            ->required()
+                            ->maxLength(255),
+                    ])
+                    ->action(function ($record, array $data) {
+                        $record->update([
+                            'hasil_maintenance' => $data['hasil_maintenance'],
+                        ]);
+                    })
+                    ->visible(fn($record) => $record->status === 'selesai' && !$record->hasil_maintenance),
+            ])
+            ->bulkActions([
+                Tables\Actions\BulkActionGroup::make([
+                    Tables\Actions\DeleteBulkAction::make(),
+                ]),
             ]);
     }
 
