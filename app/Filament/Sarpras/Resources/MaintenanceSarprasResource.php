@@ -61,7 +61,21 @@ class MaintenanceSarprasResource extends Resource
                     ])
                     ->searchable()
                     ->reactive()
-                    ->required(),
+                    ->required()
+                    ->afterStateHydrated(function (callable $get, callable $set) {
+                        $idPeriode = $get('id_periode_pemeliharaan');
+
+                        if ($idPeriode) {
+                            // Cari dari sumber mana berdasarkan id_periode_pemeliharaan
+                            if (PeriodePemeliharaan::whereIn('kode_barang', Inventaris::pluck('kode_barang'))->where('id', $idPeriode)->exists()) {
+                                $set('sumber_data', 'inventaris');
+                            } elseif (PeriodePemeliharaan::whereIn('kode_barang', InventarisDKV::pluck('kode_barang'))->where('id', $idPeriode)->exists()) {
+                                $set('sumber_data', 'inventaris_dkv');
+                            } elseif (PeriodePemeliharaan::whereIn('kode_barang', InventarisSarpras::pluck('kode_barang'))->where('id', $idPeriode)->exists()) {
+                                $set('sumber_data', 'inventaris_sarpras');
+                            }
+                        }
+                    }),
 
                 Forms\Components\Select::make('id_periode_pemeliharaan')
                     ->label('Barang')
@@ -88,7 +102,13 @@ class MaintenanceSarprasResource extends Resource
                     ->searchable()
                     ->required()
                     ->reactive()
-                    ->placeholder('Pilih Barang'),
+                    ->placeholder('Pilih Barang')
+                    ->afterStateHydrated(function ($state, callable $set, callable $get) {
+                        if ($state) {
+                            $set('id_periode_pemeliharaan', $state);
+                        }
+                    }),
+
             
 
                 Forms\Components\Select::make('id_user')

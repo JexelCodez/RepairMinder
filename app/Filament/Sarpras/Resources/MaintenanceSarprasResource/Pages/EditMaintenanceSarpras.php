@@ -16,4 +16,15 @@ class EditMaintenanceSarpras extends EditRecord
             Actions\DeleteAction::make(),
         ];
     }
+
+    protected function mutateFormDataBeforeFill(array $data): array
+    {
+        if (isset($data['sumber_data'])) {
+            // Pastikan data sumber_data tetap ada saat edit
+            $data['sumber_data'] = $data['sumber_data'];
+        }
+
+        return $data;
+    }
+
 }
