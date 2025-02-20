@@ -130,6 +130,7 @@ class LaporanResource extends Resource implements CustomizeOverlookWidget
                     ->placeholder('Pilih Jurusan'),
             ])
             ->actions([
+                Tables\Actions\ViewAction::make(),
 
                 Action::make('Process')
                     ->visible(fn (Laporan $record) => $record->status === 'pending')
@@ -179,6 +180,23 @@ class LaporanResource extends Resource implements CustomizeOverlookWidget
                     ->modalDescription('Apakah Anda yakin barang ini sudah selesai diproses?')
                     ->color('success')
                     ->icon('heroicon-o-check-circle'),
+
+                Action::make('isi_hasil_laporan')
+                    ->label('Isi Hasil')
+                    ->icon('heroicon-o-document-text')
+                    ->modalHeading('Isi Hasil Laporan')
+                    ->form([
+                        Forms\Components\Textarea::make('hasil_laporan')
+                            ->label('Hasil Laporan')
+                            ->required()
+                            ->maxLength(255),
+                    ])
+                    ->action(function ($record, array $data) {
+                        $record->update([
+                            'hasil_laporan' => $data['hasil_laporan'],
+                        ]);
+                    })
+                    ->visible(fn($record) => $record->status === 'done' && !$record->hasil_laporan),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -245,6 +263,20 @@ class LaporanResource extends Resource implements CustomizeOverlookWidget
                                         ->size('md'),
                                 ]),
                         ]),
+
+                    Tabs\Tab::make('Hasil Laporan')
+                        ->schema([
+                            Section::make('Hasil Laporan')
+                                ->label('')
+                                ->description('')
+                                ->schema([
+                                    TextEntry::make('hasil_laporan')
+                                    ->label('')
+                                    ->placeholder('Belum Diisi'),
+                                ]),
+                        ]),
+
+                        
                 ]),    
         ])->columns(1);
     }
