@@ -103,17 +103,42 @@ class MaintenanceSarprasResource extends Resource
                     ->required()
                     ->reactive()
                     ->placeholder('Pilih Barang')
-                    ->rule(function (callable $get) {
-                        return function (string $attribute, $value, callable $fail) {
-                            $existingMaintenance = Maintenance::where('id_periode_pemeliharaan', $value)
-                                ->whereIn('status', ['sedang diproses', 'dalam perbaikan'])
-                                ->exists();
-                
-                            if ($existingMaintenance) {
-                                $fail('Tidak dapat membuat maintenance baru karena masih ada maintenance yang sedang diproses atau dalam perbaikan.');
+                    ->rule(function (callable $get, ?Maintenance $record) {
+                        return function (string $attribute, $value, callable $fail) use ($record, $get) {
+                            // Ambil id_periode_pemeliharaan dari input saat ini
+                            $periodeId = $get('id_periode_pemeliharaan');
+                    
+                            // Jika sedang membuat data baru
+                            if (!$record) {
+                                $existingMaintenance = Maintenance::where('id_periode_pemeliharaan', $periodeId)
+                                    ->whereIn('status', ['sedang diproses', 'dalam perbaikan'])
+                                    ->exists();
+                    
+                                if ($existingMaintenance) {
+                                    $fail('Tidak dapat membuat maintenance baru karena masih ada maintenance yang sedang diproses atau dalam perbaikan.');
+                                }
+                            } 
+                            // Jika sedang mengedit data
+                            else {
+                                // Status sebelumnya
+                                $oldStatus = $record->getOriginal('status');
+                    
+                                // Cek apakah ada maintenance lain dalam periode ini yang sedang berjalan
+                                $existingMaintenance = Maintenance::where('id_periode_pemeliharaan', $periodeId)
+                                    ->where('id', '!=', $record->id) // Exclude record yang sedang diedit
+                                    ->whereIn('status', ['sedang diproses', 'dalam perbaikan'])
+                                    ->exists();
+                    
+                                // Jika status sebelumnya "selesai", dan mencoba mengubah ke "sedang diproses/dalam perbaikan"
+                                if ($oldStatus === 'selesai' && in_array($value, ['sedang diproses', 'dalam perbaikan'])) {
+                                    // Cek apakah ada maintenance lain yang sedang berjalan
+                                    if ($existingMaintenance) {
+                                        $fail('Tidak dapat mengubah status kembali ke sedang diproses/dalam perbaikan karena ada maintenance lain yang sedang berjalan.');
+                                    }
+                                }
                             }
                         };
-                    }),
+                    }),                                                                                                
                 
 
                 Forms\Components\Select::make('id_user')
@@ -144,19 +169,29 @@ class MaintenanceSarprasResource extends Resource
                     ])
                     ->default('sedang diproses') // Menetapkan default
                     ->required()
-                    ->reactive(),
+                    ->reactive()
+                    ->rule(function (callable $get, ?Maintenance $record) {
+                        return function (string $attribute, $value, callable $fail) use ($record, $get) {
+                            $periodeId = $get('id_periode_pemeliharaan');
+                            if (in_array($value, ['sedang diproses', 'dalam perbaikan'])) {
+                                $existingMaintenance = Maintenance::where('id_periode_pemeliharaan', $periodeId)
+                                    ->when($record, function ($query) use ($record) {
+                                        return $query->where('id', '!=', $record->id);
+                                    })
+                                    ->whereIn('status', ['sedang diproses', 'dalam perbaikan'])
+                                    ->exists();
+                                
+                                if ($existingMaintenance) {
+                                    $fail('Tidak dapat mengubah status ke sedang diproses/dalam perbaikan karena ada maintenance lain yang sedang berjalan.');
+                                }
+                            }
+                        };
+                    }),
                 
                 Forms\Components\DatePicker::make('tanggal_pelaksanaan')
                     ->label('Tanggal Pelaksanaan')
                     ->default(now()) // Menetapkan default ke hari ini
-                    ->required(),
-
-                Forms\Components\TextArea::make('hasil_maintenance')
-                    ->label('Hasil Maintenance')
-                    ->maxLength(255)
-                    ->visible(fn (callable $get) => $get('status') === 'selesai')
-                    ->required(fn (callable $get) => $get('status') === 'selesai')
-                
+                    ->required(),                
             ]);
     }
 
@@ -249,6 +284,27 @@ class MaintenanceSarprasResource extends Resource
             ->actions([
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
+                Tables\Actions\Action::make('isi_hasil_maintenance')
+                    ->label('Isi Hasil')
+                    ->icon('heroicon-o-document-text')
+                    ->modalHeading('Isi Hasil Maintenance')
+                    ->form([
+                        Forms\Components\Textarea::make('hasil_maintenance')
+                            ->label('Hasil Maintenance')
+                            ->required()
+                            ->maxLength(255),
+                    ])
+                    ->action(function ($record, array $data) {
+                        $record->update([
+                            'hasil_maintenance' => $data['hasil_maintenance'],
+                        ]);
+                    })
+                    ->visible(fn($record) => $record->status === 'selesai' && !$record->hasil_maintenance),
+            ])
+            ->bulkActions([
+                Tables\Actions\BulkActionGroup::make([
+                    Tables\Actions\DeleteBulkAction::make(),
+                ]),
             ]);
     }
 

@@ -60,14 +60,39 @@ class MaintenanceResource extends Resource
                     ->searchable()
                     ->required()
                     ->placeholder('Pilih Barang')
-                    ->rule(function (callable $get) {
-                        return function (string $attribute, $value, callable $fail) {
-                            $existingMaintenance = Maintenance::where('id_periode_pemeliharaan', $value)
-                                ->whereIn('status', ['sedang diproses', 'dalam perbaikan'])
-                                ->exists();
-                
-                            if ($existingMaintenance) {
-                                $fail('Tidak dapat membuat maintenance baru karena masih ada maintenance yang sedang diproses atau dalam perbaikan.');
+                    ->rule(function (callable $get, ?Maintenance $record) {
+                        return function (string $attribute, $value, callable $fail) use ($record, $get) {
+                            // Ambil id_periode_pemeliharaan dari input saat ini
+                            $periodeId = $get('id_periode_pemeliharaan');
+                    
+                            // Jika sedang membuat data baru
+                            if (!$record) {
+                                $existingMaintenance = Maintenance::where('id_periode_pemeliharaan', $periodeId)
+                                    ->whereIn('status', ['sedang diproses', 'dalam perbaikan'])
+                                    ->exists();
+                    
+                                if ($existingMaintenance) {
+                                    $fail('Tidak dapat membuat maintenance baru karena masih ada maintenance yang sedang diproses atau dalam perbaikan.');
+                                }
+                            } 
+                            // Jika sedang mengedit data
+                            else {
+                                // Status sebelumnya
+                                $oldStatus = $record->getOriginal('status');
+                    
+                                // Cek apakah ada maintenance lain dalam periode ini yang sedang berjalan
+                                $existingMaintenance = Maintenance::where('id_periode_pemeliharaan', $periodeId)
+                                    ->where('id', '!=', $record->id) // Exclude record yang sedang diedit
+                                    ->whereIn('status', ['sedang diproses', 'dalam perbaikan'])
+                                    ->exists();
+                    
+                                // Jika status sebelumnya "selesai", dan mencoba mengubah ke "sedang diproses/dalam perbaikan"
+                                if ($oldStatus === 'selesai' && in_array($value, ['sedang diproses', 'dalam perbaikan'])) {
+                                    // Cek apakah ada maintenance lain yang sedang berjalan
+                                    if ($existingMaintenance) {
+                                        $fail('Tidak dapat mengubah status kembali ke sedang diproses/dalam perbaikan karena ada maintenance lain yang sedang berjalan.');
+                                    }
+                                }
                             }
                         };
                     }),
@@ -100,7 +125,24 @@ class MaintenanceResource extends Resource
                         'selesai' => 'Selesai',
                     ])
                     ->required()
-                    ->reactive(),
+                    ->reactive()
+                    ->rule(function (callable $get, ?Maintenance $record) {
+                        return function (string $attribute, $value, callable $fail) use ($record, $get) {
+                            $periodeId = $get('id_periode_pemeliharaan');
+                            if (in_array($value, ['sedang diproses', 'dalam perbaikan'])) {
+                                $existingMaintenance = Maintenance::where('id_periode_pemeliharaan', $periodeId)
+                                    ->when($record, function ($query) use ($record) {
+                                        return $query->where('id', '!=', $record->id);
+                                    })
+                                    ->whereIn('status', ['sedang diproses', 'dalam perbaikan'])
+                                    ->exists();
+                                
+                                if ($existingMaintenance) {
+                                    $fail('Tidak dapat mengubah status ke sedang diproses/dalam perbaikan karena ada maintenance lain yang sedang berjalan.');
+                                }
+                            }
+                        };
+                    }),
 
                 Forms\Components\DatePicker::make('tanggal_pelaksanaan')
                     ->label('Tanggal Pelaksanaan')
