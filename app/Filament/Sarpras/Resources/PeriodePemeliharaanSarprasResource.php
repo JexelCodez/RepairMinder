@@ -54,6 +54,19 @@ class PeriodePemeliharaanSarprasResource extends Resource
                     ->searchable()
                     ->reactive()
                     ->required()
+                    ->afterStateHydrated(function (callable $get, callable $set) {
+                        $kodeBarang = $get('kode_barang');
+
+                        if ($kodeBarang) {
+                            if (Inventaris::where('kode_barang', $kodeBarang)->exists()) {
+                                $set('sumber_data', 'inventaris');
+                            } elseif (InventarisDKV::where('kode_barang', $kodeBarang)->exists()) {
+                                $set('sumber_data', 'inventaris_dkv');
+                            } elseif (InventarisSarpras::where('kode_barang', $kodeBarang)->exists()) {
+                                $set('sumber_data', 'inventaris_sarpras');
+                            }
+                        }
+                    })
                     ->afterStateUpdated(fn ($set) => $set('kode_barang', null)), // Reset kode_barang jika sumber data berubah
 
                 Forms\Components\Select::make('kode_barang')
@@ -79,6 +92,8 @@ class PeriodePemeliharaanSarprasResource extends Resource
                     ->required()
                     ->reactive()
                     ->placeholder('Pilih Barang'),
+
+
 
                 Forms\Components\TextInput::make('periode')
                     ->label('Periode (dalam hari)')

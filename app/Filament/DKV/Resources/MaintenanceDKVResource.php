@@ -64,7 +64,18 @@ class MaintenanceDKVResource extends Resource
                     })
                     ->searchable()
                     ->required()
-                    ->placeholder('Pilih Barang'),
+                    ->placeholder('Pilih Barang')
+                    ->rule(function (callable $get) {
+                        return function (string $attribute, $value, callable $fail) {
+                            $existingMaintenance = Maintenance::where('id_periode_pemeliharaan', $value)
+                                ->whereIn('status', ['sedang diproses', 'dalam perbaikan'])
+                                ->exists();
+                
+                            if ($existingMaintenance) {
+                                $fail('Tidak dapat membuat maintenance baru karena masih ada maintenance yang sedang diproses atau dalam perbaikan.');
+                            }
+                        };
+                    }),
 
                 Forms\Components\Select::make('id_user')
                     ->label('Assigned User')
