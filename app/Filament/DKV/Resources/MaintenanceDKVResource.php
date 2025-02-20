@@ -20,6 +20,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
+use Filament\Tables\Columns\BadgeColumn;
 
 
 class MaintenanceDKVResource extends Resource
@@ -173,7 +174,6 @@ class MaintenanceDKVResource extends Resource
                 TextColumn::make('nama_barang')
                     ->label('Nama Barang')
                     ->sortable()
-                    ->searchable()
                     ->getStateUsing(fn($record) =>
                         $record->periode?->inventaris->nama_barang ??
                         $record->periode?->inventarisDKV->nama_barang ??
@@ -183,7 +183,6 @@ class MaintenanceDKVResource extends Resource
                 TextColumn::make('merek')
                     ->label('Merk Barang')
                     ->sortable()
-                    ->searchable()
                     ->getStateUsing(fn($record) =>
                         $record->periode?->inventaris->merek ??
                         $record->periode?->inventarisDKV->merek ??
@@ -230,7 +229,8 @@ class MaintenanceDKVResource extends Resource
                     ->label('Hasil Maintenance')
                     ->placeholder('Belum Diisi')
                     ->limit(50),    
-            ])       
+            ])     
+            ->searchPlaceholder('(Kode Barang, Teknisi)')    
             ->filters([
                 SelectFilter::make('jurusan')
                     ->label('Filter Berdasarkan Jurusan')
