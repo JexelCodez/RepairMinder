@@ -20,4 +20,8 @@ class Teknisi extends Model
     {
         return $this->hasMany(Maintenance::class);
     }
+    public function laporan()
+    {
+        return $this->hasMany(Laporan::class);
+    }
 }

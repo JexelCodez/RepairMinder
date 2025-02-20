@@ -20,7 +20,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
-
+use Filament\Tables\Columns\BadgeColumn;
 
 class MaintenanceDKVResource extends Resource
 {
