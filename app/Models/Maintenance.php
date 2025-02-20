@@ -15,7 +15,8 @@ class Maintenance extends Model
         'id_periode_pemeliharaan',
         'id_user',
         'id_teknisi',
-        'deskripsi_tugas',	
+        'deskripsi_tugas',
+        'hasil_maintenance',	
         'status',
         'tanggal_pelaksanaan',
     ];

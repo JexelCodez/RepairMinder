@@ -9,6 +9,7 @@ use App\Models\Inventaris;
 use App\Models\InventarisDKV;
 use App\Models\InventarisSarpras;
 use App\Models\PeriodePemeliharaan;
+use App\Models\Teknisi;
 use App\Models\User;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -84,6 +85,13 @@ class MaintenanceDKVResource extends Resource
                     ->searchable()
                     ->required(),
 
+                Forms\Components\Select::make('id_teknisi')
+                    ->label('Teknisi')
+                    ->options(Teknisi::pluck('nama', 'id'))
+                    ->default(fn() => auth()->id())
+                    ->searchable()
+                    ->required(),
+
                 Forms\Components\TextInput::make('deskripsi_tugas')
                     ->label('Task Description')
                     ->required()
@@ -96,11 +104,18 @@ class MaintenanceDKVResource extends Resource
                         'dalam perbaikan' => 'Dalam Perbaikan',
                         'selesai' => 'Selesai',
                     ])
-                    ->required(),
+                    ->required()
+                    ->reactive(),
 
                 Forms\Components\DatePicker::make('tanggal_pelaksanaan')
                     ->label('Tanggal Pelaksanaan')
                     ->required(),
+
+                Forms\Components\TextArea::make('hasil_maintenance')
+                    ->label('Hasil Maintenance')
+                    ->maxLength(255)
+                    ->visible(fn (callable $get) => $get('status') === 'selesai')
+                    ->required(fn (callable $get) => $get('status') === 'selesai')
             ]);
     }
 

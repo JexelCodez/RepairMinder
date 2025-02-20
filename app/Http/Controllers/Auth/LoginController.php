@@ -26,18 +26,22 @@ class LoginController extends Controller
                 Alert::success('Mantap', 'Anda berhasil login!');
                 return redirect('/');
             }
-            if ($user->role === 'guru') {
-                return redirect()->route('home.guru');
-            }
+            // if ($user->role === 'guru') {
+            //     return redirect()->route('home.guru');
+            // }
             if ($user->role === 'admin') {
                 return redirect('/sija');
             }
-            if ($user->role === 'teknisi') {
-                $zone = Str::lower(optional($user->zoneUser)->zone_name);
-                if (in_array($zone, ['sija', 'dkv', 'sarpras'])) {
-                    return redirect("/{$zone}");
-                }
+            else {
+                return redirect()->route('home');
             }
+
+            // if ($user->role === 'teknisi') {
+            //     $zone = Str::lower(optional($user->zoneUser)->zone_name);
+            //     if (in_array($zone, ['sija', 'dkv', 'sarpras'])) {
+            //         return redirect("/{$zone}");
+            //     }
+            // }
         }
 
         return redirect()->back()->withErrors(['email' => 'Invalid credentials'])->withInput();

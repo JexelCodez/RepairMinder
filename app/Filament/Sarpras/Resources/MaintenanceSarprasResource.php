@@ -143,12 +143,19 @@ class MaintenanceSarprasResource extends Resource
                         'selesai' => 'Selesai',
                     ])
                     ->default('sedang diproses') // Menetapkan default
-                    ->required(),
+                    ->required()
+                    ->reactive(),
                 
                 Forms\Components\DatePicker::make('tanggal_pelaksanaan')
                     ->label('Tanggal Pelaksanaan')
                     ->default(now()) // Menetapkan default ke hari ini
                     ->required(),
+
+                Forms\Components\TextArea::make('hasil_maintenance')
+                    ->label('Hasil Maintenance')
+                    ->maxLength(255)
+                    ->visible(fn (callable $get) => $get('status') === 'selesai')
+                    ->required(fn (callable $get) => $get('status') === 'selesai')
                 
             ]);
     }
