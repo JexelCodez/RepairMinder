@@ -118,7 +118,7 @@ class PeriodePemeliharaanSarprasResource extends Resource
                 TextColumn::make('nama_barang')
                     ->label('Nama Barang')
                     ->sortable()
-                    ->searchable()
+                    // ->searchable()
                     ->getStateUsing(fn($record) =>
                         $record->inventaris->nama_barang ?? 
                         $record->inventarisDKV->nama_barang ?? 
@@ -127,7 +127,7 @@ class PeriodePemeliharaanSarprasResource extends Resource
                 TextColumn::make('merek')
                     ->label('Merk Barang')
                     ->sortable()
-                    ->searchable()
+                    // ->searchable()
                     ->getStateUsing(fn($record) =>
                         $record->inventaris->merek ?? 
                         $record->inventarisDKV->merek ?? 
@@ -164,6 +164,7 @@ class PeriodePemeliharaanSarprasResource extends Resource
                     ->dateTime()
                     ->sortable(),
             ])
+            ->searchPlaceholder('(Kode Barang)')  
             ->filters([
                 SelectFilter::make('jurusan')
                     ->label('Filter Berdasarkan Jurusan')

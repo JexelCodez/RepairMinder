@@ -204,21 +204,31 @@ class MaintenanceSarprasResource extends Resource
                     ->label('Kode Barang')
                     ->sortable()
                     ->searchable(),
-            
+
                 TextColumn::make('nama_barang')
                     ->label('Nama Barang')
                     ->sortable()
-                    ->searchable()
+                    // ->searchable(query: function (\Illuminate\Database\Eloquent\Builder $query, string $search) {
+                    //     // Gunakan kode_barang pada periode sebagai proxy
+                    //     return $query->whereHas('periode', function ($q) use ($search) {
+                    //         $q->where('kode_barang', 'like', "%{$search}%");
+                    //     });
+                    // })
                     ->getStateUsing(fn($record) =>
                         $record->periode?->inventaris->nama_barang ??
                         $record->periode?->inventarisDKV->nama_barang ??
                         $record->periode?->inventarisSarpras->nama_barang ?? 'N/A'
                     ),
-            
+
                 TextColumn::make('merek')
                     ->label('Merk Barang')
                     ->sortable()
-                    ->searchable()
+                    // ->searchable(query: function (\Illuminate\Database\Eloquent\Builder $query, string $search) {
+                    //     // Gunakan kode_barang pada periode sebagai proxy jika merek tidak tersimpan di tabel
+                    //     return $query->whereHas('periode', function ($q) use ($search) {
+                    //         $q->where('kode_barang', 'like', "%{$search}%");
+                    //     });
+                    // })
                     ->getStateUsing(fn($record) =>
                         $record->periode?->inventaris->merek ??
                         $record->periode?->inventarisDKV->merek ??
@@ -265,7 +275,8 @@ class MaintenanceSarprasResource extends Resource
                     ->label('Hasil Maintenance')
                     ->placeholder('Belum Diisi')
                     ->limit(50),    
-            ])        
+            ])
+            ->searchPlaceholder('(Kode Barang, Teknisi)')        
             ->filters([
                 SelectFilter::make('jurusan')
                     ->label('Filter Berdasarkan Jurusan')

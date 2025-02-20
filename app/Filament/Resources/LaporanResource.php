@@ -241,7 +241,7 @@ class LaporanResource extends Resource implements CustomizeOverlookWidget
 
     public static function getOverlookWidgetQuery(Builder $query): Builder
     {
-        return $query->whereIn('kode_barang', Inventaris::where('status', 'pending')->pluck('kode_barang'));
+        return $query->whereIn('kode_barang', Laporan::where('status', 'pending')->pluck('kode_barang'));
     }
     public static function getOverlookWidgetTitle(): string
     {
