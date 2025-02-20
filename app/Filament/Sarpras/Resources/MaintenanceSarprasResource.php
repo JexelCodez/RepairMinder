@@ -81,11 +81,11 @@ class MaintenanceSarprasResource extends Resource
                     ->label('Barang')
                     ->options(function (callable $get) {
                         $sumberData = $get('sumber_data');
-
+                
                         if (!$sumberData) {
                             return ['' => 'Pilih sumber data terlebih dahulu'];
                         }
-
+                
                         return match ($sumberData) {
                             'inventaris' => PeriodePemeliharaan::whereIn('kode_barang', Inventaris::pluck('kode_barang'))
                                 ->get()
@@ -103,13 +103,18 @@ class MaintenanceSarprasResource extends Resource
                     ->required()
                     ->reactive()
                     ->placeholder('Pilih Barang')
-                    ->afterStateHydrated(function ($state, callable $set, callable $get) {
-                        if ($state) {
-                            $set('id_periode_pemeliharaan', $state);
-                        }
+                    ->rule(function (callable $get) {
+                        return function (string $attribute, $value, callable $fail) {
+                            $existingMaintenance = Maintenance::where('id_periode_pemeliharaan', $value)
+                                ->whereIn('status', ['sedang diproses', 'dalam perbaikan'])
+                                ->exists();
+                
+                            if ($existingMaintenance) {
+                                $fail('Tidak dapat membuat maintenance baru karena masih ada maintenance yang sedang diproses atau dalam perbaikan.');
+                            }
+                        };
                     }),
-
-            
+                
 
                 Forms\Components\Select::make('id_user')
                     ->label('Assigned User')

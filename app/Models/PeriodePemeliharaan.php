@@ -20,43 +20,6 @@ class PeriodePemeliharaan extends Model
         'tanggal_maintenance_selanjutnya',
     ];
 
-    // public function setKodeBarangAttribute($value)
-    // {
-    //     $this->attributes['kode_barang'] = $value;
-    //     $this->attributes['kode_barang_kecil'] = strtolower($value);
-    // }
-
-    // protected static function boot()
-    // {
-    //     parent::boot();
-
-    //     static::retrieved(function ($periode) {
-    //         $periode->checkMaintenanceDue();
-    //     });
-
-    //     static::updated(function ($periode) {
-    //         $periode->checkMaintenanceDue();
-    //     });
-    // }
-
-    // public function checkMaintenanceDue()
-    // {
-    //     if ($this->tanggal_maintenance_selanjutnya && now()->greaterThanOrEqualTo($this->tanggal_maintenance_selanjutnya)) {
-    //         $user = auth()->user();
-
-    //         Notification::make()
-    //             ->title('⚠️ Maintenance Due!')
-    //             ->color('warning')
-    //             ->body("🛠️ Maintenance untuk {$this->kode_barang} sudah jatuh tempo. Segera lakukan tindakan.")
-    //             ->actions([
-    //                 Action::make('Proses')
-    //                     ->icon('heroicon-o-eye')
-    //                     // ->url(),
-    //             ])
-    //             ->sendToDatabase($user);
-    //     }
-    // }
-
     public function inventaris()
     {
         return $this->belongsTo(Inventaris::class, 'kode_barang', 'kode_barang');

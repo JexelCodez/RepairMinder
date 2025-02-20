@@ -62,26 +62,32 @@ class Maintenance extends Model
 
         // Saat maintenance baru dibuat, set tanggal maintenance selanjutnya
         static::created(function ($maintenance) {
-            $periode = $maintenance->periode; // Menggunakan relasi langsung
-
-            if ($periode) {
-                $periode->update([
-                    'tanggal_maintenance_selanjutnya' => now()->addDays($periode->periode),
-                ]);
-            }
+            $maintenance->updateNextMaintenanceDate();
         });
 
-        // Saat maintenance diupdate (misalnya status diubah jadi "selesai"), update tanggal maintenance selanjutnya
+        // Saat maintenance diupdate, update tanggal maintenance selanjutnya jika tanggal_pelaksanaan berubah
         static::updated(function ($maintenance) {
-            if ($maintenance->isDirty('status') && $maintenance->status === 'selesai') {
-                $periode = $maintenance->periode;
-
-                if ($periode) {
-                    $periode->update([
-                        'tanggal_maintenance_selanjutnya' => now()->addDays($periode->periode),
-                    ]);
-                }
+            if ($maintenance->isDirty('tanggal_pelaksanaan') || $maintenance->isDirty('status')) {
+                $maintenance->updateNextMaintenanceDate();
             }
         });
     }
+
+    /**
+     * Fungsi untuk memperbarui tanggal maintenance selanjutnya.
+     */
+    public function updateNextMaintenanceDate()
+    {
+        $periode = $this->periode; // Menggunakan relasi langsung
+
+        if ($periode) {
+            // Pastikan ada tanggal pelaksanaan yang valid
+            if ($this->tanggal_pelaksanaan) {
+                $periode->update([
+                    'tanggal_maintenance_selanjutnya' => \Carbon\Carbon::parse($this->tanggal_pelaksanaan)->addDays($periode->periode),
+                ]);
+            }
+        }
+    }
+
 }
