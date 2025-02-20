@@ -1,13 +1,81 @@
 @extends('user_view.resources.layouts.app')
 @section('title', 'Buat Laporan')
 
+@push('custom-css')
+    
+
+    {{-- <style>
+        #reader__dashboard_section_csr{
+            display: none !important;
+        }
+    </style> --}}
+    <style>
+        #reader {
+            width: 100%;
+            max-width: 400px;
+            height: auto;
+            margin: auto;
+            position: relative;
+            overflow: hidden;
+        }
+    
+        #reader video {
+            /* transform: scaleX(-1); */
+            width: 100%;
+            height: auto;
+            object-fit: cover;
+        }
+    
+        @media (max-width: 768px) {
+            #reader {
+                max-width: 300px;
+            }
+        }
+    
+        @media (max-width: 480px) {
+            #reader {
+                max-width: 250px;
+            }
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* Tambahkan animasi dan border pada modal */
+        #result .bg-white.rounded-lg {
+            border: 2px solid #ddd;
+            animation: fadeIn 0.3s ease-in-out forwards;
+            transform: translateY(-10px);
+            opacity: 0;
+        }
+
+        @keyframes fadeIn {
+            100% {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .header-scan {
+            background-image: url("../images/templatemo-wave-header.jpg"),
+                linear-gradient(#348cd2, #ffffff);
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+        
+    </style>
+@endpush
+
 @section('content')
 <div class="container py-5">
     <div class="row justify-content-center">
         <div class="col-lg-8">
             <div class="card shadow">
-                <div class="card-header bg-primary text-white">
-                    <h4 class="mb-0">Buat Laporan</h4>
+                <div class="p-4 border-b header-scan">
+                    <h3 class="text-xl font-bold">Buat Laporan</h3>
                 </div>
                 <div class="card-body">
                     <form action="{{ route('lapor.store') }}" method="POST" enctype="multipart/form-data">
@@ -57,9 +125,13 @@
                             <label for="bukti_laporan" class="form-label">Bukti Laporan (Opsional)</label>
                             
                             <!-- Pilihan untuk menggunakan kamera atau mengunggah file -->
-                            <div class="d-flex justify-content-between mb-3">
-                                <button type="button" class="btn btn-secondary" id="uploadOption">Upload File</button>
-                                <button type="button" class="btn btn-primary" id="captureOption">Capture Kamera</button>
+]                            <div class="d-flex justify-content-between mb-3">
+                                <button type="button" class="btn secondary-btn smoothscroll mt-3" id="uploadOption">
+                                    <i class="fa fa-upload"></i> Upload File
+                                </button>
+                                <button type="button" class="btn custom-btn smoothscroll mt-3" id="captureOption">
+                                    <i class="fa fa-camera-retro"></i> Capture Kamera
+                                </button>
                             </div>
                         
                             <!-- Input file untuk upload file -->
@@ -81,7 +153,7 @@
 
                         <!-- Tombol Submit -->
                         <div class="d-flex justify-content-end">
-                            <button type="submit" class="btn btn-primary">
+                            <button type="submit" class="btn custom-btn smoothscroll mt-3">
                                 Kirim Laporan
                             </button>
                         </div>
