@@ -20,6 +20,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
+use Filament\Tables\Columns\BadgeColumn;
 
 
 class MaintenanceSarprasResource extends Resource
@@ -222,22 +223,48 @@ class MaintenanceSarprasResource extends Resource
                         $record->periode?->inventaris->merek ??
                         $record->periode?->inventarisDKV->merek ??
                         $record->periode?->inventarisSarpras->merek ?? 'N/A'
-                    ),
+                    )
+                    ->toggleable(isToggledHiddenByDefault: true),
             
                 TextColumn::make('user.name')
                     ->label('User Pelaksana')
                     ->searchable(),
             
+                TextColumn::make('teknisi.nama')
+                    ->label('Teknisi Pelaksana')
+                    ->searchable(),
+                    
                 TextColumn::make('deskripsi_tugas')
                     ->label('Deskripsi Tugas')
                     ->limit(50),
-            
-                TextColumn::make('status')
-                    ->label('Status'),
+                BadgeColumn::make('status')
+                    ->label('Status')
+                    ->badge()
+                    ->formatStateUsing(fn ($state) => match ($state) {
+                        'sedang diproses' => 'Sedang Diproses',
+                        'dalam perbaikan' => 'Dalam Perbaikan',
+                        'selesai' => 'Selesai',
+                        default => $state,
+                    })
+                    ->icons([
+                        'heroicon-o-play' => 'sedang diproses',
+                        'heroicon-o-wrench-screwdriver' => 'dalam perbaikan',
+                        'heroicon-o-check-circle' => 'selesai',
+                    ])
+                    ->colors([
+                        'success' => 'selesai',
+                        'warning' => 'dalam perbaikan',
+                        'danger' => 'sedang diproses',
+                    ]),    
             
                 TextColumn::make('tanggal_pelaksanaan')
                     ->label('Tanggal Pelaksanaan')
                     ->date(),
+
+                TextColumn::make('hasil_maintenance')
+                    ->label('Hasil Maintenance')
+                    ->placeholder('Belum Diisi')
+                    ->limit(50),    
             ])        
             ->filters([
                 SelectFilter::make('jurusan')
