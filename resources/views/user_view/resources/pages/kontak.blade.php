@@ -17,8 +17,18 @@
                             <h3 class="mb-4">Bingung Mau Kontak Siapa? Cek Sini!</h3>
 
                             <p class="d-flex border-bottom pb-3 mb-4">
-                                <strong class="d-inline me-4">Telepon:</strong>
-                                <span>010-020-0340</span>
+                                <strong class="d-inline me-4">Teknisi 1 (WA):</strong>
+                                <span>0851-7344-7197</span>
+                            </p>
+
+                            <p class="d-flex border-bottom pb-3 mb-4">
+                                <strong class="d-inline me-4">Teknisi 2 (WA):</strong>
+                                <span>0812-9396-2019</span> 
+                            </p>
+
+                            <p class="d-flex border-bottom pb-3 mb-4">
+                                <strong class="d-inline me-4">Teknisi 3 (WA):</strong>
+                                <span>0859-5940-3949</span> 
                             </p>
 
                             <p class="d-flex border-bottom pb-3 mb-4">
