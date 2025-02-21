@@ -14,6 +14,7 @@ class Laporan extends Model
 
     protected $fillable = [
         'id_user',
+        'id_teknisi',
         'nama_barang',
         'merk_barang',
         'kode_barang',
@@ -22,12 +23,17 @@ class Laporan extends Model
         'lokasi_barang',
         'status',
         'tanggal_laporan',
+        'hasil_laporan',
     ];
 
 
     public function user()
     {
         return $this->belongsTo(User::class, 'id_user');
+    }
+    public function teknisi()
+    {
+        return $this->belongsTo(Teknisi::class, 'id_teknisi');
     }
 
 

@@ -8,6 +8,7 @@ use App\Models\Laporan;
 use App\Models\Inventaris;
 use App\Models\InventarisDKV;
 use App\Models\InventarisSarpras;
+use App\Models\Teknisi;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -34,6 +35,8 @@ use Filament\Infolists\Components\Section;
 //Plugin
 use Awcodes\Overlook\Contracts\CustomizeOverlookWidget;
 use Awcodes\Overlook\Concerns\HandlesOverlookWidgetCustomization;
+use Filament\Tables\Columns\ImageColumn;
+use Filament\Tables\Columns\TextColumn;
 
 class LaporanResource extends Resource implements CustomizeOverlookWidget
 {
@@ -56,19 +59,21 @@ class LaporanResource extends Resource implements CustomizeOverlookWidget
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('user.name')
+                TextColumn::make('user.name')
                     ->sortable(),
-                Tables\Columns\TextColumn::make('nama_barang')
+                TextColumn::make('teknisi.nama')
+                    ->sortable(),
+                TextColumn::make('nama_barang')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('merk_barang')
+                TextColumn::make('merk_barang')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('kode_barang')
+                TextColumn::make('kode_barang')
                     ->searchable(),
-                Tables\Columns\ImageColumn::make('bukti_laporan')
+                ImageColumn::make('bukti_laporan')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('lokasi_barang')
+                TextColumn::make('lokasi_barang')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('status'),
+                TextColumn::make('status'),
                 BadgeColumn::make('status')
                     ->badge()
                     ->formatStateUsing(fn ($state) => match ($state) {
@@ -87,14 +92,18 @@ class LaporanResource extends Resource implements CustomizeOverlookWidget
                         'warning' => 'processed',
                         'danger' => 'pending',
                     ]),
-                Tables\Columns\TextColumn::make('tanggal_laporan')
+                TextColumn::make('tanggal_laporan')
                     ->date()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('created_at')
+                TextColumn::make('hasil_laporan')
+                    ->label('Hasil Laporan')
+                    ->placeholder('Belum Diisi')
+                    ->limit(50),    
+                TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
+                TextColumn::make('updated_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
@@ -122,23 +131,33 @@ class LaporanResource extends Resource implements CustomizeOverlookWidget
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
-            
+
                 Action::make('Process')
                     ->visible(fn (Laporan $record) => $record->status === 'pending')
-                    ->action(function (Laporan $record) {
-                        $record->update(['status' => 'processed']);
-            
+                    ->form([
+                        Forms\Components\Select::make('id_teknisi')
+                            ->label('Pilih Teknisi')
+                            ->options(Teknisi::pluck('nama', 'id'))
+                            ->required(),
+                    ])
+                    ->action(function (Laporan $record, array $data) {
+                        $record->update([
+                            'status' => 'processed',
+                            'id_teknisi' => $data['id_teknisi'], // Simpan teknisi yang dipilih
+                        ]);
+                
                         Notification::make()
-                            ->title('Barang Diproses')
-                            ->body('Status barang telah diubah menjadi "Processed".')
+                            ->title('Laporan Diproses')
+                            ->body('Status laporan telah diubah menjadi "Processed" dan teknisi telah ditetapkan.')
                             ->success()
                             ->send();
                     })
                     ->requiresConfirmation()
-                    ->modalHeading('Proses Barang')
-                    ->modalDescription('Apakah Anda yakin ingin memproses barang ini?')
+                    ->modalHeading('Proses Laporan')
+                    ->modalDescription('Silakan pilih teknisi sebelum memproses laporan.')
                     ->color('warning')
                     ->icon('heroicon-o-arrow-path'),
+                
             
                 Action::make('Done')
                     ->visible(fn (Laporan $record) => $record->status === 'processed')
@@ -161,6 +180,23 @@ class LaporanResource extends Resource implements CustomizeOverlookWidget
                     ->modalDescription('Apakah Anda yakin barang ini sudah selesai diproses?')
                     ->color('success')
                     ->icon('heroicon-o-check-circle'),
+
+                Action::make('isi_hasil_laporan')
+                    ->label('Isi Hasil')
+                    ->icon('heroicon-o-document-text')
+                    ->modalHeading('Isi Hasil Laporan')
+                    ->form([
+                        Forms\Components\Textarea::make('hasil_laporan')
+                            ->label('Hasil Laporan')
+                            ->required()
+                            ->maxLength(255),
+                    ])
+                    ->action(function ($record, array $data) {
+                        $record->update([
+                            'hasil_laporan' => $data['hasil_laporan'],
+                        ]);
+                    })
+                    ->visible(fn($record) => $record->status === 'done' && !$record->hasil_laporan),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -227,6 +263,20 @@ class LaporanResource extends Resource implements CustomizeOverlookWidget
                                         ->size('md'),
                                 ]),
                         ]),
+
+                    Tabs\Tab::make('Hasil Laporan')
+                        ->schema([
+                            Section::make('Hasil Laporan')
+                                ->label('')
+                                ->description('')
+                                ->schema([
+                                    TextEntry::make('hasil_laporan')
+                                    ->label('')
+                                    ->placeholder('Belum Diisi'),
+                                ]),
+                        ]),
+
+                        
                 ]),    
         ])->columns(1);
     }
