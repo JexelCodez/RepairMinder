@@ -1,42 +1,89 @@
 @extends('user_view.resources.layouts.app')
 @section('title', 'Daftar Laporan Saya')
 
+@push('custom-css')
+    <style>
+        /* Styling untuk tab */
+        .nav-tabs .nav-link {
+            color: #555;
+            border-radius: 8px 8px 0 0;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        .nav-tabs .nav-link.active {
+            background-color: var(--custom-btn-bg-color);
+            color: var(--white-color);
+            font: var(--title-font-family);
+        }
+
+        .nav-tabs .nav-link:hover {
+            background: var(--custom-btn-bg-hover-color);
+            color: var(--white-color);
+        }
+
+        /* Styling untuk kontainer laporan */
+        .tab-content {
+            min-height: 300px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-top: none;
+            border-radius: 0 0 8px 8px;
+            background: white;
+        }
+
+        /* Styling jika tidak ada laporan */
+        .no-laporan {
+            text-align: center;
+            color: #6b7280;
+            font-size: 1rem;
+            margin-top: 20px;
+        }
+    </style>
+@endpush
+
 @section('content')
 <div class="min-h-screen bg-gray-100 py-8">
     <div class="container mx-auto px-4">
         <div class="bg-white shadow-lg rounded-lg p-6">
             <h2 class="text-2xl font-bold mb-6 text-center text-gray-800">📋 Daftar Laporan Anda</h2>
 
-            @if($laporan->isEmpty())
-                <p class="text-center text-gray-500">Belum ada laporan yang Anda buat.</p>
-            @else
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                    @foreach($laporan as $dt)
-                        <div class="bg-white shadow-md rounded-lg p-5 border border-gray-300 hover:shadow-lg transition-shadow">
-                            <h3 class="text-lg font-semibold text-gray-800">{{ $dt->nama_barang }} ({{ $dt->kode_barang }})</h3>
-                            <p class="text-sm text-gray-600"><strong>Merk:</strong> {{ $dt->merk_barang }}</p>
-                            <p class="text-sm text-gray-600"><strong>Lokasi:</strong> {{ $dt->lokasi_barang }}</p>
-                            <p class="text-sm text-gray-600"><strong>Status Laporan:</strong> 
-                                <span class="px-3 py-1 text-xs font-semibold rounded-full 
-                                    {{ $dt->status == 'diterima' ? 'bg-green-100 text-green-700' : ($dt->status == 'diproses' ? 'bg-yellow-100 text-yellow-700' : 'bg-red-100 text-red-700') }}">
-                                    {{ ucfirst($dt->status) }}
-                                </span>
-                            </p>
-                            <p class="text-sm text-gray-600"><strong>Tanggal Laporan:</strong> {{ \Carbon\Carbon::parse($dt->tanggal_laporan)->format('d M Y') }}</p>
+            <!-- Tabs -->
+            <ul class="nav nav-tabs mb-4" id="laporanTabs">
+                <li class="nav-item">
+                    <a class="nav-link active" data-bs-toggle="tab" href="#pending">Pending</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-bs-toggle="tab" href="#processed">Processed</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-bs-toggle="tab" href="#done">Done</a>
+                </li>
+            </ul>
 
-                            @if($dt->bukti_laporan)
-                                <div class="mt-3">
-                                    <strong class="text-sm text-gray-700">Bukti Laporan:</strong>
-                                    <div class="mt-2 w-full h-40 overflow-hidden rounded-mdS">
-                                        <img src="{{ asset('storage/' . $dt->bukti_laporan) }}" alt="Bukti Laporan" class="img-thumbnail" style="max-width: 100px; max-height: 100px;">
-                                    </div>
-                                </div>
-                            @endif
-                        </div>
-                    @endforeach
+            <!-- Tab Content -->
+            <div class="tab-content">
+                <div class="tab-pane fade show active" id="pending">
+                    @include('user_view.resources.partials.laporan.laporan-tab', ['laporan' => $laporanPending])
                 </div>
-            @endif
+                <div class="tab-pane fade" id="processed">
+                    @include('user_view.resources.partials.laporan.laporan-tab', ['laporan' => $laporanProcessed])
+                </div>
+                <div class="tab-pane fade" id="done">
+                    @include('user_view.resources.partials.laporan.laporan-tab', ['laporan' => $laporanDone])
+                </div>
+            </div>
         </div>
     </div>
 </div>
 @endsection
+
+@push('custom-js')
+    <script>
+        $(document).ready(function () {
+            $('#laporanTabs a').on('click', function (e) {
+                e.preventDefault();
+                $(this).tab('show');
+            });
+        });
+    </script>
+@endpush
