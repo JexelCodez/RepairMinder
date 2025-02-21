@@ -24,13 +24,6 @@ class UserSeeder extends Seeder
         // Tambahkan user dengan id_zone yang sesuai
         User::insert([
             [
-                'name' => 'Admin',
-                'email' => 'admin@gmail.com',
-                'password' => Hash::make('123'),
-                'role' => 'admin',
-                'id_zone' => null,
-            ],
-            [
                 'name' => 'Teknisi DKV',
                 'email' => 'dkv@gmail.com',
                 'password' => Hash::make('123'),

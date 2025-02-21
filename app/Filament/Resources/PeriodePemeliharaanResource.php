@@ -29,6 +29,7 @@ use Filament\Infolists\Components\Grid;
 use Filament\Infolists\Components\ImageEntry;
 use Filament\Infolists\Components\Tabs;
 use Filament\Infolists\Components\Section;
+use Illuminate\Support\Facades\Auth;
 
 class PeriodePemeliharaanResource extends Resource
 {
@@ -208,6 +209,18 @@ class PeriodePemeliharaanResource extends Resource
                             'deskripsi'  => $data['deskripsi'],
                         ]);
                     }),
+
+                Action::make('maintenance')
+                    ->label('Set Maintenance')
+                    ->icon('heroicon-o-wrench')
+                    ->visible(fn ($record) => is_null($record->tanggal_maintenance_selanjutnya))
+                    ->action(function ($record) {
+                        $kodeBarang = $record->inventaris->kode_barang ?? $record->kode_barang;
+                        return redirect(MaintenanceResource::getUrl('create', [
+                            'kode_barang' => $kodeBarang,
+                        ]));
+                    })
+                    ->color('success')
             ]);
     }
     
