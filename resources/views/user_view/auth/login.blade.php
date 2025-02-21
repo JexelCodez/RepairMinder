@@ -185,10 +185,6 @@
                             <!-- Submit Button -->
                             <button type="submit" class="btn btn-login mb-3">Login</button>
                         </form>
-                        <!-- Register Link -->
-                        <div class="mt-3 text-center">
-                            <p>Belum memiliki akun? <a href="{{ route('register') }}" class="text-decoration-none">Register</a></p>
-                        </div>
                     </div>
                 </div>
             </div>
