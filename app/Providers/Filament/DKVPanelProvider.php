@@ -22,6 +22,8 @@ use Filament\Navigation\NavigationItem;
 // PLUGIN
 use Joaopaulolndev\FilamentEditProfile\FilamentEditProfilePlugin;
 use GeoSot\FilamentEnvEditor\FilamentEnvEditorPlugin;
+use Awcodes\Overlook\OverlookPlugin;
+use Awcodes\Overlook\Widgets\OverlookWidget;
 
 class DKVPanelProvider extends PanelProvider
 {
@@ -47,6 +49,7 @@ class DKVPanelProvider extends PanelProvider
             ->pages([
                 Pages\Dashboard::class,
             ])
+            ->viteTheme('resources/css/filament/dKV/theme.css')
             ->discoverWidgets(in: app_path('Filament/DKV/Widgets'), for: 'App\\Filament\\DKV\\Widgets')
             ->widgets([
                 Widgets\AccountWidget::class,
@@ -64,7 +67,20 @@ class DKVPanelProvider extends PanelProvider
                     ->navigationIcon('heroicon-o-cog-8-tooth')
                     ->navigationSort(1)
                     ->slug('env-editor')
-                    ->authorize(fn() => auth()->check() && auth()->user()->role === 'admin'),    
+                    ->authorize(fn() => auth()->check() && auth()->user()->role === 'admin'),
+                OverlookPlugin::make()
+                    ->includes([
+                        \App\Filament\DKV\Resources\LaporanDKVResource::class,
+                        \App\Filament\DKV\Resources\InventarisDKVResource::class,
+                    ])
+                    ->icons([
+                        'heroicon-o-document-text' => \App\Filament\DKV\Resources\LaporanDKVResource::class,
+                        'heroicon-o-archive-box' => \App\Filament\DKV\Resources\InventarisDKVResource::class,
+                    ])
+                    ->sort(2)
+                    ->columns([
+                        'lg' => 4,
+                    ]),    
             ])
             ->navigationItems([
                 NavigationItem::make('Scanner')

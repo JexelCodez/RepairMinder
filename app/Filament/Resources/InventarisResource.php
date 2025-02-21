@@ -69,6 +69,11 @@ class InventarisResource extends Resource implements CustomizeOverlookWidget
                     ->label('ID Inventaris')
                     ->sortable(),
 
+                TextColumn::make('kode_barang')
+                    ->label('Kode Barang')
+                    ->sortable()
+                    ->searchable(),
+
                 TextColumn::make('nama_barang')
                     ->label('Nama Barang')
                     ->sortable()

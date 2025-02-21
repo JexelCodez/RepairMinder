@@ -62,6 +62,7 @@ class LaporanResource extends Resource implements CustomizeOverlookWidget
                 TextColumn::make('user.name')
                     ->sortable(),
                 TextColumn::make('teknisi.nama')
+                    ->placeholder('Belum Diisi')
                     ->sortable(),
                 TextColumn::make('nama_barang')
                     ->searchable(),
@@ -70,6 +71,7 @@ class LaporanResource extends Resource implements CustomizeOverlookWidget
                 TextColumn::make('kode_barang')
                     ->searchable(),
                 ImageColumn::make('bukti_laporan')
+                    ->placeholder('Tidak Diisi')
                     ->searchable(),
                 TextColumn::make('lokasi_barang')
                     ->searchable(),
