@@ -13,6 +13,8 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Forms\Components\Wizard;
+use Guava\FilamentModalRelationManagers\Actions\Table\RelationManagerAction;
+
 
 class TeknisiResource extends Resource
 {
@@ -72,6 +74,14 @@ class TeknisiResource extends Resource
             ->actions([
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
+                RelationManagerAction::make('maintenance-relation-manager')
+                    ->label('Hasil Maintenance')
+                    ->icon('heroicon-o-wrench')
+                    ->relationManager(RelationManagers\MaintenanceRelationManager::make()),
+                RelationManagerAction::make('laporan-relation-manager')
+                    ->label('Hasil Laporan')
+                    ->icon('heroicon-o-document-text')
+                    ->relationManager(RelationManagers\LaporanRelationManager::make()),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -83,7 +93,8 @@ class TeknisiResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            RelationManagers\MaintenanceRelationManager::class,
+            RelationManagers\LaporanRelationManager::class,
         ];
     }
 

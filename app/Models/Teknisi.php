@@ -18,10 +18,10 @@ class Teknisi extends Model
 
     public function maintenance()
     {
-        return $this->hasMany(Maintenance::class);
+        return $this->hasMany(Maintenance::class, 'id_teknisi');
     }
     public function laporan()
     {
-        return $this->hasMany(Laporan::class);
+        return $this->hasMany(Laporan::class, 'id_teknisi');
     }
 }

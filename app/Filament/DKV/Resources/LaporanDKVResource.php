@@ -31,8 +31,15 @@ use Filament\Infolists\Components\ImageEntry;
 use Filament\Infolists\Components\Tabs;
 use Filament\Infolists\Components\Section;
 
-class LaporanDKVResource extends Resource
+// PLUGIN
+use Awcodes\Overlook\Contracts\CustomizeOverlookWidget;
+use Awcodes\Overlook\Concerns\HandlesOverlookWidgetCustomization;
+
+
+class LaporanDKVResource extends Resource implements CustomizeOverlookWidget
 {
+    use HandlesOverlookWidgetCustomization;
+
     protected static ?string $model = Laporan::class;
 
     protected static ?string $modelLabel = 'Laporan';
@@ -268,5 +275,14 @@ class LaporanDKVResource extends Resource
             'index' => Pages\ListLaporanDKVS::route('/'),
             'view' => Pages\ViewLaporanDKV::route('/{record}'),
         ];
+    }
+
+    public static function getOverlookWidgetQuery(Builder $query): Builder
+    {
+        return $query->whereIn('kode_barang', Laporan::where('status', 'pending')->pluck('kode_barang'));
+    }
+    public static function getOverlookWidgetTitle(): string
+    {
+        return 'Laporan Pending';
     }
 }

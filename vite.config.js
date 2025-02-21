@@ -8,6 +8,8 @@ export default defineConfig({
                 "resources/css/app.css",
                 "resources/js/app.js",
                 "resources/css/filament/admin/theme.css",
+                "resources/css/filament/dKV/theme.css",
+                "resources/css/filament/sarpras/theme.css",
             ],
             refresh: true,
         }),

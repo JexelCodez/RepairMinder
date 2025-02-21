@@ -9,6 +9,7 @@ export default {
         "./resources/**/*.js",
         "./resources/**/*.vue",
         "./vendor/awcodes/overlook/resources/**/*.blade.php",
+        "./vendor/guava/filament-modal-relation-managers/resources/**/*.blade.php",
     ],
     theme: {
         extend: {

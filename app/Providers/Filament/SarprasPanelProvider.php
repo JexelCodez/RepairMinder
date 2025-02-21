@@ -46,6 +46,7 @@ class SarprasPanelProvider extends PanelProvider
             ->pages([
                 Pages\Dashboard::class,
             ])
+            ->viteTheme('resources/css/filament/sarpras/theme.css')
             ->discoverWidgets(in: app_path('Filament/Sarpras/Widgets'), for: 'App\\Filament\\Sarpras\\Widgets')
             ->widgets([
                 Widgets\AccountWidget::class,
