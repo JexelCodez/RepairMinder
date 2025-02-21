@@ -12,6 +12,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Filament\Forms\Components\Wizard;
 
 class TeknisiResource extends Resource
 {
@@ -26,30 +27,44 @@ class TeknisiResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('nama')
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\Textarea::make('informasi')
-                    ->required(),
-            ])->columns(2);
+                Wizard::make([
+                    Wizard\Step::make('nama')
+                        ->schema([
+                            Forms\Components\TextInput::make('nama')
+                                ->required()
+                                ->maxLength(255),
+                        ]),
+                    Wizard\Step::make('informasi')
+                        ->schema([                                            
+                            Forms\Components\Textarea::make('informasi')
+                                ->required(),
+                        ]),
+                ])
+            ])->columns(1);
     }
 
     public static function table(Table $table): Table
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('nama')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('informasi')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\Layout\Split::make([
+                    Tables\Columns\Layout\Stack::make([
+                        Tables\Columns\TextColumn::make('nama')
+                            ->searchable()
+                            ->sortable()
+                            ->weight('medium')
+                            ->alignLeft(),
+                    ])->space(),
+
+                    Tables\Columns\Layout\Stack::make([
+                        Tables\Columns\TextColumn::make('informasi')
+                            ->label('Informasi')
+                            ->searchable()
+                            ->sortable()
+                            ->color('gray')
+                            ->alignLeft(),
+                    ])->space(2),
+                ])->from('md'),
             ])
             ->filters([
                 //
@@ -76,9 +91,9 @@ class TeknisiResource extends Resource
     {
         return [
             'index' => Pages\ListTeknisis::route('/'),
-            'create' => Pages\CreateTeknisi::route('/create'),
-            'view' => Pages\ViewTeknisi::route('/{record}'),
-            'edit' => Pages\EditTeknisi::route('/{record}/edit'),
+            // 'create' => Pages\CreateTeknisi::route('/create'),
+            // 'view' => Pages\ViewTeknisi::route('/{record}'),
+            // 'edit' => Pages\EditTeknisi::route('/{record}/edit'),
         ];
     }
 }
