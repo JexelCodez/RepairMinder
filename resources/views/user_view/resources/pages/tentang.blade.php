@@ -41,7 +41,7 @@
                             <div class="section-title-wrap mb-4">
                                 <h4 class="section-title">Bagaimana cara login ke REMI?</h4>
                             </div>
-                            <p>Pengguna dapat login menggunakan email dan password yang telah didaftarkan oleh admin. Jika mengalami kendala, hubungi admin atau teknisi.</p>
+                            <p>Pengguna dapat login menggunakan email dan password yang telah didaftarkan oleh admin. Jika mengalami kendala, hubungi admin.</p>
 
                             <div class="section-title-wrap mb-4">
                                 <h4 class="section-title">Apa itu sistem hak akses berdasarkan zona?</h4>
@@ -51,7 +51,7 @@
                             <div class="section-title-wrap mb-4">
                                 <h4 class="section-title">Bagaimana cara mengubah password?</h4>
                             </div>
-                            <p>Pengguna dapat menghubungi teknisi melalui nomor yang telah disediakan. Silakan cek halaman kontak untuk informasi lebih lanjut.</p>
+                            <p>Pengguna dapat menghubungi admin melalui nomor yang telah disediakan. Silakan cek halaman kontak untuk informasi lebih lanjut.</p>
 
                             <div class="section-title-wrap mb-4">
                                 <h4 class="section-title">Bagaimana cara melaporkan kerusakan aset?</h4>
