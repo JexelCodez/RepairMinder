@@ -24,6 +24,23 @@ class TeknisiResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-users';
     protected static ?string $navigationGroup = 'Teknisi';
 
+    public static function shouldRegisterNavigation(): bool
+    {
+        return auth()->check() && (
+            auth()->user()->role === 'admin' ||
+            (auth()->user()->role === 'teknisi' && strtolower(optional(auth()->user()->zoneUser)->zone_name) === 'sarpras')
+        );
+    }
+    
+    // Pastikan hanya admin dan teknisi dengan zone sarpras bisa melihat resource
+    public static function canViewAny(): bool
+    {
+        return auth()->check() && (
+            auth()->user()->role === 'admin' ||
+            (auth()->user()->role === 'teknisi' && strtolower(optional(auth()->user()->zoneUser)->zone_name) === 'sarpras')
+        );
+    }
+
     public static function form(Form $form): Form
     {
         return $form

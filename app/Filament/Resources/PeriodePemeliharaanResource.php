@@ -177,6 +177,11 @@ class PeriodePemeliharaanResource extends Resource
                         }
                         return $query;
                     }),
+                
+                Filter::make('belum_maintenance')
+                    ->label('Belum Ada Maintenance')
+                    ->query(fn ($query) => $query->whereNull('tanggal_maintenance_selanjutnya')),
+                    
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
