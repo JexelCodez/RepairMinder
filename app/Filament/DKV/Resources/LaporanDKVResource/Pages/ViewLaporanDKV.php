@@ -13,6 +13,7 @@ use Filament\Resources\Pages\ViewRecord;
 use Filament\Tables\Columns\BadgeColumn;
 use Filament\Notifications\Notification;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Textarea;
 
 class ViewLaporanDKV extends ViewRecord
 {
@@ -86,6 +87,31 @@ class ViewLaporanDKV extends ViewRecord
                 ->modalHeading('Selesai')
                 ->modalDescription('Apakah Anda yakin barang ini sudah selesai diproses?')
                 ->color('success')
+                ->icon('heroicon-o-check-circle'),
+
+            Actions\Action::make('Hasil Laporan')
+                ->visible(fn($record) => $record->status === 'done' && !$record->hasil_laporan)
+                ->form([
+                    Textarea::make('hasil_laporan')
+                        ->label('Hasil Laporan')
+                        ->required()
+                        ->maxLength(255),
+                ])
+                ->action(function ($record, array $data) {
+                    $record->update([
+                        'hasil_laporan' => $data['hasil_laporan'],
+                    ]);
+                    Notification::make()
+                        ->title('Barang Selesai')
+                        ->body('Hasil Laporan Berhasil diBuat')
+                        ->success()
+                        ->send();
+                })
+
+                ->requiresConfirmation()
+                ->modalHeading('Selesai')
+                ->modalDescription('Apakah Anda yakin barang ini sudah selesai diproses?')
+                ->color('info')
                 ->icon('heroicon-o-check-circle'),
         ];
     }
