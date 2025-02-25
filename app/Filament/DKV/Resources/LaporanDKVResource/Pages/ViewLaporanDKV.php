@@ -3,12 +3,16 @@
 namespace App\Filament\DKV\Resources\LaporanDKVResource\Pages;
 
 use App\Filament\DKV\Resources\LaporanDKVResource;
-use App\Models\InventarisDKV;
 use App\Models\Laporan;
+use App\Models\Inventaris;
+use App\Models\InventarisDKV;
+use App\Models\InventarisSarpras;
+use App\Models\Teknisi;
 use Filament\Actions;
 use Filament\Resources\Pages\ViewRecord;
 use Filament\Tables\Columns\BadgeColumn;
 use Filament\Notifications\Notification;
+use Filament\Forms\Components\Select;
 
 class ViewLaporanDKV extends ViewRecord
 {
@@ -34,18 +38,27 @@ class ViewLaporanDKV extends ViewRecord
 
             Actions\Action::make('Process')
                 ->visible(fn (Laporan $record) => $record->status === 'pending')
-                ->action(function (Laporan $record) {
-                    $record->update(['status' => 'processed']);
-
+                ->form([
+                    Select::make('id_teknisi')
+                        ->label('Pilih Teknisi')
+                        ->options(Teknisi::pluck('nama', 'id'))
+                        ->required(),
+                ])
+                ->action(function (Laporan $record, array $data) {
+                    $record->update([
+                        'status' => 'processed',
+                        'id_teknisi' => $data['id_teknisi'], // Simpan teknisi yang dipilih
+                    ]);
+            
                     Notification::make()
-                            ->title('Barang Diproses')
-                            ->body('Status barang telah diubah menjadi "Processed".')
-                            ->success()
-                            ->send();
+                        ->title('Laporan Diproses')
+                        ->body('Status laporan telah diubah menjadi "Processed" dan teknisi telah ditetapkan.')
+                        ->success()
+                        ->send();
                 })
                 ->requiresConfirmation()
-                ->modalHeading('Proses Barang')
-                ->modalDescription('Apakah Anda yakin ingin memproses barang ini?')
+                ->modalHeading('Proses Laporan')
+                ->modalDescription('Silakan pilih teknisi sebelum memproses laporan.')
                 ->color('warning')
                 ->icon('heroicon-o-arrow-path'),
 
@@ -56,7 +69,7 @@ class ViewLaporanDKV extends ViewRecord
                     $record->update(['status' => 'done']);
 
                     // Cari inventaris berdasarkan kode_barang
-                    $inventaris = InventarisDKV::where('kode_barang', $record->kode_barang)->first();
+                    $inventaris = Inventaris::where('kode_barang', $record->kode_barang)->first();
 
                     // Jika ditemukan, update kondisi barang ke "Lengkap"
                     if ($inventaris) {
