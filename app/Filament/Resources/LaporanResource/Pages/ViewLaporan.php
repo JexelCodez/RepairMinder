@@ -3,12 +3,16 @@
 namespace App\Filament\Resources\LaporanResource\Pages;
 
 use App\Filament\Resources\LaporanResource;
-use App\Models\Inventaris;
 use App\Models\Laporan;
+use App\Models\Inventaris;
+use App\Models\InventarisDKV;
+use App\Models\InventarisSarpras;
+use App\Models\Teknisi;
 use Filament\Actions;
 use Filament\Resources\Pages\ViewRecord;
 use Filament\Tables\Columns\BadgeColumn;
 use Filament\Notifications\Notification;
+use Filament\Forms\Components\Select;
 
 class ViewLaporan extends ViewRecord
 {
@@ -34,18 +38,27 @@ class ViewLaporan extends ViewRecord
 
             Actions\Action::make('Process')
                 ->visible(fn (Laporan $record) => $record->status === 'pending')
-                ->action(function (Laporan $record) {
-                    $record->update(['status' => 'processed']);
-
+                ->form([
+                    Select::make('id_teknisi')
+                        ->label('Pilih Teknisi')
+                        ->options(Teknisi::pluck('nama', 'id'))
+                        ->required(),
+                ])
+                ->action(function (Laporan $record, array $data) {
+                    $record->update([
+                        'status' => 'processed',
+                        'id_teknisi' => $data['id_teknisi'], // Simpan teknisi yang dipilih
+                    ]);
+            
                     Notification::make()
-                            ->title('Barang Diproses')
-                            ->body('Status barang telah diubah menjadi "Processed".')
-                            ->success()
-                            ->send();
+                        ->title('Laporan Diproses')
+                        ->body('Status laporan telah diubah menjadi "Processed" dan teknisi telah ditetapkan.')
+                        ->success()
+                        ->send();
                 })
                 ->requiresConfirmation()
-                ->modalHeading('Proses Barang')
-                ->modalDescription('Apakah Anda yakin ingin memproses barang ini?')
+                ->modalHeading('Proses Laporan')
+                ->modalDescription('Silakan pilih teknisi sebelum memproses laporan.')
                 ->color('warning')
                 ->icon('heroicon-o-arrow-path'),
 

@@ -277,7 +277,8 @@ class PeriodePemeliharaanSarprasResource extends Resource
                                             $record->inventarisDKV->merek ?? 
                                             $record->inventarisSarpras->merek ?? 'N/A'
                                         ),
-                                    TextEntry::make('periode'),
+                                    TextEntry::make('periode')
+                                        ->formatStateUsing(fn($state) => $state . ' Hari'),
                                     TextEntry::make('kode_barang'),                                                              
                                 ])->columnSpan(2)->columns(2),
                             Grid::make()

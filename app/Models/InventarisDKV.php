@@ -62,6 +62,23 @@ class InventarisDKV extends Model
                 'created_at' => now()->format('Y-m-d H:i:s'),
                 'updated_at' => now()->format('Y-m-d H:i:s'),
             ],
+            [
+                'id_inventaris' => 3,
+                'id_barang' => 203,
+                'nama_jenis_barang' => 'Peralatan Elektronik',
+                'nama_barang' => 'AC',
+                'merek' => 'DAIKIN',
+                'kode_barang' => 'DKV-003',
+                'qrcode_image' => 'https://example.com/qrcode_dkv_003.png',
+                'stok_barang' => 1,
+                'id_ruangan' => 10,
+                'nama_ruangan' => 'LAB 4',
+                'jumlah_barang' => 5,
+                'kondisi_barang' => 'lengkap',
+                'ket_barang' => 'Digunakan untuk meningkatkan kenyamanan ruangan',
+                'created_at' => now()->format('Y-m-d H:i:s'),
+                'updated_at' => now()->format('Y-m-d H:i:s'),
+            ],
         ];
     }
 

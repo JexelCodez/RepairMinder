@@ -8,6 +8,7 @@ use App\Models\Laporan;
 use App\Models\Inventaris;
 use App\Models\InventarisDKV;
 use App\Models\InventarisSarpras;
+use App\Models\Teknisi;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -120,18 +121,27 @@ class LaporanSarprasResource extends Resource
             
                 Action::make('Process')
                     ->visible(fn (Laporan $record) => $record->status === 'pending')
-                    ->action(function (Laporan $record) {
-                        $record->update(['status' => 'processed']);
-            
+                    ->form([
+                        Forms\Components\Select::make('id_teknisi')
+                            ->label('Pilih Teknisi')
+                            ->options(Teknisi::pluck('nama', 'id'))
+                            ->required(),
+                    ])
+                    ->action(function (Laporan $record, array $data) {
+                        $record->update([
+                            'status' => 'processed',
+                            'id_teknisi' => $data['id_teknisi'], // Simpan teknisi yang dipilih
+                        ]);
+                
                         Notification::make()
-                            ->title('Barang Diproses')
-                            ->body('Status barang telah diubah menjadi "Processed".')
+                            ->title('Laporan Diproses')
+                            ->body('Status laporan telah diubah menjadi "Processed" dan teknisi telah ditetapkan.')
                             ->success()
                             ->send();
                     })
                     ->requiresConfirmation()
-                    ->modalHeading('Proses Barang')
-                    ->modalDescription('Apakah Anda yakin ingin memproses barang ini?')
+                    ->modalHeading('Proses Laporan')
+                    ->modalDescription('Silakan pilih teknisi sebelum memproses laporan.')
                     ->color('warning')
                     ->icon('heroicon-o-arrow-path'),
             
