@@ -22,7 +22,7 @@ class LoginController extends Controller
 
         if (Auth::attempt($credentials)) {
             $user = Auth::user();
-            if ($user->role === 'siswa') {
+            if ($user->role === 'guru') {
                 Alert::success('Mantap', 'Anda berhasil login!');
                 return redirect('/');
             }
