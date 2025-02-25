@@ -30,7 +30,6 @@
                             <h4 class="section-title">Apa saja fitur utama dalam REMI?</h4>
                         </div>
                         <ul>
-                            <li>Manajemen aset sekolah</li>
                             <li>Penjadwalan pemeliharaan aset</li>
                             <li>Pelaporan dan pemantauan perbaikan</li>
                             <li>Dashboard monitoring</li>
