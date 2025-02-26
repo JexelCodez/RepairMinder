@@ -22,12 +22,8 @@ class SendMaintenanceReminder extends Command
     {
         \Log::info('Maintenance reminder command triggered at: ' . now()->toDateTimeString());
 
-    // Ambil data maintenance tepat 7 hari ke depan
-
-    $sevenDaysAgo = Carbon::now()->subDays(7)->toDateString();
-
-    $maintenanceList = PeriodePemeliharaan::whereDate('tanggal_maintenance_selanjutnya', $sevenDaysAgo)->get();
-
+        $sevenDaysAgo = Carbon::now()->subDays(7)->toDateString();
+        $maintenanceList = PeriodePemeliharaan::whereDate('tanggal_maintenance_selanjutnya', $sevenDaysAgo)->get();
 
         \Log::info('Total maintenance list matching criteria: ' . $maintenanceList->count());
 
@@ -37,32 +33,30 @@ class SendMaintenanceReminder extends Command
         }
 
         foreach ($maintenanceList as $maintenance) {
-            $teknisiUsers = collect();
-        
-            // Cek barang ada di model inventaris mana
+            $kodeBarang = $maintenance->kode_barang;
+            
             if (InventarisDKV::where('kode_barang', $maintenance->kode_barang)->exists()) {
                 $teknisiUsers = User::where('role', 'admin')
-                    ->orWhere(fn($query) => 
+                    ->orWhere(fn($query) =>
                         $query->where('role', 'teknisi')
                               ->whereHas('zoneUser', fn($q) => $q->where('zone_name', 'dkv'))
                     )
                     ->orWhere(fn($query) =>
                         $query->where('role', 'teknisi')
-                            ->whereHas('zoneUser', fn($q) => $q->where('zone_name', 'sarpras'))
+                              ->whereHas('zoneUser', fn($q) => $q->where('zone_name', 'sarpras'))
                     )
                     ->get();
-                    
-        
-                // Menggunakan LaporanDKVResource untuk route laporan DKV
-                $laporUrl = PeriodePemeliharaanDKVResource::getUrl('view', ['record' => $maintenance], panel: 'dKV');
+
+                $kodeBarang = $maintenance->inventarisDKV->kode_barang ?? $maintenance->kode_barang;
             } elseif (InventarisSarpras::where('kode_barang', $maintenance->kode_barang)->exists()) {
                 $teknisiUsers = User::where('role', 'admin')
-                    ->orWhere(fn($query) => 
+                    ->orWhere(fn($query) =>
                         $query->where('role', 'teknisi')
                               ->whereHas('zoneUser', fn($q) => $q->where('zone_name', 'sarpras'))
-                    )->get();
-        
-                $laporUrl = PeriodePemeliharaanSarprasResource::getUrl('view', ['record' => $maintenance], panel: 'sarpras');
+                    )
+                    ->get();
+
+                $kodeBarang = $maintenance->inventarisSarpras->kode_barang ?? $maintenance->kode_barang;
             } else {
                 $teknisiUsers = User::where('role', 'admin')
                     ->orWhere(fn($query) =>
@@ -71,25 +65,35 @@ class SendMaintenanceReminder extends Command
                     )
                     ->orWhere(fn($query) =>
                         $query->where('role', 'teknisi')
-                            ->whereHas('zoneUser', fn($q) => $q->where('zone_name', 'sarpras'))
+                              ->whereHas('zoneUser', fn($q) => $q->where('zone_name', 'sarpras'))
                     )
                     ->get();
-        
-                $laporUrl = PeriodePemeliharaanResource::getUrl('view', ['record' => $maintenance], panel: 'admin');
+
+                $kodeBarang = $maintenance->inventaris->kode_barang ?? $maintenance->kode_barang;
             }
-        
+
             foreach ($teknisiUsers as $user) {
+                $zone = strtolower(optional($user->zoneUser)->zone_name);
+                if ($zone === 'dkv') {
+                    $laporUrl = PeriodePemeliharaanDKVResource::getUrl('view', ['record' => $maintenance], panel: 'dKV');
+                } elseif ($zone === 'sarpras') {
+                    $laporUrl = PeriodePemeliharaanSarprasResource::getUrl('view', ['record' => $maintenance], panel: 'sarpras');
+                } else {
+                    $laporUrl = PeriodePemeliharaanResource::getUrl('view', ['record' => $maintenance], panel: 'admin');
+                }
+
                 Notification::make()
                     ->title('🔧 Maintenance Reminder')
                     ->color('info')
-                    ->body("Barang {$maintenance->kode_barang} perlu maintenance dalam 7 hari terakhir hingga hari ini. Klik untuk melihat detail.")
+                    ->body("Barang {$kodeBarang} perlu maintenance dalam 7 hari terakhir hingga hari ini. Klik untuk melihat detail.")
                     ->actions([
-                        Action::make('Lihat')->icon('heroicon-o-eye')->url($laporUrl),
+                        Action::make('Lihat')
+                            ->icon('heroicon-o-eye')
+                            ->url($laporUrl),
                     ])
                     ->sendToDatabase($user);
             }
         }
-        
 
         return self::SUCCESS;
     }

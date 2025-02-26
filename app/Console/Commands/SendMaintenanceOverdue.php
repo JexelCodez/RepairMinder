@@ -34,10 +34,11 @@ class SendMaintenanceOverdue extends Command
         }
 
         foreach ($maintenanceList as $maintenance) {
-            $teknisiUsers = collect();
-            $kodeBarang = $maintenance->kode_barang; // default
-
-            // Cek barang ada di model inventaris mana dan ambil data kode barang dari relasinya
+            // Tetap ambil kode barang default
+            $kodeBarang = $maintenance->kode_barang; 
+        
+            // Karena laporan overdue dikirim ke semua user terkait (termasuk admin, teknisi dari berbagai zone)
+            // kita ambil daftar user dahulu sesuai kondisi (tanpa meng-set laporUrl di sini)
             if (InventarisDKV::where('kode_barang', $maintenance->kode_barang)->exists()) {
                 $teknisiUsers = User::where('role', 'admin')
                     ->orWhere(fn($query) =>
@@ -49,24 +50,18 @@ class SendMaintenanceOverdue extends Command
                               ->whereHas('zoneUser', fn($q) => $q->where('zone_name', 'sarpras'))
                     )
                     ->get();
-
-                // Mengambil data dari relasi inventarisDKV
+        
+                // Jika maintenance terkait inventarisDKV, ambil data kode_barang dari relasi (jika ada)
                 $kodeBarang = $maintenance->inventarisDKV->kode_barang ?? $maintenance->kode_barang;
-                $laporUrl = MaintenanceDKVResource::getUrl('create', [
-                    'kode_barang' => $kodeBarang,
-                ], panel: 'dKV');
             } elseif (InventarisSarpras::where('kode_barang', $maintenance->kode_barang)->exists()) {
                 $teknisiUsers = User::where('role', 'admin')
                     ->orWhere(fn($query) =>
                         $query->where('role', 'teknisi')
                               ->whereHas('zoneUser', fn($q) => $q->where('zone_name', 'sarpras'))
-                    )->get();
-
-                // Mengambil data dari relasi inventarisSarpras
+                    )
+                    ->get();
+        
                 $kodeBarang = $maintenance->inventarisSarpras->kode_barang ?? $maintenance->kode_barang;
-                $laporUrl = MaintenanceSarprasResource::getUrl('create', [
-                    'kode_barang' => $kodeBarang,
-                ], panel: 'sarpras');
             } else {
                 $teknisiUsers = User::where('role', 'admin')
                     ->orWhere(fn($query) =>
@@ -75,18 +70,30 @@ class SendMaintenanceOverdue extends Command
                     )
                     ->orWhere(fn($query) =>
                         $query->where('role', 'teknisi')
-                            ->whereHas('zoneUser', fn($q) => $q->where('zone_name', 'sarpras'))
+                              ->whereHas('zoneUser', fn($q) => $q->where('zone_name', 'sarpras'))
                     )
                     ->get();
-
-                // Mengambil data dari relasi inventaris (default)
+        
                 $kodeBarang = $maintenance->inventaris->kode_barang ?? $maintenance->kode_barang;
-                $laporUrl = MaintenanceResource::getUrl('create', [
-                    'kode_barang' => $kodeBarang,
-                ], panel: 'admin');
             }
-
+        
+            // Kirim notifikasi ke setiap user dengan URL laporan disesuaikan berdasar zone user
             foreach ($teknisiUsers as $user) {
+                $zone = strtolower(optional($user->zoneUser)->zone_name);
+                if ($zone === 'dkv') {
+                    $laporUrl = MaintenanceDKVResource::getUrl('create', [
+                        'kode_barang' => $kodeBarang,
+                    ], panel: 'dKV');
+                } elseif ($zone === 'sarpras') {
+                    $laporUrl = MaintenanceSarprasResource::getUrl('create', [
+                        'kode_barang' => $kodeBarang,
+                    ], panel: 'sarpras');
+                } else {
+                    $laporUrl = MaintenanceResource::getUrl('create', [
+                        'kode_barang' => $kodeBarang,
+                    ], panel: 'admin');
+                }
+        
                 Notification::make()
                     ->title('🔧 Maintenance Overdue')
                     ->color('info')
