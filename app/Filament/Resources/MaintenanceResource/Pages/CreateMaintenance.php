@@ -26,7 +26,7 @@ class CreateMaintenance extends CreateRecord
             if ($periode) {
                 // Isi field select dengan record id dari periode
                 $this->form->fill([
-                    'id_periode_pemeliharaan' => $periode->id,
+                    'id_periode_pemeliharaan' => $periode->kode_barang,
                 ]);
             }
         }
