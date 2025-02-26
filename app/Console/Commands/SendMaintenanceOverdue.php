@@ -23,7 +23,7 @@ class SendMaintenanceOverdue extends Command
     {
         \Log::info('Maintenance reminder command triggered at: ' . now()->toDateTimeString());
 
-        $kemarin = Carbon::yesterday()->toDateString();
+        $kemarin = Carbon::tomorrow()->toDateString();
         $maintenanceList = PeriodePemeliharaan::whereDate('tanggal_maintenance_selanjutnya', $kemarin)->get();
 
         \Log::info('Total maintenance list matching criteria: ' . $maintenanceList->count());
