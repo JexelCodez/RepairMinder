@@ -23,8 +23,10 @@ class SendMaintenanceReminder extends Command
         \Log::info('Maintenance reminder command triggered at: ' . now()->toDateTimeString());
 
     // Ambil data maintenance tepat 7 hari ke depan
-    $maintenanceDate = Carbon::now()->addDays(7)->toDateString();
-    $maintenanceList = PeriodePemeliharaan::whereDate('tanggal_maintenance_selanjutnya', $maintenanceDate)->get();
+
+    $sevenDaysAgo = Carbon::now()->subDays(7)->toDateString();
+
+    $maintenanceList = PeriodePemeliharaan::whereDate('tanggal_maintenance_selanjutnya', $sevenDaysAgo)->get();
 
 
         \Log::info('Total maintenance list matching criteria: ' . $maintenanceList->count());

@@ -218,6 +218,9 @@ class PeriodePemeliharaanSarprasResource extends Resource
                     }
                     return $query;
                 }),
+            Filter::make('belum_maintenance')
+                ->label('Belum Ada Maintenance')
+                ->query(fn ($query) => $query->whereNull('tanggal_maintenance_selanjutnya')),
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
@@ -250,6 +253,17 @@ class PeriodePemeliharaanSarprasResource extends Resource
                             'deskripsi'  => $data['deskripsi'],
                         ]);
                     }),
+                Action::make('maintenance')
+                    ->label('Set Maintenance')
+                    ->icon('heroicon-o-wrench')
+                    ->visible(fn ($record) => is_null($record->tanggal_maintenance_selanjutnya))
+                    ->action(function ($record) {
+                        $kodeBarang = $record->inventaris->kode_barang ?? $record->kode_barang;
+                        return redirect(MaintenanceSarprasResource::getUrl('create', [
+                            'kode_barang' => $kodeBarang,
+                        ]));
+                    })
+                    ->color('success')
             ]);
     }
 
