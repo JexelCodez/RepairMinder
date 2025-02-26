@@ -317,6 +317,7 @@ class MaintenanceResource extends Resource
                                             ->label('Kode Barang'),
     
                                         TextEntry::make('periode.periode')
+                                            ->formatStateUsing(fn($state) => $state . ' Hari')
                                             ->label('Periode Pemeliharaan'),    
     
                                         TextEntry::make('user.name')
