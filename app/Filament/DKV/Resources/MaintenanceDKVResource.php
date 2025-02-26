@@ -22,6 +22,18 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Columns\BadgeColumn;
 
+// INFOLIST
+use Filament\Infolists\Infolist;
+use Filament\Infolists\Components\TextEntry;
+use Filament\Infolists\Components\RepeatableEntry;
+use Filament\Infolists\Components\Fieldset;
+use Filament\Infolists\Components\ViewEntry;
+use Filament\Infolists\Components\Grid;
+use Filament\Infolists\Components\ImageEntry;
+use Filament\Infolists\Components\Tabs;
+use Filament\Infolists\Components\Section;
+use Illuminate\Support\Facades\Auth;
+
 class MaintenanceDKVResource extends Resource
 {
     protected static ?string $model = Maintenance::class;
@@ -294,6 +306,70 @@ class MaintenanceDKVResource extends Resource
             ]);
     }
 
+    public static function infolist(Infolist $infolist): Infolist
+    {
+        return $infolist
+            ->schema([
+                Tabs::make('Informasi Maintenance')
+                    ->tabs([
+                        Tabs\Tab::make('Detail Maintenance')
+                            ->schema([
+                                Fieldset::make('Informasi Utama')
+                                    ->schema([
+                                        TextEntry::make('periode.kode_barang')
+                                            ->label('Kode Barang'),
+    
+                                        TextEntry::make('periode.periode')
+                                            ->formatStateUsing(fn($state) => $state . ' Hari')
+                                            ->label('Periode Pemeliharaan'),    
+    
+                                        TextEntry::make('user.name')
+                                            ->label('Assigned User'),
+    
+                                        TextEntry::make('teknisi.nama')
+                                            ->label('Teknisi'),
+    
+                                        TextEntry::make('status')
+                                            ->badge()
+                                            ->label('Status')
+                                            ->colors([
+                                                'info' => 'sedang diproses',
+                                                'warning' => 'dalam perbaikan',
+                                                'success'  => 'selesai',
+                                            ]),
+                                    ])->columns(2),
+    
+                                Section::make('Tanggal Pelaksanaan')
+                                    ->schema([
+                                        TextEntry::make('tanggal_pelaksanaan')
+                                            ->label('Tanggal Pelaksanaan')
+                                            ->date(),
+                                    ]),
+                            ]),
+    
+                        Tabs\Tab::make('Deskripsi Tugas')
+                            ->schema([
+                                Section::make('Detail Tugas')
+                                    ->schema([
+                                        TextEntry::make('deskripsi_tugas')
+                                            ->label('Deskripsi Tugas')
+                                            ->columnSpan(2),
+                                    ]),
+                            ]),
+    
+                        Tabs\Tab::make('Hasil Maintenance')
+                            ->schema([
+                                Section::make('Hasil')
+                                    ->schema([
+                                        TextEntry::make('hasil_maintenance')
+                                            ->label('Hasil Maintenance')
+                                            ->placeholder('Belum Diisi'),
+                                    ]),
+                            ]),
+                    ]),
+            ])->columns(1);
+    }
+
     public static function getRelations(): array
     {
         return [
@@ -306,7 +382,8 @@ class MaintenanceDKVResource extends Resource
         return [
             'index' => Pages\ListMaintenanceDKVS::route('/'),
             'create' => Pages\CreateMaintenanceDKV::route('/create'),
-            'edit' => Pages\EditMaintenanceDKV::route('/{record}/edit'),
+            // 'edit' => Pages\EditMaintenanceDKV::route('/{record}/edit'),
+            'view' => Pages\ViewMaintenance::route('/{record}'),
         ];
     }
 }

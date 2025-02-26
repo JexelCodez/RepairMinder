@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Filament\Resources\MaintenanceResource\Pages;
+namespace App\Filament\DKV\Resources\MaintenanceDKVResource\Pages;
 
-use App\Filament\Resources\MaintenanceResource;
+use App\Filament\DKV\Resources\MaintenanceDKVResource;
 use Filament\Actions;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\ViewRecord;
@@ -10,7 +10,7 @@ use Filament\Forms\Components\Textarea;
 
 class ViewMaintenance extends ViewRecord
 {
-    protected static string $resource = MaintenanceResource::class;
+    protected static string $resource = MaintenanceDKVResource::class;
 
     protected function getHeaderActions(): array
 {
